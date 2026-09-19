@@ -156,8 +156,11 @@ def main():
     for path in sorted(ROOT.rglob("*")):
         if not path.is_file():
             continue
+        rel_parts = path.relative_to(ROOT).parts
         rel = path.relative_to(ROOT).as_posix()
-        if any(part in SKIP_DIRS for part in path.parts):
+        # сравниваем части пути ОТНОСИТЕЛЬНО корня сканирования: иначе каталог сборки
+        # «dist» в абсолютном пути выбрасывал и сам пакет, когда манифест строится для него
+        if any(part in SKIP_DIRS for part in rel_parts):
             continue
         if path.name in SKIP_FILES or path.suffix in (".pyc", ".db-wal", ".db-shm"):
             continue
