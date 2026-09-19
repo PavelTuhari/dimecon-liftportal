@@ -1,0 +1,24 @@
+{% extends "partner/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block heading %}{{ p.name }} <span class="badge accent">{{ p.tier }}</span>{% endblock %}
+{% block content %}
+{% set pq = ('?partner_id=' ~ request.args.partner_id) if request.args.get('partner_id') else '' %}
+<div class="grid g4 mb">
+  <div class="kpi" style="{{ 'border-color:var(--warn)' if pending }}"><b>{{ pending|length }}</b><span>рапортов ждут подтверждения</span></div>
+  <div class="kpi"><b>{{ projects|selectattr('status','equalto','active')|list|length }}</b><span>активных объектов</span></div>
+  <div class="kpi"><b>{{ month_spend|money }}</b><span>расход за месяц, {{ tenant.currency }}</span></div>
+  <div class="kpi"><b>−{{ p.discount_pct }} %</b><span>договорная скидка · отсрочка {{ p.payment_days }} дн</span></div>
+</div>
+{% if pending %}<div class="card mb" style="border-color:var(--warn)"><h3>Требуют вашего подтверждения</h3>{% for s in pending %}<div class="flex between wrap" style="padding:8px 0;border-bottom:1px solid var(--border)">
+  <span>{{ s.work_date }} · оператор {{ s.operator }} · <b>{{ s.hours_worked }} ч</b>{% if s.hours_idle %} + простой {{ s.hours_idle }} ч ({{ s.idle_fault }}){% endif %} · {{ s.lifts }} подъёмов<br><span class="small muted">{{ s.notes }}</span></span>
+  <span class="flex"><form method="post" action="{{ url_for('partner.shift_action', sid=s.id, action='approve') }}{{ pq }}">{{ csrf() }}<button class="btn sm primary">Подтвердить</button></form>
+  <form method="post" action="{{ url_for('partner.shift_action', sid=s.id, action='dispute') }}{{ pq }}" class="flex">{{ csrf() }}<input name="reason" placeholder="что не так" style="min-height:32px;width:160px"><button class="btn sm">Оспорить</button></form></span></div>{% endfor %}</div>{% endif %}
+<div class="grid g2" style="align-items:start">
+<div><div class="flex between mb"><h3 style="margin:0">Объекты</h3></div>
+  {% for pr in projects %}<a class="card mb" href="{{ url_for('partner.project', pid=pr.id) }}{{ pq }}"><div class="flex between"><b>{{ pr.name }}</b>{{ status_badge(pr.status) }}</div><span class="small muted">{{ pr.address }} · {{ pr.starts_at or '' }} — {{ pr.ends_at or '…' }}</span></a>{% endfor %}
+  <form class="card" method="post" action="{{ url_for('partner.project_new') }}{{ pq }}">{{ csrf() }}<h4>+ Новый объект</h4><div class="grid g3"><input name="name" placeholder="Название" required><input name="address" placeholder="Адрес"><input type="date" name="starts_at"></div><button class="btn sm mt">Создать</button></form></div>
+<div><div class="card"><h3>Уровень партнёрства</h3><p class="small muted">Оборот за 12 мес: <b>{{ p.turnover|money(tenant.currency) }}</b>{% if next_tier %} · до уровня <b>{{ next_tier[0] }}</b> осталось {{ (next_tier[1]-p.turnover)|money(tenant.currency) }}{% endif %}</p>
+  {% if next_tier %}<div class="progress"><i style="width:{{ (p.turnover/next_tier[1]*100)|int }}%"></i></div>{% endif %}</div>
+  <div class="card mt"><h3>Последние заявки</h3><table class="small"><tbody>{% for o in orders %}<tr><td><b>{{ o.number }}</b></td><td>{{ o.starts_at|dt('%d.%m %H:%M') }}</td><td>{{ o.equipment.model if o.equipment else '—' }}</td><td>{{ o.price_final|money }}</td><td>{{ status_badge(o.status) }}</td></tr>{% else %}<tr><td class="muted">Заявок ещё нет</td></tr>{% endfor %}</tbody></table></div>
+  <div class="card mt"><h3>Документы</h3><table class="small"><tbody>{% for d in docs %}<tr><td>{{ d.type|upper }} {{ d.number }}</td><td>{{ d.issued_at }}</td><td>{{ d.amount|money }}</td><td>{{ status_badge(d.status) }}</td></tr>{% else %}<tr><td class="muted">Документов нет</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

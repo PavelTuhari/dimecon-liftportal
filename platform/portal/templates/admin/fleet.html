@@ -1,0 +1,14 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block heading %}Техника и график{% endblock %}
+{% block content %}
+<div class="toolbar"><a class="btn primary" href="{{ url_for('admin.equipment') }}">+ Добавить технику</a>
+  <a class="btn sm" href="{{ url_for('export.fleet_xlsx') }}">⤓ Парк и грузовые таблицы, Excel</a>
+  <a class="btn sm" href="{{ url_for('export.pricelist_xlsx') }}">⤓ Прайс-лист, Excel</a>
+  <span class="small muted">Зелёный — заказ, жёлтый — мягкая бронь, серый — ТО</span></div>
+<div class="timeline mb2"><div class="h">Техника / 14 дней</div>{% for d in days %}<div class="h">{{ d.strftime('%d.%m') }}<br><span class="faint">{{ ['пн','вт','ср','чт','пт','сб','вс'][d.weekday()] }}</span></div>{% endfor %}
+{% for e in rows %}<div><a href="{{ url_for('admin.equipment', eid=e.id) }}"><b>{{ e.brand }} {{ e.model }}</b></a><br><span class="faint">{{ e.capacity_t|int }} т · {{ e.status }}</span></div>{% for d in days %}<div class="cell {{ grid.get((e.id, d.date()), '') }}"></div>{% endfor %}{% endfor %}</div>
+<div class="table-wrap"><table><thead><tr><th>Инв. №</th><th>Техника</th><th>Категория</th><th>Г/П</th><th>Вылет</th><th>Высота</th><th>Ставка/ч</th><th>Мин. смена</th><th>Таблиц</th><th>Статус</th><th>Публ.</th></tr></thead><tbody>
+{% for e in rows %}<tr><td class="small muted">{{ e.inventory_no }}</td><td><a href="{{ url_for('admin.equipment', eid=e.id) }}"><b>{{ e.brand }} {{ e.model }}</b></a></td><td class="small">{{ tr(e.category.name) if e.category else '—' }}</td><td>{{ e.capacity_t|int }} т</td><td>{{ e.radius_m|int }} м</td><td>{{ e.height_m|int }} м</td><td>{{ e.hourly_rate|money }}</td><td>{{ e.min_hours|int }} ч</td><td>{{ e.load_charts|length }}{% if e.is_crane and not e.load_charts %} <span class="badge warn">нет</span>{% endif %}</td><td>{{ status_badge(e.status) }}</td><td>{{ '✔' if e.is_published else '—' }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

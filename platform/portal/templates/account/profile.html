@@ -1,0 +1,9 @@
+{% extends "site/_layout.html" %}
+{% block content %}
+<div class="container" style="max-width:560px;padding:44px 24px"><a class="small muted" href="{{ url_for('account.index') }}">← {{ t('acc.orders') }}</a><h1>Профиль</h1>
+<form class="card" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label>Имя</label><input name="name" value="{{ user.full_name }}"></div><div class="field"><label>Телефон</label><input name="phone" value="{{ user.phone }}"></div>
+  <div class="field"><label>Язык</label><select name="locale">{% for l in LANGS %}<option value="{{ l }}" {{ 'selected' if user.locale==l }}>{{ LANG_NAMES[l] }}</option>{% endfor %}</select></div>
+  <div class="field"><label>Новый пароль</label><input type="password" name="password" placeholder="оставьте пустым, чтобы не менять"></div>
+  <button class="btn primary">{{ t('common.save') }}</button></form></div>
+{% endblock %}

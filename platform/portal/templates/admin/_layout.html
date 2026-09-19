@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes, csrf with context %}
+{% block body %}
+<div class="app">
+  <aside class="side">
+    <a class="logo" href="{{ url_for('admin.dashboard') }}"><span class="mark">{{ tenant.name[0] }}</span><span>{{ tenant.name }}<br><span class="tiny" style="opacity:.5;font-weight:500">кабинет компании</span></span></a>
+    {% set ep = request.endpoint %}
+    <h5>Продажи</h5>
+    <a href="{{ url_for('admin.dashboard') }}" class="{{ 'on' if ep=='admin.dashboard' }}">📊 Дашборд</a>
+    <a href="{{ url_for('admin.orders') }}" class="{{ 'on' if ep in ('admin.orders','admin.order') }}">🧭 Заявки и сделки</a>
+    <a href="{{ url_for('admin.contacts') }}" class="{{ 'on' if ep in ('admin.contacts','admin.contact') }}">👤 Контакты</a>
+    <a href="{{ url_for('admin.tasks') }}" class="{{ 'on' if ep=='admin.tasks' }}">✅ Задачи</a>
+    <a href="{{ url_for('admin.partners') }}" class="{{ 'on' if ep=='admin.partners' }}">🏢 Партнёры B2B</a>
+    <a href="{{ url_for('admin.shifts') }}" class="{{ 'on' if ep=='admin.shifts' }}">⏱ Сменные рапорты</a>
+    <h5>Парк и контент</h5>
+    <a href="{{ url_for('admin.fleet') }}" class="{{ 'on' if ep in ('admin.fleet','admin.equipment') }}">🏗 Техника и график</a>
+    <a href="{{ url_for('admin.content_list', kind='services') }}" class="{{ 'on' if request.view_args.get('kind')=='services' }}">🛠 Услуги</a>
+    <a href="{{ url_for('admin.content_list', kind='products') }}" class="{{ 'on' if request.view_args.get('kind')=='products' }}">📦 Товары</a>
+    <a href="{{ url_for('admin.content_list', kind='cases') }}" class="{{ 'on' if request.view_args.get('kind')=='cases' }}">🏆 Кейсы</a>
+    <a href="{{ url_for('admin.content_list', kind='pages') }}" class="{{ 'on' if request.view_args.get('kind')=='pages' }}">📄 Страницы</a>
+    <a href="{{ url_for('admin.reviews') }}" class="{{ 'on' if ep=='admin.reviews' }}">⭐ Отзывы</a>
+    <a href="{{ url_for('admin.media') }}" class="{{ 'on' if ep=='admin.media' }}">🖼 Медиатека</a>
+    {% if is_owner %}
+    <h5>Настройки</h5>
+    <a href="{{ url_for('admin.branding') }}" class="{{ 'on' if ep=='admin.branding' }}">🎨 Сайт и бренд</a>
+    <a href="{{ url_for('admin.pricing_settings') }}" class="{{ 'on' if ep=='admin.pricing_settings' }}">💰 Тарифы</a>
+    <a href="{{ url_for('admin.mail_settings') }}" class="{{ 'on' if ep=='admin.mail_settings' }}">✉️ Почта (SMTP)</a>
+    <a href="{{ url_for('admin.storage_settings') }}" class="{{ 'on' if ep=='admin.storage_settings' }}">🗄 Хранилище файлов</a>
+    <a href="{{ url_for('admin.integrations') }}" class="{{ 'on' if ep=='admin.integrations' }}">🔌 Интеграция CRM</a>
+    <a href="{{ url_for('admin.team') }}" class="{{ 'on' if ep=='admin.team' }}">👥 Команда, домен, API</a>
+    <a href="{{ url_for('admin.audit') }}" class="{{ 'on' if ep=='admin.audit' }}">🧾 Аудит</a>
+    {% endif %}
+    <h5>Сайт</h5>
+    <a href="{{ url_for('site.home') }}" target="_blank">🌐 Открыть сайт ↗</a>
+    <a href="{{ url_for('partner.index') }}">🤝 Портал партнёра</a>
+    {% if user.is_platform_admin %}<a href="{{ url_for('platform.admin') }}">⚙ Суперадмин</a>{% endif %}
+  </aside>
+  <div class="main">
+    <div class="topbar"><h1>{% block heading %}{% endblock %}</h1><div class="spacer" style="flex:1"></div>
+      <span class="small muted">{{ user.full_name or user.email }} · {{ membership.role if membership else 'platform' }}</span>
+      <form method="post" action="{{ url_for('platform.logout') }}">{{ csrf() }}<button class="btn sm">Выйти</button></form></div>
+    <div class="content">{{ flashes() }}{% block content %}{% endblock %}</div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes, csrf with context %}
+{% block body %}
+<header class="site-head"><div class="container">
+  <a class="logo" href="{{ url_for('site.home') }}">
+    {% if tenant.theme.get('logo_url') %}<img src="{{ tenant.theme.logo_url }}" alt="{{ tenant.name }}">{% else %}<span class="mark">{{ tenant.name[0] }}</span>{% endif %}{{ tenant.name }}
+  </a>
+  <nav class="site-nav">
+    <a href="{{ url_for('site.equipment') }}" class="{{ 'on' if request.endpoint in ('site.equipment','site.equipment_item') }}">{{ t('nav.equipment') }}</a>
+    <a href="{{ url_for('site.services') }}" class="{{ 'on' if request.endpoint in ('site.services','site.service_item') }}">{{ t('nav.services') }}</a>
+    <a href="{{ url_for('site.products') }}">{{ t('nav.products') }}</a>
+    <a href="{{ url_for('site.cases') }}">{{ t('nav.cases') }}</a>
+    <a href="{{ url_for('site.partners_landing') }}">{{ t('nav.partners') }}</a>
+    <a href="{{ url_for('site.about') }}">{{ t('nav.about') }}</a>
+    <a href="{{ url_for('site.contacts') }}">{{ t('nav.contacts') }}</a>
+  </nav>
+  <div class="lang">{% for l in tenant.locales %}<a href="?lang={{ l }}" class="{{ 'on' if l==lang }}">{{ l|upper }}</a>{% endfor %}</div>
+  {% if tenant.phone %}<a href="tel:{{ tenant.phone|replace(' ','') }}" class="small" style="font-weight:800">{{ tenant.phone }}</a>{% endif %}
+  {% if user %}
+    <a class="btn sm" href="{{ url_for('admin.dashboard') if is_staff else (url_for('partner.index') if membership and membership.role=='partner' else url_for('account.index')) }}">{{ t('nav.cabinet') }}</a>
+  {% else %}<a class="btn sm ghost" href="{{ url_for('account.login') }}">{{ t('nav.cabinet') }}</a>{% endif %}
+  <a class="btn sm primary" href="{{ url_for('site.wizard') }}">{{ t('nav.calculate') }}</a>
+</div></header>
+<div class="container" style="padding-top:12px">{{ flashes() }}</div>
+<main>{% block content %}{% endblock %}</main>
+<footer class="site-foot"><div class="container">
+  <div class="grid g4">
+    <div><h4>{{ tenant.name }}</h4><p class="small">{{ tenant.legal_name }}<br>{{ tenant.address }}<br>{% if tenant.idno %}IDNO {{ tenant.idno }}{% endif %}</p></div>
+    <div><h4>{{ t('nav.services') }}</h4><p class="small"><a href="{{ url_for('site.services') }}">{{ t('nav.services') }}</a><br><a href="{{ url_for('site.equipment') }}">{{ t('nav.equipment') }}</a><br><a href="{{ url_for('site.products') }}">{{ t('nav.products') }}</a><br><a href="{{ url_for('export.pricelist_xlsx') }}">⤓ Прайс-лист (Excel)</a></p></div>
+    <div><h4>{{ t('nav.contacts') }}</h4><p class="small">{{ tenant.phone }}<br>{{ tenant.phone2 }}<br>{{ tenant.email }}</p></div>
+    <div><h4>{{ t('nav.partners') }}</h4><p class="small"><a href="{{ url_for('site.partners_landing') }}">{{ t('sec.partners.cta') }}</a><br><a href="{{ url_for('partner.index') }}">Портал партнёра</a><br><a href="{{ url_for('site.page', slug='terms') }}">Условия аренды</a></p></div>
+  </div>
+  <div class="bottom"><span>© {{ tenant.founded_year or now.year }}–{{ now.year }} {{ tenant.name }}. {{ t('footer.rights') }}.</span><span>{{ t('footer.powered') }} <a href="{{ url_for('platform.index') }}">{{ platform_name }}</a></span></div>
+</div></footer>
+<div class="sticky-cta"><a class="btn" href="tel:{{ tenant.phone|replace(' ','') }}">📞</a><a class="btn primary" href="{{ url_for('site.wizard') }}">{{ t('nav.calculate') }}</a></div>
+{% endblock %}

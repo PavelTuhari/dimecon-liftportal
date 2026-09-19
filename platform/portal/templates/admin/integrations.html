@@ -1,0 +1,138 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Интеграция с внешней CRM{% endblock %}
+{% block content %}
+<div class="grid g4 mb">
+  <div class="kpi"><b>{{ stats.contacts }}</b><span>контактов в платформе</span></div>
+  <div class="kpi"><b>{{ stats.imported }}</b><span>из них перенесено из CRM</span></div>
+  <div class="kpi"><b>{{ stats.orders }}</b><span>заявок всего</span></div>
+  <div class="kpi"><b>{{ 'есть' if tenant.settings.get('api_key') else 'нет' }}</b><span>ключ API для обмена</span></div>
+</div>
+
+<div class="grid g2" style="align-items:start">
+  <div>
+    <form class="card" method="post" enctype="multipart/form-data">{{ csrf() }}
+      <h3>Импорт из выгрузки CRM</h3>
+      <p class="small muted">Подходит выгрузка контактов, компаний или сделок из любой системы в формате CSV или Excel.
+        Колонки распознаются автоматически по заголовкам (русским, румынским, английским); сопоставление можно поправить.
+        Дубликаты определяются по телефону и e-mail — повторный импорт того же файла не создаёт копий.</p>
+      <div class="field"><label>Файл выгрузки</label><input type="file" name="file" accept=".csv,.xlsx,.xlsm,.txt" required></div>
+      <div class="grid g2">
+        <div class="field"><label>Метка источника</label><input name="source_label" value="crm-import" placeholder="например: bitrix24"></div>
+        <div class="field"><label>Привязать к партнёру B2B</label><select name="partner_id"><option value="">— не привязывать —</option>{% for p in partners %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}</select></div>
+      </div>
+      <label class="check"><input type="checkbox" name="create_orders" value="1"><span>Создать заявки из суммы оборота — перенести историю сделок в воронку</span></label>
+      {% if prev %}
+      <h4 class="mt">Сопоставление колонок · {{ prev.filename }} ({{ prev.count }} строк)</h4>
+      <div class="table-wrap"><table><thead><tr><th>Колонка в файле</th><th>Поле платформы</th></tr></thead><tbody>
+        {% for h in prev.headers %}<tr><td class="small">{{ h or '(без заголовка)' }}</td>
+          {% set col = loop.index0 %}
+          <td><select name="col{{ col }}" style="min-height:32px;padding:4px">
+            <option value="">— не импортировать —</option>
+            {% for key, title in fields.items() %}<option value="{{ key }}" {{ 'selected' if prev.mapping.get(col) == key }}>{{ title }}</option>{% endfor %}
+          </select></td></tr>{% endfor %}
+      </tbody></table></div>
+      {% endif %}
+      <div class="flex mt"><button class="btn" name="action" value="preview">Проверить файл</button>
+        <button class="btn primary" name="action" value="import">Импортировать</button></div>
+    </form>
+  </div>
+
+  <div>
+    {% if result %}
+    <div class="card" style="border-color:{{ 'var(--ok)' if result.ok else 'var(--warn)' }}">
+      <h3>{{ 'Пробный прогон' if result.dry_run else 'Импорт выполнен' }}</h3>
+      <div class="grid g4"><div class="kpi"><b>{{ result.total }}</b><span>строк</span></div>
+        <div class="kpi"><b>{{ result.created }}</b><span>новых</span></div>
+        <div class="kpi"><b>{{ result.updated }}</b><span>совпало</span></div>
+        <div class="kpi"><b>{{ result.skipped }}</b><span>пропущено</span></div></div>
+      {% if result.dry_run %}<p class="small muted mt">Данные не записаны. Проверьте сопоставление ниже и нажмите «Импортировать».</p>{% endif %}
+      {% if result.errors %}<div class="alert warning mt"><b>Проблемные строки ({{ result.errors|length }}):</b>
+        <ul class="small">{% for e in result.errors[:10] %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+      {% if result.samples %}<h4 class="mt">Что будет записано (первые {{ result.samples|length }})</h4>
+      <div class="table-wrap"><table><thead><tr><th>Имя</th><th>Компания</th><th>Телефон</th><th>E-mail</th><th>Оборот</th></tr></thead><tbody>
+        {% for s in result.samples %}<tr><td>{{ s.get('name','') }}</td><td>{{ s.get('company','') }}</td><td>{{ s.get('phone','') }}</td><td>{{ s.get('email','') }}</td><td>{{ s.get('revenue','') }}</td></tr>{% endfor %}
+      </tbody></table></div>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="card {{ 'mt' if result }}"><h3>Обмен в обратную сторону</h3>
+      <p class="small muted">Данные платформы доступны внешней системе двумя способами.</p>
+      <table class="small"><tbody>
+        <tr><td><b>Выгрузки Excel</b></td><td><a href="{{ url_for('export.contacts_xlsx') }}">контакты</a> · <a href="{{ url_for('export.orders_xlsx') }}">заявки</a> · <a href="{{ url_for('export.documents_xlsx') }}">документы</a> · <a href="{{ url_for('export.shifts_xlsx') }}">смены</a></td></tr>
+        <tr><td><b>REST API</b></td><td><code>GET /api/v1/orders</code>, <code>GET /api/v1/equipment</code>, <code>POST /api/v1/quotes</code> — заголовок <code>X-API-Key</code></td></tr>
+      </tbody></table>
+      <pre style="white-space:pre-wrap">curl -H "X-API-Key: {{ tenant.settings.get('api_key','—') }}" {{ request.url_root }}api/v1/orders</pre>
+      <a class="btn sm" href="{{ url_for('admin.team') }}">Управление ключом</a>
+    </div>
+
+    <form class="card mt" method="post" action="{{ url_for('admin.officeplus') }}">{{ csrf() }}
+      <h3>OfficePlus · Partner B2B API</h3>
+      <p class="small muted">Подключение к вашей системе на платформе Artgranit (модуль <code>partner</code>).
+        Каталог партнёра переносится в раздел «В продаже», заказы товаров уходят обратно в ERP.
+        Реальные маршруты — <code>/UNA.md/orasldev/partner/api/…</code>, публичный адрес — <code>officeplus.md/api/v1</code>.</p>
+      <div class="grid g2">
+        <div class="field"><label>Базовый адрес API</label><input name="base_url" value="{{ op.get('base_url','https://officeplus.md/api/v1') }}"></div>
+        <div class="field"><label>Логин партнёра</label><input name="username" value="{{ op.get('username','') }}"></div>
+        <div class="field"><label>Пароль</label><input type="password" name="password" placeholder="{{ '••••••' if op.get('password') else '' }}"></div>
+        <div class="field"><label>Изменения с даты (необязательно)</label><input name="since" placeholder="2026-09-01"><span class="hint">пусто — весь каталог постранично</span></div>
+      </div>
+      <label class="check"><input type="checkbox" name="auto_publish" value="1" {{ 'checked' if op.get('auto_publish') }}><span>Публиковать перенесённые товары на сайте сразу<br><span class="small muted">по умолчанию позиции создаются скрытыми — их проверяет контент-менеджер</span></span></label>
+      <div class="flex wrap mt">
+        <button class="btn" name="action" value="save">Сохранить</button>
+        <button class="btn" name="action" value="check">Проверить соединение</button>
+        <button class="btn" name="action" value="sync_preview">Пробная синхронизация</button>
+        <button class="btn primary" name="action" value="sync">Синхронизировать каталог</button>
+      </div>
+      {% if op.get('expires_at') %}<p class="tiny muted" style="margin:8px 0 0">Токен доступа действует до {{ op.expires_at[:19].replace('T',' ') }} (обновляется автоматически).</p>{% endif %}
+      <p class="tiny muted" style="margin:6px 0 0">Ограничение API — 120 запросов в минуту, клиент соблюдает его сам;
+        при истечении токена выполняется refresh, при 429 — пауза и повтор.</p>
+    </form>
+
+    <form class="card mt" method="post" action="{{ url_for('admin.oracle_source') }}">{{ csrf() }}
+      <h3>Oracle ERP OfficePlus · контрагенты напрямую</h3>
+      <p class="small muted">Чтение справочника контрагентов и оборотов из базы ERP. Запросы построены по схеме
+        вашего проекта: <code>TMS_ORG</code> + <code>TMS_UNIVERS</code> (TIP='O'), обороты — по
+        <code>VMDB_ST201D</code> и <code>TMDB_DOCS</code> (SYSFID 12280), учётные записи — <code>PAPI_PARTNER</code>.</p>
+      <div class="grid g2">
+        <div class="field"><label>Строка подключения (DSN)</label><input name="dsn" value="{{ ora.get('dsn','') }}" placeholder="host:1521/ORCL или TNS-алиас"></div>
+        <div class="field"><label>Пользователь</label><input name="user" value="{{ ora.get('user','') }}"></div>
+        <div class="field"><label>Пароль</label><input type="password" name="password" placeholder="{{ '••••••' if ora.get('password') else 'хранится в настройках компании' }}"></div>
+        <div class="field"><label>Режим драйвера</label><select name="mode">
+          <option value="thick" {{ 'selected' if ora.get('mode','thick')=='thick' }}>thick — для Oracle 11g (нужен Instant Client)</option>
+          <option value="thin" {{ 'selected' if ora.get('mode')=='thin' }}>thin — для 12.1+ и Autonomous</option></select></div>
+        <div class="field"><label>Каталог Instant Client</label><input name="lib_dir" value="{{ ora.get('lib_dir','') }}" placeholder="/opt/oracle/instantclient_21_13"></div>
+        <div class="field"><label>Каталог кошелька (Autonomous)</label><input name="wallet_dir" value="{{ ora.get('wallet_dir','') }}" placeholder="/home/ubuntu/oracle_wallets/wallet_…"></div>
+        <div class="field"><label>Схема (если объекты не в схеме пользователя)</label><input name="schema" value="{{ ora.get('schema','') }}"></div>
+        <div class="field"><label>Сколько записей читать</label><input type="number" name="limit" value="200" min="1" max="5000"></div>
+      </div>
+      <details><summary class="small muted" style="cursor:pointer">Свой SQL вместо штатного запроса</summary>
+        <textarea name="sql_counterparties" class="code" style="min-height:90px" placeholder="SELECT o.COD, u.DENUMIREA AS NAME, o.CODFISCAL, o.ADRESS FROM TMS_ORG o …">{{ ora.get('sql_counterparties','') }}</textarea>
+        <span class="hint">Колонки name / codfiscal / adress / gr1 / bank / cod распознаются автоматически. Пагинация по ROWNUM добавляется сама.</span></details>
+      <div class="grid g2 mt"><div class="field"><label>Отбор по названию или IDNO</label><input name="search" placeholder="необязательно"></div>
+        <div class="field"><label>Оборот за последние дней</label><input type="number" name="days" value="365"></div></div>
+      <label class="check"><input type="checkbox" name="with_revenue" value="1"><span>Подтянуть оборот по каждому контрагенту (продажи SYSFID 12280)</span></label>
+      <div class="flex wrap mt">
+        <button class="btn" name="action" value="save">Сохранить</button>
+        <button class="btn" name="action" value="check">Проверить подключение</button>
+        <button class="btn" name="action" value="preview">Пробное чтение</button>
+        <button class="btn primary" name="action" value="import">Импортировать контрагентов</button>
+      </div>
+      <p class="tiny muted" style="margin:8px 0 0">ERP работает на Oracle 11g, а thin-режим драйвера поддерживает только 12.1+.
+        Поэтому для 11g выбирайте thick и укажите каталог Instant Client на сервере платформы.</p>
+    </form>
+
+    <div class="card mt"><h3>Готовые сценарии подключения</h3>
+      <table class="small"><tbody>
+        <tr><td><b>Файловая выгрузка</b></td><td>работает сейчас: CSV/XLSX из любой CRM, ручной или регулярный импорт</td></tr>
+        <tr><td><b>REST-обмен</b></td><td>работает сейчас: чтение заявок и каталога, создание расчётов по ключу API</td></tr>
+        <tr><td><b>OfficePlus / Artgranit</b></td><td>клиент Partner B2B API готов: авторизация с обновлением токена, каталог, остатки, отправка заказа; нужны логин и пароль партнёра</td></tr>
+        <tr><td><b>Oracle напрямую</b></td><td>адаптер готов: запросы по схеме TMS_ORG / TMS_UNIVERS / PAPI_PARTNER; нужны DSN, пользователь и пароль</td></tr>
+        <tr><td><b>Вебхуки из CRM</b></td><td>требует настройки на стороне CRM: приём событий «новый контакт / сделка»</td></tr>
+      </tbody></table>
+      <p class="tiny muted" style="margin-bottom:0">Первые три сценария работают без доработок кода. Последние два настраиваются
+        после предоставления доступа — кошелька Oracle либо возможности слать вебхуки.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

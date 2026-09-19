@@ -1,0 +1,36 @@
+{% extends "platform/_layout.html" %}
+{% from "_macros.html" import csrf, status_badge with context %}
+{% block title %}Суперадмин{% endblock %}
+{% block content %}
+<div class="container" style="padding:32px 24px">
+  <div class="flex between mb"><h1>Управление платформой</h1>
+    <div class="flex"><a class="btn sm" href="{{ url_for('platform.mail_log') }}">Журнал почты</a><a class="btn sm" href="{{ url_for('platform.ddl') }}" target="_blank">DDL для MySQL</a></div></div>
+  <div class="grid g4 mb2">
+    <div class="kpi"><b>{{ totals.tenants }}</b><span>компаний</span></div>
+    <div class="kpi"><b>{{ totals.users }}</b><span>пользователей</span></div>
+    <div class="kpi"><b>{{ totals.orders }}</b><span>заявок всего</span></div>
+    <div class="kpi"><b>{{ totals.equipment }}</b><span>единиц техники</span></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Компания</th><th>Город</th><th>Статус</th><th>Пакет</th><th>Заявок</th><th>В списке</th><th>Домен</th><th></th></tr></thead>
+    <tbody>{% for tnt in tenants %}
+    <tr>
+      <td><b>{{ tnt.name }}</b><br><span class="tiny muted">/s/{{ tnt.slug }} · {{ tnt.email }}</span></td>
+      <td>{{ tnt.city }}</td>
+      <td>{{ status_badge(tnt.status) }}</td>
+      <td>{{ tnt.plan|upper }}</td>
+      <td>{{ counts[tnt.id] }}</td>
+      <td>{{ '✔' if tnt.is_listed else '—' }}</td>
+      <td class="small">{{ tnt.custom_domain or '—' }}</td>
+      <td>
+        <form method="post" action="{{ url_for('platform.tenant_status', tid=tnt.id) }}" class="flex">{{ csrf() }}
+          <select name="status" style="min-height:32px;padding:4px"><option value="active" {{ 'selected' if tnt.status=='active' }}>active</option><option value="pending" {{ 'selected' if tnt.status=='pending' }}>pending</option><option value="suspended" {{ 'selected' if tnt.status=='suspended' }}>suspended</option></select>
+          <select name="plan" style="min-height:32px;padding:4px"><option {{ 'selected' if tnt.plan=='base' }}>base</option><option {{ 'selected' if tnt.plan=='pro' }}>pro</option><option {{ 'selected' if tnt.plan=='max' }}>max</option></select>
+          <label class="small"><input type="checkbox" name="is_listed" value="1" {{ 'checked' if tnt.is_listed }}> листинг</label>
+          <button class="btn sm">OK</button>
+        </form>
+        <div class="flex mt" style="gap:6px"><a class="btn sm" href="{{ url_for('site.home', tenant_slug=tnt.slug) }}">Сайт</a><a class="btn sm navy" href="{{ url_for('admin.dashboard', tenant_slug=tnt.slug) }}">Кабинет</a></div>
+      </td>
+    </tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+============================================================================
+AUTO
+[ru][0] Автокран КС-3577
+        СВОДКА: Грузоподъемность максимальная Q=14 т; Вылет максимальный R=13,0 м; Высота подъема максимальная H=14,5 м.
+[ru][1] Автокран КС-4562
+        СВОДКА: Грузоподъемность максимальная Q=17 т; Вылет максимальный R=11 м; Высота подъема максимальная H=12,2 м.
+[ru][2] Автокран GROVE GMK 5100
+        СВОДКА: Грузоподъемность максимальная Q=100 т; Вылет выдвинутой стрелы, максимальный R=46 м; Высота подъема максимальная H=68 м.
+   ---
+[ro][0] Macara auto GROVE GMK 3055
+        СВОДКА: Macaraua este utilată cu braț telescopic cu lungimea de 43 metri.Brațul poate fi completat cu un prelungitor cu lungimea de 15 metri
+[ro][1] Macara auto GROVE GMK 2035
+        СВОДКА: Macaraua este utilată cu braț telescopic cu lungimea de 29 metri.Brațul poate fi completat cu un prelungitor cu lungimea de 15 metri
+[ro][2] Macara auto KC-3577
+        СВОДКА: Sarcina nominală Q=14 t; Deschiderea brațului R=13 m; Înălțimea maximă de ridicare: H=14,5 m.
+[ro][3] Macara auto KC-4562
+        СВОДКА: Sarcina nominală Q=17 t; Deschiderea brațului R=11 m; Înălțimea maximă de ridicare: H=12,2 m.
+[ro][4] Macara auto GROVE GMK 5100
+        СВОДКА: Sarcina nominală Q=100 t; Deschiderea maximă a brațului telescopat R=46 m; Înălțimea maximă de ridicare: H=68 m.
+   ---
+[en][0] Mobile crane KC-3577
+        СВОДКА: Maximum lifting capacity Q=14 t; Maximum operating radius R=13 m; Maximum hoisting height H=14,5 m.
+[en][1] Mobile crane KC-4562
+        СВОДКА: Maximum lifting capacity Q=17 t; Maximum operating radius R=11 m; Maximum hoisting height H=12,2 m.
+[en][2] Mobile crane KC-6471
+        СВОДКА: Maximum lifting capacity Q=40 t; Maximum opening of the telescopic jib R=18 m; Maximum hoisting height H=34 m.
+[en][3] Mobile crane GROVE GMK 5100
+        СВОДКА: Maximum lifting capacity Q=100 t; Maximum opening of the telescopic jib R=46 m; Maximum hoisting height H=68 m.
+   ---
+============================================================================
+TURN
+[ru][0] Башенный кран КБ-308, КБ-308А
+        СВОДКА: Грузоподъемность максимальная Q=8 т; Вылет максимальный R=25 м; Высота подъема максимальная H=42 м.
+[ru][1] Башенный кран КБ-309ХЛ
+        СВОДКА: Грузоподъемность максимальная Q=8 т; Вылет максимальный R=25 м; Высота подъема максимальная H=37 м.
+[ru][2] Башенный кран POTAIN MC-85B
+        СВОДКА: Грузоподъемность максимальная Q=5 т; Вылет максимальный R=50 м; Высота подъема максимальная H=94,5 м.
+[ru][3] Башенный кран POTAIN MCT-88
+        СВОДКА: Грузоподъемность максимальная Q=5 т; Вылет максимальный R=52 м; Высота подъема максимальная H=127 м.
+[ru][4] Башенный кран Irmaos Tavares IT-54 5fd
+        СВОДКА: Грузоподъемность максимальная Q=6 т; Вылет максимальный R=54 м; Высота подъема максимальная H=109,9 м.
+[ru][5] Башенный кран COMANSA 10LC 140
+        СВОДКА: Грузоподъемность максимальная Q=8 т; Вылет максимальный R=60 м; Высота подъема максимальная H=82,6 м.
+[ru][6] Башенный кран КБ-403А, КБ-403Б
+        СВОДКА: Грузоподъемность максимальная Q=8 т; Вылет максимальный R=30 м; Высота подъема максимальная H=57,5 м.
+[ru][7] Башенный кран КБ-405-1А, КБ-405-1АМ, КБ-405-2А
+        СВОДКА: Грузоподъемность максимальная Q=10 т; Вылет максимальный R=30 м; Высота подъема максимальная H=70 м.
+[ru][8] Башенный кран КБ-408
+        СВОДКА: Грузоподъемность максимальная Q=10 т; Вылет максимальный R=30 м; Высота подъема максимальная H=54,7 м.
+   ---
+[ro][0] Macara turn POTAIN MC-85B
+        СВОДКА: Sarcina nominală Q=5 t; Raza maximă de acțiune R=50 m; Înălțimea maximă de ridicare: H=94,5 m.
+[ro][1] Macara turn POTAIN MCT-88
+        СВОДКА: Sarcina nominală Q=5 t; Raza maximă de acțiune R=52 m; Înălțimea maximă de ridicare H=127 m.
+[ro][2] Macara turn Irmaos Tavares IT-54 5fd
+        СВОДКА: Sarcina nominală Q=6 t; Raza maximă de acțiune R=54 m; Înălțimea maximă de ridicare H=109,9 m.
+[ro][3] Macara turn COMANSA 10LC 140
+        СВОДКА: Sarcina nominală Q=8 t; Raza maximă de acțiune R=60 m; Înălțimea maximă de ridicare H=82,6 m.
+[ro][4] Macara turn KБ-403A, KБ-403Б
+        СВОДКА: Sarcina nominală Q=8 t; Raza maximă de acțiune R=30 m; Înălțimea maximă de ridicare H=57,5 m.
+[ro][5] Macara turn KБ-405-1A, KБ-405-1AM, KБ-405-2A
+        СВОДКА: Sarcina nominală Q=10 t; Raza maximă de acțiune R=30 m; Înălțimea maximă de ridicare H=70 m.
+[ro][6] Macara turn KБ-408
+        СВОДКА: Sarcina nominală Q=10 t; Raza maximă de acțiune R=30 m; Înălțimea maximă de ridicare H=54,7 m.
+[ro][7] Macara turn KБ-308, KБ-308A
+        СВОДКА: Sarcina nominală Q=8 t; Raza maximă de acțiune R=25 m; Înălțimea maximă de ridicare H=42 m.
+[ro][8] Macara turn KБ-309 ХЛ
+        СВОДКА: Sarcina nominală Q=8 t; Raza maximă de acțiune R=25 m; Înălțimea maximă de ridicare H=37 m.
+   ---
+[en][0] Tower crane POTAIN MC-85B
+        СВОДКА: Maximum lifting capacity Q=5 t; Maximum jib range R=50 m; Maximum hoisting height H=94,5 m.
+[en][1] Tower crane POTAIN MCT-88
+        СВОДКА: Maximum lifting capacity Q=5 t; Maximum jib range R=52 m; Maximum hoisting height H=127 m.
+[en][2] Tower crane Irmaos Tavares IT-54 5fd
+        СВОДКА: Maximum lifting capacity Q=6 t; Maximum jib range R=54 m; Maximum hoisting height H=109,9 m.
+[en][3] Tower crane COMANSA 10LC 140
+        СВОДКА: Maximum lifting capacity Q=8 t; Maximum jib range R=60 m; Maximum hoisting height H=82,6 m.
+[en][4] Tower crane KB-403A, KB-403B
+        СВОДКА: Maximum lifting capacity Q=8 t; Maximum operating radius R=30 m; Maximum hoisting height H=57,5 m.
+[en][5] Tower crane КB-405-1А, КB-405-1АМ, КB-405-2А
+        СВОДКА: Maximum lifting capacity Q=10 t; Maximum operating radius R=30 m; Maximum hoisting height H=70 m.
+[en][6] Tower crane KB-408
+        СВОДКА: Maximum lifting capacity Q=10 t; Maximum operating radius R=30 m; Maximum hoisting height H=54,7 m.
+[en][7] Tower crane KB-308, KB-308A
+        СВОДКА: Maximum lifting capacity Q=8 t; Maximum operating radius R=25 m; Maximum hoisting height H=42 m.
+[en][8] Tower crane KB-309 HL
+        СВОДКА: Maximum lifting capacity Q=8 t; Maximum operating radius R=25 m; Maximum hoisting height H=37 m.
+   ---
+============================================================================
+SENILE
+[ru][0] Гусеничный кран RDK 250
+        СВОДКА: Грузоподъемность максимальная Q=25 т; Вылет максимальный R=26,05 м; Высота подъема максимальная H=44,98 м.
+   ---
+[ro][0] Macara pe şenile RDK 250
+        СВОДКА: Sarcina nominală Q=25 t; Raza maximă de acțiune R=26,05 m; Înălțimea maximă de ridicare H=44,98 m.
+   ---
+[en][0] Crawler crane RDK 250
+        СВОДКА: Maximum lifting capacity Q=25 t; Maximum operating radius R=26,05 m; Maximum hoisting height H=44,98 m.
+   ---
+============================================================================
+TRANSPORT
+[ru][0] Полуприцеп A-441
+        СВОДКА: Грузоподъемность 10200 кг; Длина платформы 6500 мм Ширина платформы 2500 мм Высота платформы 750 мм
+[ru][1] Полуприцеп SJ-45S
+        СВОДКА: Грузоподъемность 45000 кг; Длина платформы 9270 мм Ширина платформы 3150 мм Высота платформы 955 мм
+[ru][2] Полуприцеп CMZAP-93853
+        СВОДКА: Грузоподъемность 26000 кг; Длина платформы 7050 мм Ширина платформы 2500 мм Высота платформы 1150 мм
+[ru][3] Полуприцеп 3PT 40-206, 3PT 40-206M
+        СВОДКА: Грузоподъемность 40000 кг; Длина платформы 3730 мм Ширина платформы 3000 мм Высота платформы 980 мм
+[ru][4] Полуприцеп FAYMONVILLE SNT-4U
+        СВОДКА: Грузоподъемность 63000 кг Длина платформы 7950+4000 мм Ширина платформы 2740+375 мм Высота платформы 860 мм
+[ru][5] Самосвал 555-102
+        СВОДКА: Грузоподъемность 10000 кг; Длина платформы 3800 мм Ширина платформы 2268 мм
+   ---
+[ro][0] SEMIREMORCĂ A-441
+        СВОДКА: Capacitatea de încărare 10200 kg Lungimea platformei 6500 mm Lățimea platformei 2500 mm Înălțimea platformei 750 mm
+[ro][1] SMIREMORCĂ FAYMONVILLE SNT-4U
+        СВОДКА: Capacitatea de încărare 63000 kg Lungimea platformei 7950+4000 mm Lățimea platformei 2740+375 mm Înălțimea platformei 860 mm
+[ro][2] SEMIREMORCĂ SJ-45S
+        СВОДКА: Capacitatea de încărare 45000 kg Lungimea platformei 9270 mm Lățimea platformei 3150 mm Înălțimea platformei 955 mm
+[ro][3] SEMIREMORCĂ CMZAP-93853
+        СВОДКА: Capacitatea de încărare 26000 kg Lungimea platformei 7050 mm Lățimea platformei 2500 mm Înălțimea platformei 1150 mm
+[ro][4] SEMIREMORCĂ 3PT 40-206, 3PT 40-206M
+        СВОДКА: Capacitatea de încărare 40000 kg Lungimea platformei 3730 mm Lățimea platformei 3000 mm Înălțimea platformei 980 mm
+[ro][5] AUTOBASCULANTĂ МАЗ 555-102
+        СВОДКА: capacitatea de încărcare 10000 kg Lungimea platformei 3800 mm Lățimea platformei 2268 mm
+   ---
+[en][0] Semitrailer A-441
+        СВОДКА: Load capacity 10200 kg Platform length 6500 mm Platform width 2500 mm Platform height 750 mm
+[en][1] Semitrailer SJ-45S
+        СВОДКА: Load capacity 45000 kg Platform length 9270 mm Platform width 3150 mm Platform height 955 mm
+[en][2] Semitrailer CMZAP-93853
+        СВОДКА: Load capacity 26000 kg Platform length 7050 mm Platform width 2500 mm Platform height 1150 mm
+[en][3] Semitrailer 3PT 40-206, 3PT 40-206M
+        СВОДКА: Load capacity 40000 kg Platform length 3730 mm Platform width 3000 mm Platform height 980 mm
+[en][4] Semitrailer FAYMONVILLE SNT-4U
+        СВОДКА: Load capacity 63000 kg Platform length 7950+4000 mm Platform width 2740+375 mm Platform height 860 mm
+[en][5] Dump truck МАZ 555-102
+        СВОДКА: Load capacity 10000 kg Platform length 3800 mm Platform width 2268 mm
+   ---
+============================================================================
+VINZARI
+[ru][0] аренда помещении
+[ru][1] Стальные канаты
+        СВОДКА: Продажа различных видов стального каната диаметром от 5,6 до 39,5 мм в диаметре.
+[ru][2] Грузозахватные приспособления и аксессуары
+        СВОДКА: Изготовляем грузозахватные приспособления: стропы, чалки траверсы. Продаем аксессуары грузозахватных приспособлений: крюки, коуши и скобы.
+[ru][3] Оборудование
+[ru][4] Запчасти для грузоподъемных кранов
+   ---
+[ro][0] arenda incaperi
+[ro][1] Cablu de oțel
+        СВОДКА: Comercializăm cablu de oțel de diferite tipuri cu diametrul de la 5,6-39,5 mm.
+[ro][2] Dispozitive pentru agăţarea şi manevrarea sarcinii, și accesorii
+        СВОДКА: Confecționăm la comandă dispozitive pentru suspendarea și manevrarea sarcinii: sapane traverse. Realizăm accesorii ale dispozitivelor pentru suspendarea și manevrarea sarcinii: lire, cîrlige, rodanțe, scoabe.
+[ro][3] Utilaje
+        СВОДКА: Vindem macarale,semiremorci,excavator,cisterne și altele
+[ro][4] Piese de schimb pentru macarale
+   ---
+[en][0] Steel Wire Ropes
+        СВОДКА: We sell ​​different types of wire ropes from 5.6 to 39.5 mm diameter.
+[en][1] Devices for hanging and handling pregnancy, and accessories.
+        СВОДКА: We produce to order devices for suspension and handling of the task:sapane traverse. We make accessories for suspension and handling of the task: pounds, hooks, rodanţe, scoabe.
+[en][2] Equipment
+        СВОДКА: We achieve second-hand equipment.
+[en][3] Spare parts for cranes.
+   ---
+============================================================================
+SERVICII
+[0] Предоставляем услуги башенными, авто и самоходными кранами
+[1] Перевозим крупногабаритные и тяжелые грузы, краны
+[2] Монтируем-демонтируем башенные краны
+[3] Сдаем краны в аренду
+[4] Проектируем и изготовляем элементы связи к зданью башенных кранов
+[5] Проводим диагностику грузоподъемных механизмов
+[6] Проводим периодичное техническое испытание контрольными грузами
+[7] Проводим периодичное техническое обслуживание и ремонт грузоподъемных механизмов
+[8] Ремонтируем гидравлическое оборудование грузоподъемных механизмов
+[9] Ремонтируем обмотки электродвигателей и гидротолкателей
+[10] Изготовливаем и ремонтируем металлоконструкции грузоподъемных механизмов
+[11] Устанавливаем и ремонтируем подкрановые пути
+[12] Разрабатываем дубликаты паспортов для кранов, автогидроподъемников и автовышек
+[13] Разрабатываем проекты для установки и эксплуатаций грузоподъемных кранов

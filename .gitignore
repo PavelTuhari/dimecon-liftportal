@@ -1,0 +1,19 @@
+# окружение и сборки
+.venv/
+dist/
+__pycache__/
+*.pyc
+*.pyo
+
+# локальные секреты и базы
+platform/.env
+.env
+*.db
+*.db-wal
+*.db-shm
+*.sqlite3
+
+# служебное
+.claude/
+Thumbs.db
+.DS_Store

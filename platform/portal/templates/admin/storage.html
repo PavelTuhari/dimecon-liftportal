@@ -1,0 +1,19 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Хранилище файлов{% endblock %}
+{% block content %}
+<div class="alert {{ 'success' if ok else 'warning' }}">{{ msg }}</div>
+{% set s = tenant.storage or {} %}
+<form class="card" method="post" style="max-width:820px">{{ csrf() }}<h3>Где лежат ваши файлы</h3><p class="small muted">Централизованы только портал и база данных. Файлы (фото техники, планы, документы) могут находиться в любом месте — платформа хранит лишь ссылку.</p>
+  <div class="grid g3">
+    <label class="check"><input type="radio" name="backend" value="local" {{ 'checked' if s.get('backend','local')=='local' }}><span><b>Диск платформы</b><br><span class="small muted">простой старт, файлы в /uploads/{{ tenant.slug }}</span></span></label>
+    <label class="check"><input type="radio" name="backend" value="url" {{ 'checked' if s.get('backend')=='url' }}><span><b>Внешние ссылки</b><br><span class="small muted">свой сервер/CDN/облако — добавляете файлы по URL</span></span></label>
+    <label class="check"><input type="radio" name="backend" value="s3" {{ 'checked' if s.get('backend')=='s3' }}><span><b>S3-совместимое</b><br><span class="small muted">MinIO, Cloudflare R2, AWS, Yandex, Hetzner</span></span></label></div>
+  <h4 class="mt">Параметры S3</h4>
+  <div class="grid g2"><div class="field"><label>Endpoint</label><input name="endpoint" value="{{ s.get('endpoint','') }}" placeholder="https://s3.eu-central-1.amazonaws.com или https://minio.company.md"></div><div class="field"><label>Bucket</label><input name="bucket" value="{{ s.get('bucket','') }}"></div>
+    <div class="field"><label>Region</label><input name="region" value="{{ s.get('region','') }}" placeholder="auto"></div><div class="field"><label>Префикс</label><input name="prefix" value="{{ s.get('prefix','') }}" placeholder="site/"></div>
+    <div class="field"><label>Access key</label><input name="access_key" value="{{ s.get('access_key','') }}"></div><div class="field"><label>Secret key</label><input type="password" name="secret_key" placeholder="{{ '••••••' if s.get('secret_key') else '' }}"></div></div>
+  <div class="field"><label>Публичный базовый URL (CDN)</label><input name="public_base_url" value="{{ s.get('public_base_url','') }}" placeholder="https://cdn.company.md"></div>
+  <p class="tiny muted">Для S3 на сервере платформы нужен пакет <code>boto3</code> (<code>pip install boto3</code>).</p>
+  <button class="btn primary">Сохранить и проверить</button></form>
+{% endblock %}

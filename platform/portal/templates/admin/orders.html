@@ -1,0 +1,29 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block heading %}Заявки и сделки{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <div class="seg"><a href="?view=kanban" class="{{ 'on' if view=='kanban' }}">Канбан</a><a href="?view=list" class="{{ 'on' if view=='list' }}">Список</a></div>
+  <div class="seg"><a href="?view={{ view }}" class="{{ 'on' if not kind }}">Все</a><a href="?view={{ view }}&kind=b2c" class="{{ 'on' if kind=='b2c' }}">B2C</a><a href="?view={{ view }}&kind=b2b" class="{{ 'on' if kind=='b2b' }}">B2B</a></div>
+  <form method="get"><input type="hidden" name="view" value="{{ view }}"><input name="q" value="{{ request.args.get('q','') }}" placeholder="№, имя, телефон, адрес"><button class="btn sm">Найти</button></form>
+  <a class="btn sm" style="margin-left:auto" href="{{ url_for('export.orders_xlsx', kind=kind) }}">⤓ Excel</a>
+  <span class="small muted">{{ rows|length }} записей</span>
+</div>
+{% if view == 'kanban' %}
+<div class="kanban">{% for s in stages %}<div class="kcol" data-stage="{{ s }}"><h4>{{ status_badge(s) }}<span>{{ by_stage[s]|length }}</span></h4>
+  {% for o in by_stage[s] %}<a class="kcard" draggable="true" data-id="{{ o.id }}" href="{{ url_for('admin.order', oid=o.id) }}"><b>{{ o.number }} {% if o.escalated %}<span class="badge warn">⚠</span>{% endif %}{% if o.kind=='b2b' %}<span class="badge info">B2B</span>{% endif %}</b>
+    {{ o.contact.name if o.contact }} · {{ o.cargo or o.task_type }} {{ o.weight_t if o.weight_t }}{{ ' т' if o.weight_t }}
+    <div class="meta"><span>{{ o.starts_at|dt('%d.%m %H:%M') }}</span><span>{% if o.price_final %}{{ o.price_final|money }}{% elif o.price_max %}до {{ o.price_max|money }}{% endif %}</span></div></a>{% endfor %}</div>{% endfor %}</div>
+{% else %}
+<div class="table-wrap"><table><thead><tr><th>№</th><th>Тип</th><th>Клиент</th><th>Задача</th><th>Техника</th><th>Подача</th><th>Цена</th><th>Этап</th><th>Статус</th><th>Создана</th></tr></thead><tbody>
+{% for o in rows %}<tr><td><a href="{{ url_for('admin.order', oid=o.id) }}"><b>{{ o.number }}</b></a>{% if o.escalated %} <span class="badge warn">⚠</span>{% endif %}</td><td>{{ o.kind|upper }}</td><td>{{ o.contact.name if o.contact }}<br><span class="tiny muted">{{ o.contact.phone if o.contact }}</span></td><td>{{ o.cargo }} {{ o.weight_t }} т</td><td>{{ o.equipment.model if o.equipment else '—' }}</td><td>{{ o.starts_at|dt }}</td><td>{% if o.price_final %}{{ o.price_final|money }}{% else %}{{ o.price_min|money }}–{{ o.price_max|money }}{% endif %}</td><td>{{ status_badge(o.stage) }}</td><td>{{ status_badge(o.status) }}</td><td class="small muted">{{ o.created_at|dt }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script>
+let drag=null;document.querySelectorAll('.kcard').forEach(c=>{c.addEventListener('dragstart',e=>{drag=c;e.dataTransfer.effectAllowed='move';});c.addEventListener('click',e=>{if(c.dataset.moved){e.preventDefault();delete c.dataset.moved;}});});
+document.querySelectorAll('.kcol').forEach(col=>{col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('over');});col.addEventListener('dragleave',()=>col.classList.remove('over'));
+col.addEventListener('drop',async e=>{e.preventDefault();col.classList.remove('over');if(!drag)return;col.appendChild(drag);drag.dataset.moved='1';
+ await fetch(`{{ url_for('admin.orders') }}/${drag.dataset.id}/stage`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','X-CSRF':'{{ csrf_token() }}'},body:'stage='+col.dataset.stage});
+ document.querySelectorAll('.kcol').forEach(k=>k.querySelector('h4 span').textContent=k.querySelectorAll('.kcard').length);});});
+</script>{% endblock %}

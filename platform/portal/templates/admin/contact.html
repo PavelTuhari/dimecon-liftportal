@@ -1,0 +1,15 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block heading %}{{ c.name }}{% endblock %}
+{% block content %}
+<a class="small muted" href="{{ url_for('admin.contacts') }}">← Контакты</a>
+<div class="grid g2 mt" style="align-items:start">
+  <form class="card" method="post">{{ csrf() }}<h3>Карточка</h3>
+    <div class="grid g2"><div class="field"><label>Имя</label><input name="name" value="{{ c.name }}"></div><div class="field"><label>Компания</label><input name="company" value="{{ c.company }}"></div>
+      <div class="field"><label>Телефон</label><input name="phone" value="{{ c.phone }}"></div><div class="field"><label>E-mail</label><input name="email" value="{{ c.email }}"></div>
+      <div class="field"><label>Тип</label><select name="kind"><option value="b2c" {{ 'selected' if c.kind=='b2c' }}>Частный</option><option value="b2b" {{ 'selected' if c.kind=='b2b' }}>Компания</option></select></div><div class="field"><label>Теги</label><input name="tags" value="{{ c.tags }}" placeholder="vip, стройка, повтор"></div></div>
+    <div class="field"><label>Заметки</label><textarea name="notes" rows="4">{{ c.notes }}</textarea></div><button class="btn primary">Сохранить</button></form>
+  <div><div class="card"><h3>Заказы ({{ orders|length }})</h3><table class="small"><tbody>{% for o in orders %}<tr><td><a href="{{ url_for('admin.order', oid=o.id) }}"><b>{{ o.number }}</b></a></td><td>{{ o.starts_at|dt('%d.%m.%Y') }}</td><td>{{ o.cargo }}</td><td>{{ (o.price_final or o.price_max)|money }}</td><td>{{ status_badge(o.status) }}</td></tr>{% endfor %}</tbody></table></div>
+  <div class="card mt"><h3>Активность</h3><ul class="activity">{% for a in acts %}<li>{{ a.body }}<div class="who">{{ a.created_at|dt }}</div></li>{% endfor %}</ul></div></div>
+</div>
+{% endblock %}

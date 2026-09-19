@@ -1,0 +1,21 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Команда, домен, API{% endblock %}
+{% block content %}
+<div class="grid g2" style="align-items:start">
+<div><div class="card"><h3>Сотрудники</h3><table class="small"><tbody>{% for m in members %}<tr><td><b>{{ m.user.full_name or m.user.email }}</b><br><span class="muted">{{ m.user.email }}</span></td>
+  <td><form method="post" class="flex">{{ csrf() }}<input type="hidden" name="action" value="role"><input type="hidden" name="mid" value="{{ m.id }}"><select name="role" style="min-height:32px;padding:4px">{% for r in ['owner','manager','dispatcher','staff','partner'] %}<option value="{{ r }}" {{ 'selected' if m.role==r }}>{{ r }}</option>{% endfor %}</select><button class="btn sm">OK</button></form></td>
+  <td>{% if m.role!='owner' %}<form method="post">{{ csrf() }}<input type="hidden" name="action" value="remove"><input type="hidden" name="mid" value="{{ m.id }}"><button class="btn sm ghost danger">✕</button></form>{% endif %}</td></tr>{% endfor %}</tbody></table>
+  <form method="post" class="flex mt">{{ csrf() }}<input type="hidden" name="action" value="invite"><input type="email" name="email" placeholder="e-mail сотрудника" required><select name="role" style="width:140px"><option value="dispatcher">dispatcher</option><option value="manager">manager</option><option value="staff">staff</option></select><button class="btn sm primary">Пригласить</button></form>
+  {% if invites %}<h4 class="mt">Ожидают активации</h4>{% for i in invites %}<div class="small">{{ i.email }} · {{ i.role }} · <a href="{{ url_for('admin.accept_invite', token=i.token) }}" style="color:var(--accent)">ссылка</a></div>{% endfor %}{% endif %}
+  <p class="tiny muted mt">Роли: owner — всё; manager — всё кроме удаления компании; dispatcher — заявки, техника, партнёры; staff — просмотр и заметки.</p></div></div>
+<div><div class="card"><h3>Собственный домен</h3><p class="small muted">Сайт доступен по адресу <b>{{ platform_host }}/s/{{ tenant.slug }}</b> и по поддомену <b>{{ tenant.slug }}.{{ platform_host }}</b>. Подключите свой домен: направьте A-запись (или CNAME) на сервер платформы — маршрутизация по Host выполняется автоматически.</p>
+  {% for d in domains %}<div class="small"><b>{{ d.host }}</b> {{ '· основной' if d.is_primary }}</div>{% endfor %}
+  <form method="post" class="flex mt">{{ csrf() }}<input type="hidden" name="action" value="domain"><input name="host" placeholder="cranes.company.md" required><button class="btn sm">Добавить</button></form></div>
+<div class="card mt"><h3>API для интеграций</h3><p class="small muted">REST API v1: каталог, расчёт, заказы. Заголовок <code>X-API-Key</code>.</p>
+  <pre>{{ tenant.settings.get('api_key') or '— ключ не выпущен —' }}</pre>
+  <pre>curl -H "X-API-Key: {{ tenant.settings.get('api_key','KEY') }}" {{ request.url_root }}api/v1/equipment
+curl -X POST -H "X-API-Key: …" -H "Content-Type: application/json" \
+  -d '{"equipment_id":1,"start":"2026-10-01T09:00","hours":4,"distance_km":12}' {{ request.url_root }}api/v1/quotes</pre>
+  <form method="post">{{ csrf() }}<input type="hidden" name="action" value="apikey"><button class="btn sm">Выпустить новый ключ</button></form></div></div></div>
+{% endblock %}

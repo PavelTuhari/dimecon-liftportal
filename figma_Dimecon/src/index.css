@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --color-navy: #1F3A52;
+  --color-navy-dark: #162B3D;
+  --color-navy-light: #2A4F6E;
+  --color-accent: #F5A623;
+  --color-accent-hover: #DB9218;
+  --color-accent-contrast: #14181B;
+  --color-bg-base: #FFFFFF;
+  --color-bg-subtle: #F5F6F7;
+  --color-bg-raised: #FFFFFF;
+  --color-bg-sunken: #EDEFF1;
+  --color-text-primary: #14181B;
+  --color-text-secondary: #5A646B;
+  --color-text-muted: #8A949B;
+  --color-border: #DDE1E4;
+  --color-border-strong: #C2C8CD;
+  --color-success: #2E7D4F;
+  --color-warning: #C77700;
+  --color-danger: #C0392B;
+  --color-info: #2D6CB5;
+  /* Dark theme */
+  --color-dark-bg: #0F1214;
+  --color-dark-subtle: #171B1E;
+  --color-dark-raised: #1E2327;
+  --color-dark-sunken: #0A0C0E;
+  --color-dark-text: #F2F4F5;
+  --color-dark-secondary: #A3ADB4;
+  --color-dark-muted: #6F7A81;
+  --color-dark-border: #2C3338;
+  --color-dark-border-strong: #3D454B;
+  --color-accent-dark: #FFB43D;
+}
+
+* {
+  font-family: 'Manrope', system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #FFFFFF;
+  color: #14181B;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C2C8CD; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #8A949B; }
+
+/* Smooth transitions */
+* { transition-property: color, background-color, border-color, box-shadow; transition-duration: 150ms; transition-timing-function: ease; }
+
+/* Status animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide-up { animation: slide-up 0.4s ease forwards; }

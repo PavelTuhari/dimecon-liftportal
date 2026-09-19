@@ -1,0 +1,19 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.partners') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<section class="hero"><div class="container" style="grid-template-columns:1fr"><div>
+  <div class="label">{{ t('sec.partners.label') }}</div><h1>Вся техника на ваших объектах — в одном окне</h1>
+  <p class="lead">Проекты, заявки за 30 секунд из шаблона, график техники, сменные рапорты с подтверждением в день смены, счета и договорные ставки.</p>
+  <div class="flex wrap"><a class="btn primary lg" href="{{ url_for('partner.apply') }}">{{ t('sec.partners.cta') }}</a><a class="btn lg" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" href="{{ url_for('partner.index') }}">Войти в портал</a></div>
+</div></div></section>
+<section class="block"><div class="container">
+  <h2>Боли подрядчика — и как портал их закрывает</h2>
+  <div class="grid g3 mt">{% for q,a in [('Спорим о часах в конце месяца','Сменный рапорт подтверждается прорабом в день смены — с фото и подписью.'),('Не знаю свои ставки, звоню уточнять','Договорный прайс и уровень партнёрства видны в портале постоянно.'),('Прораб не дозвонился диспетчеру','Заявка из шаблона за 30 секунд, статус и время подачи — в портале и push.'),('Бухгалтерия ждёт акты','Акты и счета формируются из подтверждённых рапортов, выгрузка в XLSX.'),('Нет истории по объекту','Проект хранит все заявки, смены, фото и документы за годы.'),('Сорванный график','График техники с конфликтами и приоритетной бронью для высоких уровней.')] %}
+  <div class="card"><h4>«{{ q }}»</h4><p class="small muted" style="margin:0">{{ a }}</p></div>{% endfor %}</div>
+</div></section>
+<section class="block alt"><div class="container"><h2>Уровни партнёрства</h2>
+<div class="table-wrap mt"><table><thead><tr><th>Уровень</th><th>Оборот за 12 мес</th><th>Скидка</th><th>Привилегии</th></tr></thead><tbody>
+{% for n,th,d,p in [('Базовый','до 100 000','0 %','портал, каталог, история, документы'),('Бронза','от 100 000','3 %','+ договорные ставки, отсрочка 7 дней'),('Серебро','от 400 000','5 %','+ приоритет заявок, отсрочка 14 дней, бесплатный выезд инженера'),('Золото','от 1 000 000','8 %','+ приоритетная бронь, закреплённый диспетчер, отсрочка 30 дней, API'),('Платина','от 3 000 000','12 %','+ гарантированный резерв техники, фиксация ставок на год')] %}
+<tr><td><b>{{ n }}</b></td><td>{{ th }} {{ tenant.currency }}</td><td><b>{{ d }}</b></td><td class="small">{{ p }}</td></tr>{% endfor %}</tbody></table></div>
+<a class="btn primary lg mt" href="{{ url_for('partner.apply') }}">{{ t('sec.partners.cta') }}</a></div></section>
+{% endblock %}

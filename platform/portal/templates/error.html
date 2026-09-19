@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ code }}{% endblock %}
+{% block body %}
+<div class="container" style="padding:80px 24px;max-width:640px">
+  <div class="label">Ошибка {{ code }}</div>
+  <h1>{{ message }}</h1>
+  <p class="muted">Проверьте адрес или вернитесь на главную.</p>
+  <a class="btn primary" href="{{ url_for('site.home') if tenant else url_for('platform.index') }}">На главную</a>
+</div>
+{% endblock %}

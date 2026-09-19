@@ -1,0 +1,16 @@
+﻿PDF (рендер страниц через PDFium):
+   + 52_pdf_confirmation.png — PDF: подтверждение заказа
+   + 53_pdf_quote.png — PDF: коммерческое предложение
+   + 54_pdf_invoice.png — PDF: счёт на оплату с суммой прописью
+   + 55_pdf_act.png — PDF: акт выполненных работ со сменами
+   + 56_pdf_shift.png — PDF: сменный рапорт
+XLSX:
+   + 57_xlsx_orders.png — Excel: реестр заявок
+   + 58_xlsx_pricelist.png — Excel: прайс-лист, 4 листа
+   + 59_xlsx_fleet.png — Excel: парк и грузовые таблицы
+   + 60_xlsx_shifts.png — Excel: табель смен
+Сравнение с исходным сайтом:
+   + 61_source_site.png — исходный сайт dimecon.md (каталог автокранов)
+   + 62_ported_catalog.png — тот же парк после переноса на платформу
+   + 63_ported_services.png — 14 услуг заказчика после переноса
+готово

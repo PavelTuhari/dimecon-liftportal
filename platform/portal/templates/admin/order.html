@@ -1,0 +1,52 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block heading %}{{ o.number }} {{ status_badge(o.status) }} {{ status_badge(o.stage) }}{% if o.escalated %} <span class="badge warn">нужен инженер</span>{% endif %}{% endblock %}
+{% block content %}
+<a class="small muted" href="{{ url_for('admin.orders') }}">← Все заявки</a>
+<div class="grid g2 mt" style="align-items:start">
+  <div>
+    <div class="card"><h3>Заявка · {{ o.kind|upper }} · {{ o.source }}</h3>
+      <table class="breakdown small"><tbody>
+        <tr><td>Клиент</td><td>{% if o.contact %}<a href="{{ url_for('admin.contact', cid=o.contact.id) }}"><b>{{ o.contact.name }}</b></a> · {{ o.contact.phone }} · {{ o.contact.email }}{% endif %}</td></tr>
+        <tr><td>Задача</td><td>{{ o.task_type }} · {{ o.cargo }} · <b>{{ o.weight_t }} т</b></td></tr>
+        <tr><td>Высота / расстояние</td><td>{{ o.height_m }} м / {{ o.radius_m }} м</td></tr>
+        <tr><td>Условия</td><td>{{ o.conditions|join(', ') or '—' }}</td></tr>
+        <tr><td>Адрес</td><td>{{ o.address }} <span class="muted">({{ o.zone }}, {{ o.distance_km }} км)</span></td></tr>
+        <tr><td>Подача</td><td>{{ o.starts_at|dt }} · {{ o.hours|int }} ч {% if o.flexible_date %}<span class="badge ok">гибкая дата</span>{% endif %}</td></tr>
+        <tr><td>Комментарий</td><td>{{ o.comment or '—' }}</td></tr>
+        <tr><td>Оценка</td><td>{{ o.price_min|money }} – {{ o.price_max|money(tenant.currency) }}</td></tr>
+      </tbody></table>
+      {% if o.escalation_reasons %}<div class="disclaimer mt"><b>Причины эскалации:</b><ul style="margin:6px 0 0 16px">{% for r in o.escalation_reasons %}<li>{{ r }}</li>{% endfor %}</ul></div>{% endif %}
+      {% if o.selector_log %}<details class="mt"><summary class="small muted" style="cursor:pointer">Журнал подборщика</summary><pre>{{ o.selector_log|tojson_pretty }}</pre></details>{% endif %}
+    </div>
+    {% if o.breakdown %}<div class="card mt"><h3>Расчёт, показанный клиенту</h3><table class="breakdown small"><tbody>{% for l in o.breakdown %}<tr><td>{{ l.title }}</td><td>{{ l.amount|money }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+    <div class="card mt"><h3>История и заметки</h3>
+      <form method="post" class="flex">{{ csrf() }}<input type="hidden" name="action" value="note"><select name="kind" style="width:130px"><option value="note">Заметка</option><option value="call">Звонок</option><option value="email">Письмо</option><option value="task">Задача</option></select><input name="body" placeholder="Что произошло…" required><button class="btn sm primary">+</button></form>
+      <ul class="activity mt">{% for a in o.activities %}<li>{{ a.body }}<div class="who">{{ a.kind }} · {{ a.created_at|dt }} · {{ a.user.full_name if a.user else 'система' }}</div></li>{% endfor %}</ul></div>
+  </div>
+  <div>
+    <div class="card"><h3>Обработка</h3>
+      <form method="post" class="mb">{{ csrf() }}<input type="hidden" name="action" value="status"><label class="small muted">Статус исполнения</label>
+        <div class="flex"><select name="status">{% for s in statuses %}<option value="{{ s }}" {{ 'selected' if s==o.status }}>{{ s }}</option>{% endfor %}</select><input name="note" placeholder="комментарий" style="flex:1"><button class="btn sm navy">Сменить</button></div></form>
+      <form method="post">{{ csrf() }}<input type="hidden" name="action" value="assign">
+        <div class="field"><label>Техника</label><select name="equipment_id"><option value="">— подберёт инженер —</option>{% for e in fleet %}<option value="{{ e.id }}" {{ 'selected' if e.id==o.equipment_id }}>{{ e.brand }} {{ e.model }} ({{ e.capacity_t|int }} т)</option>{% endfor %}</select></div>
+        <div class="grid g2"><div class="field"><label>Подача</label><input type="datetime-local" name="starts_at" value="{{ o.starts_at.strftime('%Y-%m-%dT%H:%M') if o.starts_at }}"></div><div class="field"><label>Часы</label><input type="number" step="0.5" name="hours" value="{{ o.hours }}"></div></div>
+        <div class="grid g2"><div class="field"><label>Ответственный</label><select name="assignee_id"><option value="">—</option>{% for u in staff %}<option value="{{ u.id }}" {{ 'selected' if u.id==o.assignee_id }}>{{ u.full_name or u.email }}</option>{% endfor %}</select></div>
+          <div class="field"><label>Итоговая цена, {{ tenant.currency }}</label><input type="number" name="price_final" value="{{ o.price_final or '' }}" placeholder="{{ o.price_max|int }}"></div></div>
+        <div class="field"><label>Внутренняя заметка</label><textarea name="internal_note" rows="2">{{ o.internal_note }}</textarea></div>
+        <button class="btn primary block">Сохранить и забронировать технику</button></form></div>
+    <div class="card mt"><h3>Документы</h3>
+      <div class="flex wrap mb"><a class="btn sm" href="{{ url_for('export.order_confirmation', oid=o.id) }}">⤓ Подтверждение PDF</a></div>
+      {% for d in docs %}<div class="flex between small" style="padding:6px 0;border-bottom:1px solid var(--border)"><span><b>{{ d.type|upper }} {{ d.number }}</b> · {{ d.issued_at }}</span>
+        <span>{{ d.amount|money(tenant.currency) }} {{ status_badge(d.status) }} <a class="btn sm" href="{{ url_for('export.document_pdf', did=d.id) }}">⤓ PDF</a></span></div>{% endfor %}
+      <form method="post" class="flex mt">{{ csrf() }}<input type="hidden" name="action" value="document"><select name="doc_type"><option value="quote">КП</option><option value="confirmation">Подтверждение</option><option value="act">Акт</option><option value="invoice">Счёт</option></select><input type="number" name="amount" placeholder="{{ (o.price_final or o.price_max)|int }}" style="width:120px"><label class="small"><input type="checkbox" name="send" value="1" checked> отправить</label><button class="btn sm">Выпустить</button></form></div>
+    <div class="card mt"><h3>Сменные рапорты</h3>
+      {% for s in shifts %}<div class="flex between small" style="padding:6px 0;border-bottom:1px solid var(--border)"><span>{{ s.work_date }} · {{ s.operator }} · <b>{{ s.hours_worked }} ч</b>{% if s.hours_idle %} + простой {{ s.hours_idle }} ч ({{ s.idle_fault }}){% endif %}</span>
+        <span>{{ status_badge(s.status) }} <a class="btn sm" href="{{ url_for('export.shift_pdf', sid=s.id) }}">⤓ PDF</a></span></div>{% endfor %}
+      <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="shift">
+        <div class="grid g3"><div class="field"><label>Дата</label><input type="date" name="work_date" value="{{ (o.starts_at or now).strftime('%Y-%m-%d') }}" required></div><div class="field"><label>Оператор</label><input name="operator"></div><div class="field"><label>Подъёмов</label><input type="number" name="lifts" value="0"></div>
+          <div class="field"><label>Часы работы</label><input type="number" step="0.5" name="hours_worked" value="{{ o.hours }}"></div><div class="field"><label>Простой, ч</label><input type="number" step="0.5" name="hours_idle" value="0"></div><div class="field"><label>Вина простоя</label><select name="idle_fault"><option value="">—</option><option value="customer">заказчик</option><option value="company">компания</option><option value="force_majeure">форс-мажор</option></select></div></div>
+        <div class="field"><input name="notes" placeholder="Примечания"></div><button class="btn sm">Добавить рапорт</button></form></div>
+  </div>
+</div>
+{% endblock %}

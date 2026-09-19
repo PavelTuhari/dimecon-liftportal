@@ -1,0 +1,24 @@
+{% extends "site/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block title %}{{ o.number }}{% endblock %}
+{% block content %}
+<div class="container" style="padding:36px 24px 64px;max-width:960px">
+  <a class="small muted" href="{{ url_for('account.index') }}">← {{ t('acc.orders') }}</a>
+  <div class="flex between wrap mt"><h1>{{ o.number }} {{ status_badge(o.status) }}</h1><form method="post" action="{{ url_for('account.repeat', oid=o.id) }}">{{ csrf() }}<button class="btn primary">{{ t('acc.repeat') }}</button></form></div>
+  <div class="grid g2 mt">
+    <div class="card"><h3>Параметры</h3><table class="breakdown"><tbody><tr><td>Груз</td><td>{{ o.cargo }} {{ o.weight_t }} т</td></tr><tr><td>Высота / расстояние</td><td>{{ o.height_m }} м / {{ o.radius_m }} м</td></tr><tr><td>Подача</td><td>{{ o.starts_at|dt }} · {{ o.hours|int }} ч</td></tr><tr><td>Адрес</td><td>{{ o.address }}</td></tr><tr><td>Техника</td><td>{{ o.equipment.brand ~ ' ' ~ o.equipment.model if o.equipment else '—' }}</td></tr></tbody></table></div>
+    <div class="card"><h3>Стоимость</h3>{% if o.breakdown %}<table class="breakdown small"><tbody>{% for l in o.breakdown %}<tr><td>{{ l.title }}</td><td>{{ l.amount|money }}</td></tr>{% endfor %}</tbody></table>{% endif %}
+      <p class="mt" style="font-size:22px;font-weight:800">{% if o.price_final %}{{ o.price_final|money(tenant.currency) }}{% else %}{{ o.price_min|money }} – {{ o.price_max|money(tenant.currency) }}{% endif %}</p></div>
+    <div class="card"><h3>Документы</h3>
+      <a class="btn sm mb" href="{{ url_for('export.order_confirmation', oid=o.id) }}">⤓ Подтверждение заказа, PDF</a>
+      {% if docs %}<ul class="small" style="list-style:none;padding:0">{% for d in docs %}<li style="padding:5px 0;border-bottom:1px solid var(--border)">{{ d.type|upper }} {{ d.number }} — {{ d.amount|money(tenant.currency) }} <span class="muted">{{ d.issued_at }}</span>
+        <a class="btn sm" href="{{ url_for('export.document_pdf', did=d.id) }}">⤓ PDF</a></li>{% endfor %}</ul>
+      {% else %}<p class="small muted">Счета и акты появятся после выполнения работ.</p>{% endif %}</div>
+    <div class="card"><h3>История</h3><ul class="activity">{% for a in o.activities %}<li>{{ a.body }}<div class="who">{{ a.created_at|dt }}</div></li>{% endfor %}</ul></div>
+  </div>
+  {% if o.status in ('completed','invoiced','paid') and not review %}<form class="card mt" method="post" action="{{ url_for('account.review', oid=o.id) }}">{{ csrf() }}<h3>Оцените работу</h3>
+    <div class="flex">{% for i in range(5,0,-1) %}<label class="check"><input type="radio" name="rating" value="{{ i }}" {{ 'checked' if i==5 }}>{{ '★'*i }}</label>{% endfor %}</div>
+    <div class="field mt"><textarea name="body" rows="3" placeholder="Что понравилось, что улучшить"></textarea></div><button class="btn primary">Отправить отзыв</button></form>
+  {% elif review %}<div class="card mt"><h3>Ваш отзыв</h3><div class="stars">{{ '★'*review.rating }}</div><p>{{ review.body }}</p></div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "partner/_layout.html" %}
+{% block heading %}График техники — 14 дней{% endblock %}
+{% block content %}
+<p class="small muted">Оранжевый — ваши брони, серый — занято другими (детали не раскрываются), пусто — свободно.</p>
+<div class="timeline"><div class="h">Техника</div>{% for d in days %}<div class="h">{{ d.strftime('%d.%m') }}<br><span class="faint">{{ ['пн','вт','ср','чт','пт','сб','вс'][d.weekday()] }}</span></div>{% endfor %}
+{% for e in fleet %}<div><b>{{ e.brand }} {{ e.model }}</b><br><span class="faint">{{ e.capacity_t|int }} т</span></div>{% for d in days %}<div class="cell {{ grid.get((e.id, d.date()), '') }}"></div>{% endfor %}{% endfor %}</div>
+{% endblock %}

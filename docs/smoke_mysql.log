@@ -1,0 +1,97 @@
+﻿DB: mysql
+тестовые объекты: техника #85 «ks-3577», услуга #81, заявка #1
+ok  200 /
+ok  200 /login
+ok  200 /register
+ok  200 /pricing
+ok  200 /s/dimecon/
+ok  200 /s/dimecon/equipment
+ok  200 /s/dimecon/equipment/ks-3577
+ok  200 /s/dimecon/services
+ok  200 /s/dimecon/services/predostavlyaem-uslugi-bashennymi-avto-i-samohodnymi-kranami-1
+ok  200 /s/dimecon/products
+ok  200 /s/dimecon/cases
+ok  200 /s/dimecon/about
+ok  200 /s/dimecon/contacts
+ok  200 /s/dimecon/partners
+ok  200 /s/dimecon/p/terms
+ok  200 /s/dimecon/calculator
+ok  200 /s/dimecon/account/login
+ok  200 /s/dimecon/account/register
+ok  200 /s/dimecon/partner/apply
+ok  200 /s/macara-nord/
+ok  200 /s/sudlift/?lang=ro
+ok  200 /s/sudlift/equipment?lang=en
+ok  200 /api/v1/health
+--- owner --- 302
+ok  200 /s/dimecon/admin/
+ok  200 /s/dimecon/admin/orders
+ok  200 /s/dimecon/admin/orders?view=list&kind=b2b
+ok  200 /s/dimecon/admin/orders/1
+ok  200 /s/dimecon/admin/contacts
+ok  200 /s/dimecon/admin/contacts/1
+ok  200 /s/dimecon/admin/tasks
+ok  200 /s/dimecon/admin/fleet
+ok  200 /s/dimecon/admin/fleet/new
+ok  200 /s/dimecon/admin/fleet/85
+ok  200 /s/dimecon/admin/content/services
+ok  200 /s/dimecon/admin/content/services/81
+ok  200 /s/dimecon/admin/content/products
+ok  200 /s/dimecon/admin/content/products/new
+ok  200 /s/dimecon/admin/content/cases/13
+ok  200 /s/dimecon/admin/content/pages/13
+ok  200 /s/dimecon/admin/reviews
+ok  200 /s/dimecon/admin/media
+ok  200 /s/dimecon/admin/partners
+ok  200 /s/dimecon/admin/shifts
+ok  200 /s/dimecon/admin/settings/branding
+ok  200 /s/dimecon/admin/settings/mail
+ok  200 /s/dimecon/admin/settings/storage
+ok  200 /s/dimecon/admin/settings/pricing
+ok  200 /s/dimecon/admin/settings/team
+ok  200 /s/dimecon/admin/integrations
+ok  200 /s/dimecon/admin/audit
+ok  200 /s/dimecon/partner/?partner_id=1
+ok  200 /s/dimecon/partner/projects/1?partner_id=1
+ok  200 /s/dimecon/partner/schedule?partner_id=1
+ok  200 /s/dimecon/partner/documents?partner_id=1
+ok  403 /s/macara-nord/admin/
+status change 200 True
+issue quote 200 True
+kanban drag 200 {'ok': True, 'stage': 'won'}
+--- partner --- 302
+ok  200 /s/dimecon/partner/
+ok  200 /s/dimecon/partner/projects/1
+ok  200 /s/dimecon/partner/schedule
+ok  200 /s/dimecon/partner/documents
+ok  403 /s/dimecon/admin/
+partner request x2 200 True
+--- client --- 302
+ok  200 /s/dimecon/account/
+ok  200 /s/dimecon/account/orders/1
+ok  200 /s/dimecon/account/profile
+repeat order -> wizard step6 200 True
+--- platform admin --- 302
+ok  200 /admin
+ok  200 /admin/mail
+ok  200 /admin/ddl
+ok  200 /s/sudlift/admin/
+ok  200 /s/macara-nord/admin/fleet
+--- exports (PDF/XLSX) ---
+ok  200 /s/dimecon/export/orders.xlsx
+ok  200 /s/dimecon/export/fleet.xlsx
+ok  200 /s/dimecon/export/pricelist.xlsx
+ok  200 /s/dimecon/export/shifts.xlsx
+ok  200 /s/dimecon/export/documents.xlsx
+ok  200 /s/dimecon/export/contacts.xlsx
+ok  200 /s/dimecon/export/orders/1/confirmation.pdf
+--- wizard e2e (anonymous) ---
+result 200 offers: 1 escalated: False
+submit 200 DIM-2026-00069
+ok  200 /s/dimecon/track/DIM-2026-00069
+escalation case: True
+api equipment 200 22
+api quote 200 5760
+api no key 401
+
+FAILURES: none

@@ -1,0 +1,10 @@
+{% extends "admin/_layout.html" %}
+{% set names = {'services':'Услуги','products':'Товары','cases':'Кейсы','pages':'Страницы'} %}
+{% block heading %}{{ names[kind] }}{% endblock %}
+{% block content %}
+<div class="toolbar"><a class="btn primary" href="{{ url_for('admin.content_edit', kind=kind) }}">+ Добавить</a><span class="small muted">{{ rows|length }} записей · переводы RU/RO/EN редактируются в карточке</span></div>
+<div class="table-wrap"><table><thead><tr><th>Название</th><th>Slug</th>{% if kind=='services' %}<th>Цена от</th>{% elif kind=='products' %}<th>SKU</th><th>Категория</th><th>Цена</th>{% elif kind=='cases' %}<th>Клиент</th><th>Год</th>{% endif %}<th>RU/RO/EN</th><th>Публ.</th></tr></thead><tbody>
+{% for r in rows %}<tr><td><a href="{{ url_for('admin.content_edit', kind=kind, iid=r.id) }}"><b>{{ tr(r.title) or '(без названия)' }}</b></a></td><td class="small muted">{{ r.slug }}</td>
+{% if kind=='services' %}<td>{{ r.price_from|money }}</td>{% elif kind=='products' %}<td>{{ r.sku }}</td><td>{{ r.category }}</td><td>{{ r.price|money }}</td>{% elif kind=='cases' %}<td>{{ r.client_name }}</td><td>{{ r.year }}</td>{% endif %}
+<td class="small">{% for l in LANGS %}<span class="badge {{ 'ok' if (r.title or {}).get(l) else '' }}">{{ l|upper }}</span>{% endfor %}</td><td>{{ '✔' if r.is_published else '—' }}</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.equipment') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container page-head"><div class="label">{{ t('sec.fleet.label') }}</div><h1>{{ t('sec.fleet.title') }}</h1>
+<form class="toolbar mt" method="get">
+  <div class="seg"><a href="{{ url_for('site.equipment') }}" class="{{ 'on' if not cat }}">{{ t('common.all') }}</a>{% for c in cats %}<a href="?cat={{ c.code }}" class="{{ 'on' if cat==c.code }}">{{ tr(c.name) }}</a>{% endfor %}</div>
+  <input type="number" name="min_cap" value="{{ min_cap or '' }}" placeholder="{{ t('eq.capacity') }} ≥ т" style="width:140px">{% if cat %}<input type="hidden" name="cat" value="{{ cat }}">{% endif %}<button class="btn sm">OK</button>
+</form></div>
+<div class="container" style="padding-bottom:64px">
+  {% if not items %}<div class="empty"><b>Техники с такими параметрами нет</b>Сбросьте фильтры</div>{% endif %}
+  <div class="grid g3">{% for eq in items %}{% include "site/_eq_card.html" %}{% endfor %}</div>
+</div>
+{% endblock %}

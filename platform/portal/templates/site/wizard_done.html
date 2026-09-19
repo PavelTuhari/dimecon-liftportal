@@ -1,0 +1,17 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('wz.success') }}{% endblock %}
+{% block content %}
+<div class="wz center"><div style="font-size:56px">✅</div><div class="label">{{ t('wz.success') }}</div>
+  <h1>{{ order.number }}</h1><p class="muted" style="font-size:17px">{{ t('wz.success.text') }}</p>
+  <div class="card" style="text-align:left"><table class="breakdown"><tbody>
+    <tr><td>Техника</td><td>{{ order.equipment.brand ~ ' ' ~ order.equipment.model if order.equipment else 'подберёт инженер' }}</td></tr>
+    <tr><td>{{ t('wz.date') }}</td><td>{{ order.starts_at|dt }}</td></tr>
+    <tr><td>{{ t('wz.address') }}</td><td>{{ order.address or '—' }}</td></tr>
+    {% if order.price_max %}<tr><td><b>Ориентировочно</b></td><td><b>{{ order.price_min|money }} – {{ order.price_max|money(tenant.currency) }}</b></td></tr>{% endif %}
+  </tbody></table></div>
+  {% if order.escalated %}<div class="disclaimer mt" style="text-align:left">{{ t('wz.escalated') }}</div>{% endif %}
+  <div class="flex wrap mt2" style="justify-content:center"><a class="btn primary" href="{{ url_for('site.track', number=order.number) }}">Отслеживать заявку</a>
+    {% if not user %}<a class="btn" href="{{ url_for('account.register') }}">Создать кабинет</a>{% else %}<a class="btn" href="{{ url_for('account.index') }}">{{ t('acc.orders') }}</a>{% endif %}
+    <a class="btn ghost" href="{{ url_for('site.home') }}">На главную</a></div>
+</div>
+{% endblock %}

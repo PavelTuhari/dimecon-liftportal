@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Документация проекта dimecon.md</title>
+<meta name="description" content="Единый хаб документации: ТЗ, акты, протоколы, скриншоты, сгенерированные PDF и Excel, исходный код">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF7; --raised:#FFFFFF; --sunken:#F4F2EC;
+  --ink:#16191C; --ink-2:#55606A; --ink-3:#8A939B;
+  --line:#E2DED4; --line-strong:#CFC9BC;
+  --accent:#D98A0B; --accent-soft:#FBEFD8; --navy:#1F3A52; --navy-soft:#E8EDF2;
+  --ok:#2E7D4F; --warn:#C77700; --bad:#B23B2E;
+  --sh-sm:0 1px 2px rgba(30,24,10,.06),0 1px 8px rgba(30,24,10,.04);
+  --sh-md:0 8px 28px rgba(30,24,10,.10);
+  --sans:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Source Serif 4",Georgia,serif;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  --side:296px; --measure:76ch;
+}
+:root[data-theme="dark"]{
+  --paper:#111417; --raised:#181C20; --sunken:#14181B;
+  --ink:#ECEFF1; --ink-2:#A6B0B8; --ink-3:#6E7880;
+  --line:#272D32; --line-strong:#39424A;
+  --accent:#F0A836; --accent-soft:#2B2113; --navy:#9EC2E0; --navy-soft:#16222C;
+  --sh-sm:0 1px 2px rgba(0,0,0,.4); --sh-md:0 10px 34px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
+
+/* ---------- шапка ---------- */
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;padding:9px 18px;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;white-space:nowrap}
+.brand .mark{width:26px;height:26px;border-radius:6px;background:var(--accent);display:grid;place-items:center;color:#1A1206;font-weight:800;font-size:13px}
+.brand small{display:block;font-weight:500;font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase}
+.spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 11px;border:1px solid var(--line-strong);
+  background:var(--raised);border-radius:8px;font-size:13px;font-weight:500;box-shadow:var(--sh-sm);white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.on{background:var(--accent-soft);border-color:var(--accent)}
+.search{position:relative;flex:0 1 330px}
+.search input{width:100%;height:34px;padding:0 11px 0 32px;border-radius:8px;border:1px solid var(--line-strong);background:var(--sunken);color:var(--ink);font-size:13px}
+.search input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.search svg{position:absolute;left:10px;top:9px;width:16px;height:16px;color:var(--ink-3)}
+
+/* ---------- каркас ---------- */
+.shell{display:grid;grid-template-columns:var(--side) minmax(0,1fr);align-items:start}
+.side{position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;padding:14px 10px 60px 16px;border-right:1px solid var(--line)}
+.grp{margin:12px 0 2px}
+.grp>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:7px;
+  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary:hover{background:var(--sunken)}
+.grp>summary::before{content:"▸";font-size:9px;transition:transform .15s}
+.grp[open]>summary::before{transform:rotate(90deg)}
+.grp .cnt{margin-left:auto;background:var(--sunken);border-radius:999px;padding:0 6px;font-size:10px;color:var(--ink-3)}
+.f{display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;padding:6px 9px;border:0;border-radius:7px;background:none;
+  font-size:13.2px;line-height:1.35;margin-bottom:1px;color:var(--ink)}
+.f:hover{background:var(--sunken)}
+.f[aria-current="true"]{background:var(--accent-soft);font-weight:600}
+.f .ic{width:15px;flex:none;text-align:center;font-size:12px;opacity:.75}
+.f .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f .sz{font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+
+/* ---------- контент ---------- */
+main{min-width:0;padding:0 clamp(14px,3vw,44px) 90px}
+.sheet{max-width:1180px;margin:0 auto}
+.head{padding:22px 0 14px;border-bottom:1px solid var(--line);margin-bottom:22px;display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
+.head h1{font-family:var(--serif);font-size:clamp(21px,2.7vw,30px);line-height:1.15;margin:4px 0 4px;letter-spacing:-.015em}
+.head .eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.head .meta{font-size:12.5px;color:var(--ink-3);font-family:var(--mono)}
+.head .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid var(--line-strong);border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--ink-2);background:var(--raised)}
+
+/* обложка */
+.cover{padding:38px 0 12px}
+.cover h1{font-family:var(--serif);font-size:clamp(28px,4.4vw,44px);line-height:1.08;margin:10px 0 8px;letter-spacing:-.02em}
+.cover .lead{font-size:17px;color:var(--ink-2);max-width:60ch;font-family:var(--serif)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:11px;margin:14px 0 4px}
+.tile{display:flex;flex-direction:column;gap:5px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;
+  background:var(--raised);box-shadow:var(--sh-sm);text-align:left;transition:.12s}
+.tile:hover{transform:translateY(-2px);border-color:var(--accent)}
+.tile .idx{font-family:var(--serif);font-size:11.5px;font-weight:700;color:var(--accent);letter-spacing:.07em;text-transform:uppercase}
+.tile h3{margin:0;font-size:14.5px;line-height:1.3}
+.tile p{margin:0;font-size:12.3px;color:var(--ink-2);line-height:1.45}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0}
+.kpi{border:1px solid var(--line);border-radius:12px;background:var(--raised);padding:13px 15px}
+.kpi b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;font-family:var(--serif)}
+.kpi span{font-size:11.5px;color:var(--ink-2)}
+.note{border-left:3px solid var(--accent);background:var(--accent-soft);padding:11px 15px;border-radius:0 8px 8px 0;font-size:13.4px;margin:18px 0}
+
+/* markdown */
+article{font-size:15.6px;max-width:var(--measure)}
+article h1{display:none}
+article h2{font-family:var(--serif);font-size:24px;line-height:1.22;margin:2em 0 .5em;padding-top:.45em;border-top:1px solid var(--line);scroll-margin-top:66px}
+article h2:first-of-type{border-top:0;margin-top:.3em;padding-top:0}
+article h3{font-size:18px;margin:1.6em 0 .45em;scroll-margin-top:66px}
+article h4{font-size:15px;margin:1.3em 0 .35em;color:var(--ink-2)}
+article p{margin:0 0 .95em}
+article ul,article ol{margin:0 0 1em;padding-left:1.3em}
+article li{margin:.25em 0}article li::marker{color:var(--accent)}
+article hr{border:0;border-top:1px solid var(--line);margin:2.2em 0}
+article blockquote{margin:1.3em 0;padding:11px 15px;border-left:3px solid var(--accent);background:var(--sunken);border-radius:0 8px 8px 0;color:var(--ink-2)}
+article code{font-family:var(--mono);font-size:.86em;background:var(--sunken);border:1px solid var(--line);padding:.08em .32em;border-radius:4px}
+article pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:13px 15px;overflow-x:auto;font-size:12.8px;line-height:1.55;margin:1.1em 0}
+article pre code{background:none;border:0;padding:0}
+article img{max-width:100%;border:1px solid var(--line);border-radius:8px;margin:.6em 0}
+article a{color:var(--navy);text-underline-offset:3px}
+.table-wrap{overflow-x:auto;margin:1.2em 0;border:1px solid var(--line);border-radius:10px;background:var(--raised);max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:13.3px}
+th,td{padding:7px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunken);font-weight:600;font-size:12.3px;white-space:nowrap;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--sunken)}
+mark.hit{background:var(--accent-soft);box-shadow:0 0 0 3px var(--accent-soft);border-radius:2px}
+
+/* просмотрщики */
+.viewer{max-width:100%}
+pre.raw{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto;
+  font-family:var(--mono);font-size:12.4px;line-height:1.55;max-height:78vh;white-space:pre-wrap;word-break:break-word}
+pre.raw .ok{color:var(--ok);font-weight:600}
+pre.raw .bad{color:var(--bad);font-weight:600}
+pre.raw .hd{color:var(--accent);font-weight:700}
+.imgbox{border:1px solid var(--line);border-radius:12px;background:var(--sunken);padding:10px;text-align:center;overflow:auto;max-height:82vh}
+.imgbox img{max-width:100%;border-radius:6px;box-shadow:var(--sh-sm);cursor:zoom-in}
+.imgbox img.zoom{max-width:none;cursor:zoom-out}
+object.pdf,iframe.htmlview{width:100%;height:82vh;border:1px solid var(--line);border-radius:12px;background:var(--raised)}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.tabs button{border:1px solid var(--line-strong);background:var(--raised);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:600}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.gcard{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--raised);text-align:left;padding:0}
+.gcard:hover{border-color:var(--accent)}
+.gcard img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:top;display:block;background:var(--sunken)}
+.gcard .c{padding:8px 10px;font-size:11.6px;line-height:1.35;color:var(--ink-2)}
+.gcard .c b{display:block;color:var(--ink);font-size:12px;margin-bottom:2px}
+.empty{padding:40px;text-align:center;color:var(--ink-3);border:1px dashed var(--line-strong);border-radius:12px}
+.loading{padding:50px;text-align:center;color:var(--ink-3)}
+
+/* поиск */
+.results{position:fixed;top:53px;left:0;right:0;bottom:0;z-index:35;background:var(--paper);overflow-y:auto;padding:22px}
+.results[hidden]{display:none}
+.results .in{max-width:860px;margin:0 auto}
+.res{display:block;width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:10px;background:var(--raised)}
+.res:hover{border-color:var(--accent)}
+.res .src{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.res .ctx{font-size:13.2px;color:var(--ink-2);margin-top:3px;line-height:1.5}
+.res .ctx b{color:var(--ink);background:var(--accent-soft);padding:0 2px;border-radius:3px}
+
+/* панели */
+.panel{position:fixed;inset:auto 14px 14px auto;width:min(370px,calc(100vw - 28px));z-index:60;background:var(--raised);
+  border:1px solid var(--line-strong);border-radius:14px;box-shadow:var(--sh-md);padding:15px 16px}
+.panel[hidden]{display:none}
+.panel h3{margin:0 0 4px;font-size:15px}
+.panel p{margin:0 0 9px;font-size:12.8px;color:var(--ink-2);line-height:1.5}
+.panel .row{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+.panel select{flex:1;min-width:140px;height:33px;border-radius:8px;border:1px solid var(--line-strong);background:var(--sunken);color:var(--ink);padding:0 8px;font-size:13px}
+.panel .close{position:absolute;top:9px;right:10px;border:0;background:none;color:var(--ink-3);font-size:18px}
+.status{font-size:12px;color:var(--ink-2);min-height:1.2em}
+.status.err{color:var(--bad)}.status.ok{color:var(--ok)}
+.tiny{font-size:11.5px;color:var(--ink-3);line-height:1.45}
+kbd{font-family:var(--sans);font-size:11px;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:1px 5px;background:var(--sunken)}
+.error-box{border:1px solid var(--bad);border-radius:12px;padding:16px 18px;background:var(--raised);margin:24px 0;max-width:var(--measure)}
+.error-box h3{margin:0 0 6px;color:var(--bad)}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;top:53px;left:0;bottom:0;width:284px;z-index:45;background:var(--paper);transform:translateX(-102%);transition:transform .18s;box-shadow:var(--sh-md)}
+  .side.open{transform:none}
+  #menuBtn{display:inline-flex!important}
+  .brand small{display:none}
+}
+@media print{.top,.side,.results,.panel{display:none!important}.shell{grid-template-columns:1fr}main{padding:0}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="btn" id="menuBtn" style="display:none" aria-label="Файлы">☰</button>
+  <a class="brand" href="#" id="home" translate="no"><span class="mark">D</span><span>dimecon.md<small>документация проекта</small></span></a>
+  <div class="spacer"></div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Поиск по всем файлам…  /" aria-label="Поиск">
+  </div>
+  <button class="btn" id="trBtn" title="Перевод">🌐</button>
+  <button class="btn" id="printBtn" title="Печать">⎙</button>
+  <button class="btn" id="themeBtn" title="Тема">◐</button>
+</header>
+
+<div class="shell">
+  <nav class="side" id="side" aria-label="Файлы проекта"></nav>
+  <main><div class="sheet" id="sheet"><div class="loading">Загрузка манифеста…</div></div></main>
+</div>
+
+<section class="results" id="results" hidden><div class="in" id="resultsIn"></div></section>
+
+<div class="panel" id="trPanel" hidden>
+  <button class="close" id="trClose">×</button>
+  <h3>Чтение на другом языке</h3>
+  <p>Исходный язык — <b>русский</b>. Тексты не дублируются: перевод выполняет браузер.</p>
+  <div class="row">
+    <select id="trLang">
+      <option value="ro">Română</option><option value="en">English</option><option value="uk">Українська</option>
+      <option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option>
+    </select>
+    <button class="btn" id="trRun">Перевести</button>
+    <button class="btn" id="trReset">Оригинал</button>
+  </div>
+  <div class="status" id="trStatus"></div>
+  <p class="tiny" id="trHint"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(() => {
+'use strict';
+const S = { man:null, files:[], byPath:new Map(), cur:null, text:new Map(), originals:null, trCache:new Map() };
+const $ = s => document.querySelector(s);
+const el = (t,c) => { const n=document.createElement(t); if(c) n.className=c; return n; };
+const esc = s => String(s).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+const ICON = { markdown:'📄', text:'📋', json:'🗂', code:'⚙', html:'🌐', image:'🖼', pdf:'📕', xlsx:'📊', csv:'📊', binary:'📦' };
+
+/* ---------------- загрузка ---------------- */
+async function fetchText(path){
+  if (S.text.has(path)) return S.text.get(path);
+  const r = await fetch(path, {cache:'no-cache'});
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText} — ${path}`);
+  const t = await r.text();
+  S.text.set(path, t);
+  return t;
+}
+function fileError(err){
+  const isFile = location.protocol === 'file:';
+  const b = el('div','error-box');
+  b.innerHTML = `<h3>Файл не загрузился</h3><p>${isFile
+    ? 'Страница открыта с диска (<code>file://</code>) — браузер запрещает ей читать соседние файлы. Нужен локальный сервер:'
+    : 'Файл недоступен.'}</p>${isFile?'<pre translate="no">python -m http.server 8080</pre><p class="tiny">затем откройте http://localhost:8080</p>':''}
+    <pre translate="no">${esc(err.message||err)}</pre>`;
+  return b;
+}
+
+/* ---------------- боковая панель ---------------- */
+function renderSide(){
+  const side = $('#side'); side.innerHTML='';
+  const home = el('button','f');
+  home.innerHTML = '<span class="ic">●</span><span class="nm">Обзор проекта</span>';
+  home.onclick = openCover; home.dataset.path=''; side.appendChild(home);
+  for (const g of S.man.groups){
+    const list = S.files.filter(f => f.group===g.name);
+    if (!list.length) continue;
+    const d = el('details','grp');
+    if (['Проект','Техническое задание','Акты и отчёты'].includes(g.name)) d.open = true;
+    const sm = el('summary'); sm.innerHTML = `${g.name}<span class="cnt">${list.length}</span>`;
+    d.appendChild(sm);
+    if (g.name === 'Скриншоты'){
+      const b = el('button','f'); b.dataset.path='@gallery';
+      b.innerHTML = `<span class="ic">🖼</span><span class="nm">Галерея — ${list.length} шт.</span>`;
+      b.onclick = openGallery; d.appendChild(b);
+    }
+    for (const f of list){
+      const b = el('button','f'); b.dataset.path=f.path;
+      b.innerHTML = `<span class="ic">${ICON[f.viewer]||'📄'}</span><span class="nm" title="${esc(f.path)}">${esc(f.title)}</span><span class="sz">${f.size_h}</span>`;
+      b.onclick = () => openFile(f.path);
+      d.appendChild(b);
+    }
+    side.appendChild(d);
+  }
+  markActive();
+}
+function markActive(){
+  document.querySelectorAll('.f').forEach(b => b.setAttribute('aria-current', String((b.dataset.path||'')===(S.cur||''))));
+}
+
+/* ---------------- обложка ---------------- */
+function openCover(){
+  S.cur = null; location.hash='';
+  const m = S.man, sheet = $('#sheet'); sheet.innerHTML='';
+  const c = el('div','cover');
+  const mb = (m.stats.bytes/1048576).toFixed(1);
+  c.innerHTML = `<div class="eyebrow">Документация проекта · собрано ${m.generated}</div>
+    <h1>${esc(m.project)}</h1>
+    <p class="lead">Все материалы проекта в одном месте: техническое задание, акты испытаний, протоколы прогонов,
+    скриншоты, сгенерированные платформой документы, исходные данные заказчика и код.</p>
+    <div class="kpis">
+      <div class="kpi"><b>${m.stats.files}</b><span>файлов, ${mb} МБ</span></div>
+      <div class="kpi"><b>${m.stats.by_group['Техническое задание']||0}</b><span>томов ТЗ</span></div>
+      <div class="kpi"><b>${m.stats.by_group['Скриншоты']||0}</b><span>скриншотов</span></div>
+      <div class="kpi"><b>${m.stats.by_group['Сгенерированные документы']||0}</b><span>PDF и Excel</span></div>
+      <div class="kpi"><b>${(m.stats.by_group['Код платформы']||0)+(m.stats.by_group['Шаблоны']||0)+(m.stats.by_group['Инструменты и тесты']||0)}</b><span>файлов кода</span></div>
+    </div>`;
+  sheet.appendChild(c);
+  for (const g of S.man.groups){
+    const list = S.files.filter(f=>f.group===g.name);
+    if (!list.length) continue;
+    const h = el('h4'); h.style.cssText='font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin:24px 0 2px';
+    h.textContent = `${g.name} — ${g.hint}`; sheet.appendChild(h);
+    const wrap = el('div','tiles');
+    const show = g.name==='Скриншоты' ? [] : list.slice(0, 12);
+    if (g.name==='Скриншоты'){
+      const t = el('button','tile'); t.onclick = openGallery;
+      t.innerHTML = `<span class="idx">Галерея</span><h3>${list.length} скриншотов</h3><p>Экраны платформы, документы, сравнение с исходным сайтом</p>`;
+      wrap.appendChild(t);
+    }
+    for (const f of show){
+      const t = el('button','tile'); t.onclick = () => openFile(f.path);
+      t.innerHTML = `<span class="idx">${ICON[f.viewer]||''} ${f.ext.replace('.','').toUpperCase()}</span>
+        <h3>${esc(f.title)}</h3><p>${esc(f.caption || f.path)}</p>
+        <span class="tiny">${f.size_h} · ${f.mtime}</span>`;
+      wrap.appendChild(t);
+    }
+    if (list.length > show.length && g.name!=='Скриншоты'){
+      const t = el('button','tile'); t.onclick = () => { const d=[...document.querySelectorAll('.grp')].find(x=>x.querySelector('summary').textContent.startsWith(g.name)); if(d){d.open=true;d.scrollIntoView({block:'center'});} };
+      t.innerHTML = `<span class="idx">Ещё</span><h3>+${list.length-show.length} файлов</h3><p>Показать в списке слева</p>`;
+      wrap.appendChild(t);
+    }
+    sheet.appendChild(wrap);
+  }
+  const n = el('div','note');
+  n.innerHTML = `<b>Как пользоваться:</b> слева — все файлы проекта по разделам; <kbd>/</kbd> — поиск по содержимому;
+    🌐 — чтение на другом языке; ⎙ — печать в PDF. Markdown, логи, JSON, код, изображения, PDF и Excel открываются прямо здесь.`;
+  sheet.appendChild(n);
+  markActive(); window.scrollTo(0,0);
+}
+
+/* ---------------- открытие файла ---------------- */
+async function openFile(path, q){
+  const f = S.byPath.get(path);
+  if (!f) return openCover();
+  S.cur = path; S.originals = null;
+  history.replaceState(null,'','#'+encodeURIComponent(path));
+  markActive(); $('#results').hidden = true;
+  const sheet = $('#sheet');
+  sheet.innerHTML = '<div class="loading">Загрузка…</div>';
+
+  const head = el('div','head');
+  head.innerHTML = `<div><div class="eyebrow">${esc(f.group)}</div><h1>${esc(f.title)}</h1>
+      <div class="meta">${esc(f.path)} · ${f.size_h} · ${f.mtime}</div></div>
+    <div class="acts"><a class="btn" href="${f.path}" download>⤓ Скачать</a>
+      <a class="btn" href="${f.path}" target="_blank">↗ Открыть отдельно</a></div>`;
+  const body = el('div','viewer');
+  sheet.innerHTML=''; sheet.appendChild(head); sheet.appendChild(body);
+
+  try { await renderInto(body, f, q); }
+  catch(e){ body.innerHTML=''; body.appendChild(fileError(e)); }
+  window.scrollTo(0,0);
+}
+
+async function renderInto(box, f, q){
+  if (f.viewer === 'image'){
+    box.innerHTML = `<div class="imgbox"><img src="${f.path}" alt="${esc(f.caption||f.name)}"></div>
+      ${f.caption?`<p class="tiny" style="margin-top:8px">${esc(f.caption)}</p>`:''}`;
+    box.querySelector('img').onclick = e => e.target.classList.toggle('zoom');
+    return;
+  }
+  if (f.viewer === 'pdf'){
+    box.innerHTML = `<object class="pdf" data="${f.path}" type="application/pdf">
+      <div class="empty">Браузер не показал PDF. <a href="${f.path}" target="_blank">Открыть в новой вкладке</a></div></object>`;
+    return;
+  }
+  if (f.viewer === 'xlsx'){ return renderXlsx(box, f); }
+  if (f.viewer === 'html'){
+    box.innerHTML = `<div class="tabs"><button class="on">Просмотр</button><button>Исходный код</button></div>
+      <iframe class="htmlview" src="${f.path}"></iframe>`;
+    const [b1,b2] = box.querySelectorAll('.tabs button');
+    b2.onclick = async () => { b2.classList.add('on'); b1.classList.remove('on');
+      box.querySelector('.htmlview').outerHTML = `<pre class="raw" translate="no">${esc(await fetchText(f.path))}</pre>`; };
+    b1.onclick = () => location.reload();
+    return;
+  }
+  if (f.viewer === 'binary'){
+    box.innerHTML = `<div class="empty"><b>${esc(f.name)}</b><br>Двоичный файл, ${f.size_h}. Используйте «Скачать».</div>`;
+    return;
+  }
+
+  const text = await fetchText(f.path);
+  if (f.viewer === 'markdown'){
+    const art = el('article');
+    art.innerHTML = window.marked ? marked.parse(text,{gfm:true}) : `<pre>${esc(text)}</pre>`;
+    box.appendChild(art);
+    post(art);
+    if (q) highlight(art, q);
+    return;
+  }
+  if (f.viewer === 'json'){
+    let pretty = text;
+    try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch {}
+    box.innerHTML = `<pre class="raw" translate="no">${esc(pretty)}</pre>`;
+    return;
+  }
+  if (f.viewer === 'csv'){ return renderCsv(box, text); }
+  // текст и код: подсветка статусов в протоколах
+  const painted = esc(text)
+    .replace(/^(ok\s+200.*)$/gmi, '<span class="ok">$1</span>')
+    .replace(/^(\s*OK\s{2,}.*)$/gm, '<span class="ok">$1</span>')
+    .replace(/^(.*(BAD|ОШИБКА|FAILED|Traceback|ERROR|НЕ ПРОЙДЕНЫ).*)$/gm, '<span class="bad">$1</span>')
+    .replace(/^(=+|-{3,}|\s*===.*|\s*\[\d+\].*)$/gm, '<span class="hd">$1</span>');
+  box.innerHTML = `<pre class="raw" translate="no">${painted}</pre>`;
+  if (q){ const pre = box.querySelector('pre'); highlight(pre, q); }
+}
+
+function renderCsv(box, text){
+  const rows = text.trim().split(/\r?\n/).slice(0,400).map(r => r.split(/[;,\t]/));
+  box.innerHTML = '<div class="table-wrap"><table></table></div>';
+  const t = box.querySelector('table');
+  rows.forEach((r,i) => {
+    const tr = el('tr');
+    r.forEach(c => { const cell = el(i?'td':'th'); cell.textContent = c; tr.appendChild(cell); });
+    t.appendChild(tr);
+  });
+}
+
+async function renderXlsx(box, f){
+  if (!window.XLSX){ box.innerHTML = `<div class="empty">Библиотека просмотра Excel не загрузилась. <a href="${f.path}" download>Скачать файл</a></div>`; return; }
+  box.innerHTML = '<div class="loading">Разбор книги…</div>';
+  const buf = await (await fetch(f.path)).arrayBuffer();
+  const wb = XLSX.read(buf, {type:'array', cellDates:true});
+  box.innerHTML = '<div class="tabs"></div><div class="sheetbox"></div>';
+  const tabs = box.querySelector('.tabs'), host = box.querySelector('.sheetbox');
+  const show = name => {
+    tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.textContent===name));
+    const ws = wb.Sheets[name];
+    const ref = ws['!ref'] || 'A1';
+    const rows = XLSX.utils.sheet_to_json(ws, {header:1, raw:false, defval:''});
+    const head = `<p class="tiny">Лист «${esc(name)}» — строк ${rows.length}, диапазон ${ref}</p>`;
+    const body = rows.slice(0,300).map((r,i) =>
+      '<tr>' + r.map(c => i===0 ? `<th>${esc(c)}</th>` : `<td>${esc(c)}</td>`).join('') + '</tr>').join('');
+    host.innerHTML = head + `<div class="table-wrap"><table>${body}</table></div>` +
+      (rows.length>300 ? `<p class="tiny">…показаны первые 300 строк из ${rows.length}</p>` : '');
+  };
+  wb.SheetNames.forEach(n => { const b = el('button'); b.textContent = n; b.onclick = () => show(n); tabs.appendChild(b); });
+  show(wb.SheetNames[0]);
+}
+
+function post(art){
+  art.querySelectorAll('pre, code').forEach(n => n.setAttribute('translate','no'));
+  art.querySelectorAll('table').forEach(t => { const w=el('div','table-wrap'); t.parentNode.insertBefore(w,t); w.appendChild(t); });
+  const used = new Set();
+  art.querySelectorAll('h2,h3,h4').forEach(h => {
+    let id = (h.textContent||'').toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu,'').replace(/\s+/g,'-').slice(0,60);
+    while (used.has(id)) id += '-x';
+    used.add(id); h.id = id;
+  });
+  // ссылки на файлы проекта открываем внутри хаба
+  art.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href');
+    if (!href || /^(https?:|#|mailto:)/.test(href)) return;
+    const base = S.cur.includes('/') ? S.cur.slice(0, S.cur.lastIndexOf('/')+1) : '';
+    const abs = href.startsWith('/') ? href.slice(1) : new URL(base + href, 'http://x/').pathname.slice(1);
+    const target = S.byPath.has(href) ? href : (S.byPath.has(abs) ? abs : null);
+    if (target) a.addEventListener('click', e => { e.preventDefault(); openFile(target); });
+  });
+  // картинки внутри md: пути относительно файла
+  art.querySelectorAll('img[src]').forEach(img => {
+    const src = img.getAttribute('src');
+    if (/^(https?:|\/)/.test(src)) return;
+    const base = S.cur.includes('/') ? S.cur.slice(0, S.cur.lastIndexOf('/')+1) : '';
+    img.setAttribute('src', base + src);
+  });
+}
+
+/* ---------------- галерея ---------------- */
+function openGallery(){
+  S.cur = '@gallery'; location.hash = '#@gallery'; markActive(); $('#results').hidden = true;
+  const list = S.files.filter(f => f.group==='Скриншоты');
+  const sheet = $('#sheet'); sheet.innerHTML='';
+  const head = el('div','head');
+  head.innerHTML = `<div><div class="eyebrow">Скриншоты</div><h1>Галерея — ${list.length} снимков</h1>
+    <div class="meta">docs/screens/</div></div>`;
+  sheet.appendChild(head);
+  const g = el('div','gallery');
+  list.forEach(f => {
+    const b = el('button','gcard'); b.onclick = () => openFile(f.path);
+    b.innerHTML = `<img loading="lazy" src="${f.path}" alt=""><div class="c"><b>${esc(f.name.replace(/\.png$/,''))}</b>${esc(f.caption||'')}</div>`;
+    g.appendChild(b);
+  });
+  sheet.appendChild(g);
+  window.scrollTo(0,0);
+}
+
+/* ---------------- поиск ---------------- */
+let timer;
+async function search(q){
+  const box = $('#results'), inner = $('#resultsIn');
+  if (!q || q.trim().length < 2){ box.hidden = true; return; }
+  const needle = q.trim().toLowerCase();
+  box.hidden = false;
+  inner.innerHTML = '<div class="loading">Ищем по файлам…</div>';
+  const found = [];
+  const byName = S.files.filter(f => f.title.toLowerCase().includes(needle) || f.path.toLowerCase().includes(needle)
+                                   || (f.caption||'').toLowerCase().includes(needle));
+  for (const f of S.files.filter(x => x.searchable)){
+    let txt; try { txt = await fetchText(f.path); } catch { continue; }
+    const low = txt.toLowerCase();
+    let from = 0, n = 0;
+    while (n < 3){
+      const i = low.indexOf(needle, from);
+      if (i === -1) break;
+      const a = Math.max(0, i-80), b = Math.min(txt.length, i+needle.length+120);
+      found.push({f, ctx:(a>0?'…':'')+esc(txt.slice(a,i))+'<b>'+esc(txt.slice(i,i+needle.length))+'</b>'+esc(txt.slice(i+needle.length,b))+(b<txt.length?'…':'')});
+      from = i + needle.length; n++;
+    }
+  }
+  inner.innerHTML = '';
+  const h = el('h2'); h.style.cssText='font-family:var(--serif);margin:0 0 12px';
+  h.textContent = found.length || byName.length ? `Найдено: ${found.length} совпадений в тексте, ${byName.length} по названию` : 'Ничего не найдено';
+  inner.appendChild(h);
+  byName.slice(0,12).forEach(f => {
+    const b = el('button','res'); b.onclick = () => { box.hidden=true; f.group==='Скриншоты'? openFile(f.path): openFile(f.path); };
+    b.innerHTML = `<div class="src">${esc(f.group)} · по названию</div><div class="ctx">${esc(f.title)} — <span class="tiny">${esc(f.path)}</span></div>`;
+    inner.appendChild(b);
+  });
+  found.forEach(r => {
+    const b = el('button','res'); b.onclick = () => { box.hidden=true; openFile(r.f.path, q.trim()); };
+    b.innerHTML = `<div class="src">${esc(r.f.group)} · ${esc(r.f.title)}</div><div class="ctx">${r.ctx.replace(/\n+/g,' ')}</div>`;
+    inner.appendChild(b);
+  });
+}
+function highlight(root, q){
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const needle = q.toLowerCase(); let node;
+  while ((node = w.nextNode())){
+    const i = node.nodeValue.toLowerCase().indexOf(needle);
+    if (i === -1) continue;
+    const r = document.createRange(); r.setStart(node,i); r.setEnd(node,i+q.length);
+    const m = el('mark','hit');
+    try { r.surroundContents(m); } catch { continue; }
+    m.scrollIntoView({behavior:'smooth',block:'center'}); break;
+  }
+}
+
+/* ---------------- перевод ---------------- */
+const TR_OK = 'Translator' in self;
+const withTimeout = (p,ms,l) => Promise.race([p, new Promise((_,rej)=>setTimeout(()=>rej(new Error(l)),ms))]);
+function trInit(){
+  const way = '<b>Перевод средствами браузера:</b> Chrome и Edge — правый клик → «Перевести на…», Safari — значок в адресной строке. '
+    + 'Страница размечена как <code translate="no">lang="ru"</code>. После перехода к другому файлу перевод применяется заново.';
+  $('#trHint').innerHTML = (TR_OK ? 'Встроенный движок перевода доступен: текст переводится локально. Если не сработает: <br>'
+                                  : 'Встроенного API перевода в этом браузере нет. <br>') + way;
+}
+async function translate(target){
+  const st = $('#trStatus'); st.className='status';
+  if (!TR_OK){ st.className='status err'; st.textContent='Используйте перевод браузера — способ ниже.'; return; }
+  const root = document.querySelector('article') || $('#sheet');
+  const nodes = [...root.querySelectorAll('p,li,h1,h2,h3,h4,td,th,blockquote,.tile h3,.tile p,.kpi span')]
+    .filter(n => !n.closest('[translate="no"]') && n.textContent.trim().length>1 && !n.querySelector('p,li,table'));
+  if (!S.originals){ S.originals = new Map(); nodes.forEach(n => S.originals.set(n, n.innerHTML)); }
+  try{
+    st.textContent = 'Подготовка модели…';
+    const opts = {sourceLanguage:'ru', targetLanguage:target};
+    const av = await withTimeout(Translator.availability(opts), 12000, 'браузер не ответил о доступности пары языков');
+    if (av === 'unavailable'){ st.className='status err'; st.textContent='Эта пара языков недоступна. Используйте перевод браузера.'; return; }
+    const tr = await withTimeout(Translator.create({...opts, monitor(m){ m.addEventListener('downloadprogress', e => st.textContent = `Загрузка модели: ${Math.round((e.loaded||0)*100)}%`); }}), 180000, 'модель не загрузилась');
+    let done = 0;
+    for (const n of nodes){
+      const key = target+'|'+n.textContent;
+      let out = S.trCache.get(key);
+      if (!out){ out = await withTimeout(tr.translate(n.textContent), 25000, 'перевод фрагмента затянулся'); S.trCache.set(key,out); }
+      n.textContent = out; done++;
+      if (done % 12 === 0) st.textContent = `Переведено ${done} из ${nodes.length}…`;
+    }
+    st.className='status ok'; st.textContent = `Готово: ${done} фрагментов.`;
+    document.documentElement.lang = target;
+  } catch(e){
+    st.className='status err';
+    st.innerHTML = 'Встроенный перевод недоступен. Используйте перевод браузера — способ ниже.';
+    restore();
+  }
+}
+function restore(){
+  if (S.originals) S.originals.forEach((html,n) => { n.innerHTML = html; });
+  document.documentElement.lang='ru';
+}
+
+/* ---------------- прочее ---------------- */
+function initTheme(){
+  let saved=null; try{ saved = localStorage.getItem('dimecon-theme'); }catch{}
+  document.documentElement.dataset.theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}
+function bind(){
+  $('#themeBtn').onclick = () => { const n = document.documentElement.dataset.theme==='dark'?'light':'dark';
+    document.documentElement.dataset.theme=n; try{localStorage.setItem('dimecon-theme',n);}catch{} };
+  $('#printBtn').onclick = () => print();
+  $('#home').onclick = e => { e.preventDefault(); openCover(); };
+  $('#menuBtn').onclick = () => $('#side').classList.toggle('open');
+  $('#side').addEventListener('click', e => { if (e.target.closest('.f')) $('#side').classList.remove('open'); });
+  const q = $('#q');
+  q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => search(q.value), 240); });
+  q.addEventListener('keydown', e => { if (e.key==='Escape'){ q.value=''; $('#results').hidden=true; q.blur(); } });
+  $('#trBtn').onclick = () => { const p=$('#trPanel'); p.hidden=!p.hidden; };
+  $('#trClose').onclick = () => $('#trPanel').hidden = true;
+  $('#trRun').onclick = () => translate($('#trLang').value);
+  $('#trReset').onclick = restore;
+  document.addEventListener('keydown', e => {
+    if (e.key==='/' && document.activeElement!==q){ e.preventDefault(); q.focus(); }
+    if (e.key==='Escape'){ $('#results').hidden=true; $('#trPanel').hidden=true; }
+  });
+  addEventListener('hashchange', route);
+}
+function route(){
+  const h = decodeURIComponent(location.hash.replace(/^#/,''));
+  if (h === '@gallery') return openGallery();
+  if (h && S.byPath.has(h)){ if (h !== S.cur) openFile(h); }
+  else if (!h && S.cur !== null) openCover();
+}
+async function start(){
+  initTheme(); bind(); trInit();
+  try { S.man = JSON.parse(await fetchText('manifest.json')); }
+  catch(e){ $('#sheet').innerHTML=''; $('#sheet').appendChild(fileError(e)); return; }
+  S.files = S.man.files;
+  S.files.forEach(f => S.byPath.set(f.path, f));
+  document.title = S.man.project;
+  renderSide();
+  route();
+  if (!location.hash) openCover();
+}
+start();
+})();
+</script>
+</body>
+</html>

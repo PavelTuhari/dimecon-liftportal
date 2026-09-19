@@ -1,0 +1,42 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ eq.brand }} {{ eq.model }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="padding:36px 24px 64px">
+  <a class="small muted" href="{{ url_for('site.equipment') }}">← {{ t('nav.equipment') }}</a>
+  <div class="grid g2 mt" style="align-items:start">
+    <div><div class="eq-card"><div class="ph" style="aspect-ratio:4/3;background-image:url('{{ eq.photo_url }}')"></div></div>
+      {% if chart %}<div class="card mt"><h3>{{ t('eq.loadchart') }}</h3>
+      {% if chart[0].cfg == 'approx' %}<div class="disclaimer" style="margin-bottom:10px">Кривая ориентировочная: построена по паспортным максимумам с занижением на 15 %. Точный подбор — по грузовой таблице производителя, её загружает компания в кабинете.</div>{% endif %}
+      <canvas id="lc" width="560" height="280" style="width:100%"></canvas>
+      <table class="mt small"><thead><tr><th>{{ t('eq.reach') }}, м</th><th>{{ t('eq.capacity') }}, т</th><th>{{ t('eq.height') }}, м</th></tr></thead><tbody>{% for c in chart %}<tr><td>{{ c.r }}</td><td>{{ c.q }}</td><td>{{ c.h }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+    </div>
+    <div>
+      <span class="tiny muted">{{ tr(eq.category.name) if eq.category else '' }}{% if eq.year %} · {{ eq.year }}{% endif %}</span>
+      <h1>{{ eq.brand }} {{ eq.model }}</h1>
+      <p class="muted">{{ tr(eq.description) or tr(eq.title) }}</p>
+      {% if eq.is_crane %}<div class="specs" style="grid-template-columns:repeat(3,1fr)"><div><b>{{ (eq.capacity_t|round(1) ~ ' т') if eq.capacity_t else '—' }}</b><span>{{ t('eq.capacity') }}</span></div><div><b>{{ (eq.radius_m|round(1) ~ ' м') if eq.radius_m else '—' }}</b><span>{{ t('eq.reach') }}</span></div><div><b>{{ (eq.height_m|round(1) ~ ' м') if eq.height_m else '—' }}</b><span>{{ t('eq.height') }}</span></div></div>
+      {% else %}<div class="specs"><div><b>{{ ((eq.payload_kg/1000)|round(1) ~ ' т') if eq.payload_kg else '—' }}</b><span>{{ t('eq.payload') }}</span></div><div><b>{{ (eq.platform_l_mm|int ~ ' мм') if eq.platform_l_mm else '—' }}</b><span>длина</span></div><div><b>{{ (eq.platform_w_mm|int ~ ' мм') if eq.platform_w_mm else '—' }}</b><span>ширина</span></div></div>{% endif %}
+      {% if not (eq.capacity_t or eq.payload_kg) %}<div class="alert warning small mt">Технические характеристики этой машины не опубликованы на сайте-источнике. Уточните по телефону — мы дополним карточку.</div>{% endif %}
+      <div class="card mt"><h3>{{ t('common.price') }}</h3>
+        <table class="breakdown"><tbody>
+          {% if eq.hourly_rate %}<tr><td>Ставка за час</td><td>{{ eq.hourly_rate|money(tenant.currency) }}</td></tr><tr><td>Минимальная смена</td><td>{{ eq.min_hours|int }} ч</td></tr>{% endif %}
+          {% if eq.spec.get('monthly_rate') %}<tr><td>Аренда в месяц</td><td>{{ eq.spec.monthly_rate|money(tenant.currency) }}</td></tr>{% endif %}
+          {% if eq.per_km_rate %}<tr><td>Ставка за км</td><td>{{ eq.per_km_rate|money(tenant.currency) }}</td></tr>{% endif %}
+          <tr><td>Подача / монтаж</td><td>{{ eq.mobilization_fee|money(tenant.currency) }}</td></tr>
+        </tbody></table>
+        <a class="btn primary block mt" href="{{ url_for('site.wizard_reset') }}">{{ t('eq.order') }} →</a></div>
+      <div class="card mt"><h3>Занятость</h3>{% if upcoming %}<ul class="small" style="margin:0;padding-left:18px">{% for b in upcoming %}<li>{{ b.starts_at|dt('%d.%m %H:%M') }} — {{ b.ends_at|dt('%d.%m %H:%M') }} <span class="muted">({{ 'ТО' if b.reason=='maintenance' else 'заказ' }})</span></li>{% endfor %}</ul>{% else %}<p class="small muted" style="margin:0">Ближайшие 2 недели — свободна.</p>{% endif %}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}{% if chart %}<script>
+const data={{ chart|tojson }};const cv=document.getElementById('lc'),ctx=cv.getContext('2d');const W=cv.width,H=cv.height,P=40;
+const maxR=Math.max(...data.map(d=>d.r))*1.05,maxQ=Math.max(...data.map(d=>d.q))*1.1;
+ctx.strokeStyle='#DDE1E4';ctx.lineWidth=1;ctx.font='11px Manrope';ctx.fillStyle='#8A949B';
+for(let i=0;i<=5;i++){const y=P+(H-2*P)*i/5;ctx.beginPath();ctx.moveTo(P,y);ctx.lineTo(W-10,y);ctx.stroke();ctx.fillText((maxQ*(1-i/5)).toFixed(0)+' т',4,y+4);}
+for(let i=0;i<=6;i++){const x=P+(W-P-10)*i/6;ctx.fillText((maxR*i/6).toFixed(0)+' м',x-8,H-P+16);}
+ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#F5A623';ctx.lineWidth=3;ctx.beginPath();
+data.forEach((d,i)=>{const x=P+(W-P-10)*d.r/maxR,y=P+(H-2*P)*(1-d.q/maxQ);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();
+ctx.fillStyle='#1F3A52';data.forEach(d=>{const x=P+(W-P-10)*d.r/maxR,y=P+(H-2*P)*(1-d.q/maxQ);ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fill();});
+</script>{% endif %}{% endblock %}

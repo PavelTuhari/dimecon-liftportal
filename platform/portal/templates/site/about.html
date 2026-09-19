@@ -1,0 +1,13 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.about') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="padding:44px 24px 64px;max-width:900px">
+  <div class="label">{{ t('nav.about')|upper }}</div><h1>{{ tenant.legal_name or tenant.name }}</h1>
+  <p style="font-size:18px" class="muted">{{ tr(tenant.tagline) }}</p>
+  <div class="card rich">{% if tr(tenant.about) %}{{ tr(tenant.about)|richtext }}{% else %}
+    <p class="muted">Компания {{ tenant.name }}{% if tenant.founded_year %} основана в {{ tenant.founded_year }} году{% endif %}.
+    Работаем в городе {{ tenant.city }} и по всей стране.</p>{% endif %}</div>
+  <div class="grid g3 mt"><div class="kpi"><b>{{ tenant.founded_year or '—' }}</b><span>{{ t('stats.founded') }}</span></div><div class="kpi"><b>{{ tenant.city }}</b><span>база</span></div><div class="kpi"><b>{{ tenant.idno or '—' }}</b><span>IDNO</span></div></div>
+  {% if reviews %}<h2 class="mt2">Отзывы</h2><div class="grid g2">{% for r in reviews %}<div class="review"><div class="stars">{{ '★'*r.rating }}</div><p>{{ r.body }}</p><b class="small">{{ r.author }}</b></div>{% endfor %}</div>{% endif %}
+</div>
+{% endblock %}

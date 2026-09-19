@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Акты тестирования · dimecon.md</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet"><style>
+:root{--paper:#FBFAF7;--raised:#fff;--sunken:#F4F2EC;--ink:#16191C;--ink-2:#55606A;--ink-3:#8A939B;
+--line:#E2DED4;--line-strong:#CFC9BC;--accent:#D98A0B;--accent-soft:#FBEFD8;--navy:#1F3A52;
+--ok:#2E7D4F;--bad:#B23B2E;--warn:#C77700;
+--sans:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+--mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px}
+a{color:var(--navy)}
+header.top{background:var(--navy);color:#fff;padding:26px 0 22px;margin-bottom:26px}
+header.top .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:8px 0 6px;letter-spacing:-.015em}
+header.top h1{color:#fff}
+header.top .lead{color:rgba(255,255,255,.78);max-width:70ch;margin:0}
+h2{font-family:var(--serif);font-size:23px;margin:34px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+h3{font-size:16.5px;margin:22px 0 8px}
+p{margin:0 0 .9em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.9)}
+.verdict{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:4px 13px;font-weight:700;font-size:13px}
+.verdict.ok{background:#E3F3EA;color:var(--ok)}.verdict.warn{background:#FCEFD9;color:var(--warn)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card b{display:block;font-family:var(--serif);font-size:27px;line-height:1.1;letter-spacing:-.02em}
+.card span{font-size:12.5px;color:var(--ink-2)}
+ul.scope{margin:0 0 1em;padding-left:1.15em}ul.scope li{margin:.25em 0}
+table{width:100%;border-collapse:collapse;font-size:13.6px;background:var(--raised);
+border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:12px 0}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunken);font-size:12.4px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+tbody tr:last-child td{border-bottom:0}
+td.st{white-space:nowrap;font-weight:700;width:1%}
+td.st.ok{color:var(--ok)}td.st.bad{color:var(--bad)}
+td.dt{color:var(--ink-2);font-family:var(--mono);font-size:12.2px}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+overflow-x:auto;font-family:var(--mono);font-size:12.4px;line-height:1.5;white-space:pre-wrap}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px;margin:16px 0}
+figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raised)}
+figure img{width:100%;display:block;background:var(--sunken);cursor:zoom-in}
+figcaption{padding:9px 12px;font-size:12.4px;color:var(--ink-2);border-top:1px solid var(--line)}
+figcaption b{color:var(--ink);font-family:var(--mono);font-size:11.4px;display:block;margin-bottom:2px}
+.note{border-left:3px solid var(--warn);background:#FCEFD9;padding:12px 15px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.6px;color:#7A4E00}
+.note.info{border-color:var(--accent);background:var(--accent-soft);color:#7A4E00}
+.foot{margin-top:40px;padding-top:16px;border-top:3px double var(--line-strong);font-size:13px;color:var(--ink-2)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.nav a{border:1px solid var(--line-strong);background:var(--raised);border-radius:8px;padding:6px 12px;
+font-size:13px;text-decoration:none;font-weight:600}
+.nav a:hover{border-color:var(--accent)}
+.lb{position:fixed;inset:0;background:rgba(10,12,14,.92);display:none;align-items:center;justify-content:center;z-index:99;padding:22px}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:100%;border-radius:8px}
+@media print{header.top{background:#fff;color:#000;border-bottom:2px solid #000}
+header.top h1,header.top .lead{color:#000}.pill{border-color:#999;color:#000}
+.nav,.lb{display:none!important}figure{break-inside:avoid}table{break-inside:auto}}
+</style></head><body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Комплект приёмочной документации</div>
+  <h1>Акты тестирования платформы</h1>
+  <p class="lead">Отдельный акт на каждый раздел системы. В каждом — что проверялось, результаты прогонов,
+  снимки экрана и ограничения испытаний. Данные берутся из протоколов автоматических прогонов.</p>
+  <div class="meta"><span class="pill">Дата: 19.09.2026</span>
+  <span class="pill">Актов: 9</span>
+  <span class="pill">Проверок: 219 из 219</span></div>
+</div></header>
+<div class="wrap">
+  <div class="cards">
+    <div class="card"><b>9</b><span>актов по разделам</span></div>
+    <div class="card"><b>219</b><span>проверок пройдено</span></div>
+    <div class="card"><b style="color:var(--ok)">0</b><span>не пройдено</span></div>
+    <div class="card"><b>86</b><span>снимков экрана</span></div>
+  </div>
+  <table><thead><tr><th>№</th><th>Акт</th><th>Проверки</th><th>Адреса</th><th>Снимки</th><th>Вердикт</th></tr></thead>
+  <tbody><tr><td><b>1</b></td><td><a href="01_infrastruktura.html">Инфраструктура и база данных</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Развёртывание MySQL 8.4, схема, целостность данных, кодировка и быстродействие.</span></td><td class="dt">0/—</td><td class="dt">—</td><td class="dt">3</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>2</b></td><td><a href="02_sajt_zakazchika.html">Сайт заказчика и перенос содержимого</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Полный перенос действующего сайта dimecon.md на платформу и проверка публичных страниц.</span></td><td class="dt">16/16</td><td class="dt">67</td><td class="dt">14</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>3</b></td><td><a href="03_podbor_i_raschet.html">Подбор техники и расчёт стоимости</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Проверка инженерного подбора крана и построчного расчёта цены на реальном парке заказчика.</span></td><td class="dt">24/24</td><td class="dt">—</td><td class="dt">9</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>4</b></td><td><a href="04_zakazy_crm.html">Оформление заказов, формы и CRM компании</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Сквозной путь заявки от визарда до сделки в кабинете компании.</span></td><td class="dt">7/7</td><td class="dt">37</td><td class="dt">15</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>5</b></td><td><a href="05_b2b_portal.html">Портал партнёра B2B</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Рабочее место подрядчика: объекты, заявки, график техники, сменные рапорты, документы.</span></td><td class="dt">0/—</td><td class="dt">9</td><td class="dt">5</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>6</b></td><td><a href="06_dokumenty.html">Документы: PDF и Excel</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Генерация первичных документов и выгрузок, проверка содержимого и разграничения доступа.</span></td><td class="dt">27/27</td><td class="dt">—</td><td class="dt">9</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>7</b></td><td><a href="07_bezopasnost.html">Мультиарендность и разграничение доступа</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Изоляция данных между компаниями и права ролей.</span></td><td class="dt">4/4</td><td class="dt">—</td><td class="dt">6</td><td><span class="verdict ok">Годен</span></td></tr><tr><td><b>8</b></td><td><a href="08_integracii.html">Интеграции с экосистемой заказчика</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Обмен с системой на платформе Artgranit: Partner B2B API, Oracle ERP, импорт из CRM, модуль портала.</span></td><td class="dt">101/101</td><td class="dt">—</td><td class="dt">4</td><td><span class="verdict warn">Годен с оговоркой</span></td></tr><tr><td><b>9</b></td><td><a href="09_vhod_i_roli.html">Вход и роли пользователей</a><br><span class="dt" style="font-family:var(--sans);font-size:12.4px;color:var(--ink-3)">Вход демо-доступами, устойчивость формы к ошибкам ввода и права каждой роли после входа.</span></td><td class="dt">40/40</td><td class="dt">—</td><td class="dt">21</td><td><span class="verdict ok">Годен</span></td></tr></tbody></table>
+  <div class="note info"><b>Для заказчика:</b> краткий обзор системы со снимками экрана —
+  <a href="../presentation.html">презентация платформы</a>. Все материалы проекта —
+  <a href="../../index.html">хаб документации</a>.</div>
+  <div class="foot">Сформировано автоматически 19.09.2026 21:33.</div>
+</div></body></html>

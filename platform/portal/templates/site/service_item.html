@@ -1,0 +1,13 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ tr(s.title) }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="padding:36px 24px 64px;max-width:900px">
+  <a class="small muted" href="{{ url_for('site.services') }}">← {{ t('nav.services') }}</a>
+  <div class="flex mt"><span style="font-size:40px">{{ s.icon }}</span><h1 style="margin:0">{{ tr(s.title) }}</h1></div>
+  <p class="muted" style="font-size:17px">{{ tr(s.short) }}</p>
+  {% if s.image_url %}<img src="{{ s.image_url }}" alt="" style="border-radius:12px;margin:16px 0">{% endif %}
+  <div class="card rich">{{ tr(s.body)|richtext }}</div>
+  <div class="card mt flex between wrap"><div><span class="small muted">{{ t('eq.from') }}</span><br><b style="font-size:24px">{{ s.price_from|money(tenant.currency) }}</b></div>
+    {% if s.is_orderable %}<a class="btn primary lg" href="{{ url_for('site.wizard_reset') }}">{{ t('eq.order') }} →</a>{% else %}<a class="btn lg" href="{{ url_for('site.contacts') }}">Запросить расчёт</a>{% endif %}</div>
+</div>
+{% endblock %}

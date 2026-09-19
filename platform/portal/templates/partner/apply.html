@@ -1,0 +1,9 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('sec.partners.cta') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:640px;padding:48px 24px"><div class="label">{{ t('sec.partners.label') }}</div><h1>{{ t('sec.partners.cta') }}</h1><p class="muted">Менеджер проверит данные и подключит компанию в течение 1 рабочего дня. Вы получите доступ к порталу с договорными ставками.</p>
+<form class="card" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="grid g2"><div class="field"><label>Компания *</label><input name="company" required></div><div class="field"><label>IDNO</label><input name="idno"></div><div class="field"><label>Контактное лицо *</label><input name="name" required></div><div class="field"><label>Телефон *</label><input name="phone" type="tel" required></div></div>
+  <div class="field"><label>E-mail</label><input name="email" type="email"></div><div class="field"><label>Какие объекты и техника нужны</label><textarea name="about" rows="3"></textarea></div>
+  <button class="btn primary block">Отправить заявку</button></form></div>
+{% endblock %}

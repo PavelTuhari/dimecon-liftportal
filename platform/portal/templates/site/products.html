@@ -1,0 +1,56 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.products') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container page-head"><div class="label">В ПРОДАЖЕ</div><h1>{{ t('nav.products') }}</h1>
+<p class="muted" style="max-width:62ch">Изготовление и продажа со склада компании. Цены зависят от объёма
+  и исполнения — пришлите размеры, ответим расчётом в тот же день.</p>
+<div class="seg mt"><a class="on" href="#">{{ t('common.all') }}</a>{% for c in cats %}<a href="#c-{{ loop.index }}">{{ c }}</a>{% endfor %}</div></div>
+
+<div class="container" style="padding-bottom:64px">
+{% for c in cats %}
+<h3 id="c-{{ loop.index }}" class="mt2">{{ c }}</h3>
+<div class="prod-list">
+{% for p in items if p.category == c %}
+  <article class="card prod">
+    {% if p.image_url %}<div class="prod-ph" style="background-image:url('{{ p.image_url }}')"></div>{% endif %}
+    <div class="prod-body">
+      <div class="flex between wrap" style="gap:8px">
+        <div>
+          <span class="tiny muted">{{ p.sku }}</span>
+          <h4 style="margin:2px 0 0">{{ tr(p.title) }}</h4>
+        </div>
+        {% if p.made_to_order %}<span class="badge warn">под заказ</span>
+        {% elif p.stock > 0 %}<span class="badge ok">в наличии</span>
+        {% else %}<span class="badge">нет в наличии</span>{% endif %}
+      </div>
+
+      {% set short = tr(p.description)|plain(260) %}
+      {% if short %}<p class="small muted" style="margin:10px 0 0">{{ short }}</p>{% endif %}
+
+      {% set thumbs = (p.attributes or {}).get('thumbs') or [] %}
+      {% if thumbs %}<div class="prod-thumbs">{% for u in thumbs %}
+        <img src="{{ u }}" alt="{{ tr(p.title) }}" loading="lazy">{% endfor %}</div>{% endif %}
+
+      {% if tr(p.description) %}
+      <details class="prod-more">
+        <summary>Характеристики и описание</summary>
+        <div class="rich">{{ tr(p.description)|richtext }}</div>
+      </details>
+      {% endif %}
+
+      <div class="flex between wrap prod-foot">
+        <div>
+          {% if p.price %}<b>{{ p.price|money(tenant.currency) }}</b><span class="tiny muted"> / {{ p.unit }}</span>
+          {% else %}<b>Цена по запросу</b><span class="tiny muted"> · ед. изм.: {{ p.unit }}</span>{% endif %}
+        </div>
+        <a class="btn sm primary" href="{{ url_for('site.contacts', subject=tr(p.title)) }}">Запросить цену</a>
+      </div>
+    </div>
+  </article>
+{% endfor %}
+</div>
+{% endfor %}
+
+<div class="card mt2 flex between wrap"><div><h3>Нужен расчёт партии или изготовление под заказ?</h3><p class="muted small" style="margin:0">Скидки от 50 м / 10 шт. Стропы и траверсы — по вашим размерам.</p></div><a class="btn primary" href="{{ url_for('site.contacts') }}">Запросить КП</a></div>
+</div>
+{% endblock %}

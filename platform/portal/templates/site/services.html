@@ -1,0 +1,9 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.services') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container page-head"><div class="label">{{ t('sec.tasks.label') }}</div><h1>{{ t('nav.services') }}</h1></div>
+<div class="container grid g3" style="padding-bottom:64px">
+{% for s in items %}<a class="task-card" href="{{ url_for('site.service_item', slug=s.slug) }}"><span class="ico">{{ s.icon }}</span><h3 style="margin:0">{{ tr(s.title) }}</h3><p class="small muted" style="margin:0">{{ tr(s.short) }}</p>
+  <div class="price-from"><span class="small muted">{{ t('eq.from') }}</span><b>{{ s.price_from|money(tenant.currency) }}</b></div></a>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+flask>=3.1
+sqlalchemy>=2.0
+pymysql>=1.1
+cryptography>=42
+waitress>=3.0
+python-dotenv>=1.0
+# опционально: S3-совместимое хранилище файлов (MinIO, R2, AWS)
+# boto3>=1.34

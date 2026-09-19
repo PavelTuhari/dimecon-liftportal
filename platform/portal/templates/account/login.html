@@ -1,0 +1,11 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('acc.login') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:440px;padding:56px 24px"><div class="card"><h2>{{ t('acc.login') }}</h2>
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label>E-mail</label><input type="email" name="email" required autofocus></div>
+  <div class="field"><label>{{ t('acc.password') }}</label><input type="password" name="password" required></div>
+  <button class="btn primary block">{{ t('acc.login') }}</button></form>
+<p class="small muted mt">Нет кабинета? <a href="{{ url_for('account.register') }}" style="color:var(--accent);font-weight:700">{{ t('acc.register') }}</a></p>
+{% include "_demo_login.html" %}</div></div>
+{% endblock %}

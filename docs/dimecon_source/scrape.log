@@ -1,0 +1,49 @@
+
+[auto]
+   ro: 5 — Macara auto GROVE GMK 3055; Macara auto GROVE GMK 2035; Macara auto KC-3577
+   ru: 3 — Автокран КС-3577; Автокран КС-4562; Автокран GROVE GMK 5100
+   en: 4 — Mobile crane KC-3577; Mobile crane KC-4562; Mobile crane KC-6471
+
+[turn]
+   ro: 9 — Macara turn POTAIN MC-85B; Macara turn POTAIN MCT-88; Macara turn Irmaos Tavares IT-54 5fd
+   ru: 9 — Башенный кран КБ-308, КБ-308А; Башенный кран КБ-309ХЛ; Башенный кран POTAIN MC-85B
+   en: 9 — Tower crane POTAIN MC-85B; Tower crane POTAIN MCT-88; Tower crane Irmaos Tavares IT-54 5fd
+
+[senile]
+   ro: 1 — Macara pe şenile RDK 250
+   ru: 1 — Гусеничный кран RDK 250
+   en: 1 — Crawler crane RDK 250
+
+[transport]
+   ro: 6 — SEMIREMORCĂ A-441; SMIREMORCĂ FAYMONVILLE SNT-4U; SEMIREMORCĂ SJ-45S
+   ru: 6 — Полуприцеп A-441; Полуприцеп SJ-45S; Полуприцеп CMZAP-93853
+   en: 6 — Semitrailer A-441; Semitrailer SJ-45S; Semitrailer CMZAP-93853
+
+[servicii]
+   ro: 14 — Prestăm servicii cu macarale turn, auto şi aut; Transportăm sarcini agabaritice şi de mare ton; Montăm-demontăm macarale turn
+   ru: 14 — Предоставляем услуги башенными, авто и самоход; Перевозим крупногабаритные и тяжелые грузы, кр; Монтируем-демонтируем башенные краны
+   en: 14 — Render services with tower cranes, mobile and ; We transport oversized and heavy loads, cranes; We mount and dismantle the tower cranes.
+
+[vinzari]
+   ro: 5 — arenda incaperi; Cablu de oțel; Dispozitive pentru agăţarea şi manevrarea sarc
+   ru: 5 — аренда помещении; Стальные канаты; Грузозахватные приспособления и аксессуары
+   en: 4 — Steel Wire Ropes; Devices for hanging and handling pregnancy, an; Equipment
+
+[noutati]
+   ro: 0 — 
+   ru: 0 — 
+   en: 0 — 
+[page about] ok
+[page contacts] ok
+[form aplica_macara] ok
+[form aplica_transport] ok
+
+Итого карточек (RO): 40
+  auto       {'ro': 5, 'ru': 3, 'en': 4}
+  turn       {'ro': 9, 'ru': 9, 'en': 9}
+  senile     {'ro': 1, 'ru': 1, 'en': 1}
+  transport  {'ro': 6, 'ru': 6, 'en': 6}
+  servicii   {'ro': 14, 'ru': 14, 'en': 14}
+  vinzari    {'ro': 5, 'ru': 5, 'en': 4}
+  noutati    {'ro': 0, 'ru': 0, 'en': 0}
+Сохранено: D:\Projects\dimecon.md\docs\dimecon_source\content.json

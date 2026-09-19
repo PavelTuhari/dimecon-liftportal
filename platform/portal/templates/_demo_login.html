@@ -1,0 +1,24 @@
+{# Кнопки демо-входа: подставляют данные в форму и отправляют её.
+   Копировать адрес и пароль из подсказки руками не нужно — при копировании в поле
+   попадали разделители и невидимые символы, и вход отклонялся как неверный. #}
+{% if demo %}
+<div class="demo-login mt">
+  <div class="tiny muted" style="margin-bottom:6px">Демо-доступ в один клик (пароль <code>{{ demo[0].password }}</code>):</div>
+  <div class="flex wrap" style="gap:6px">
+    {% for d in demo %}
+    <button type="button" class="btn sm ghost js-demo" data-email="{{ d.email }}" data-pass="{{ d.password }}"
+            title="{{ d.email }} — {{ d.hint }}">{{ d.role }}</button>
+    {% endfor %}
+  </div>
+</div>
+<script>
+document.querySelectorAll('.js-demo').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var f = document.querySelector('form');
+    f.email.value = b.dataset.email;
+    f.password.value = b.dataset.pass;
+    f.submit();
+  });
+});
+</script>
+{% endif %}

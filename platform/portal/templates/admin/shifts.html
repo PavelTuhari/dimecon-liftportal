@@ -1,0 +1,10 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block heading %}Сменные рапорты{% endblock %}
+{% block content %}
+<div class="toolbar"><a class="btn sm" href="{{ url_for('export.shifts_xlsx') }}">⤓ Табель смен, Excel</a>
+  <a class="btn sm" href="{{ url_for('export.documents_xlsx') }}">⤓ Документы и счета, Excel</a></div>
+<div class="table-wrap"><table><thead><tr><th>Дата</th><th>Заявка</th><th>Техника</th><th>Оператор</th><th>Часы</th><th>Простой</th><th>Подъёмов</th><th>Статус</th><th>Примечания</th></tr></thead><tbody>
+{% for s in rows %}<tr><td>{{ s.work_date }}</td><td><a href="{{ url_for('admin.order', oid=s.order_id) }}">#{{ s.order_id }}</a></td><td>{{ s.equipment_id }}</td><td>{{ s.operator }}</td><td><b>{{ s.hours_worked }}</b></td><td>{{ s.hours_idle }} {{ ('(' ~ s.idle_fault ~ ')') if s.idle_fault }}</td><td>{{ s.lifts }}</td><td>{{ status_badge(s.status) }}{% if s.dispute_reason %}<div class="tiny muted">{{ s.dispute_reason }}</div>{% endif %}</td><td class="small">{{ s.notes }}</td></tr>
+{% else %}<tr><td colspan="9" class="center muted">Рапортов нет — добавляются из карточки заявки</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

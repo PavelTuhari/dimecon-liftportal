@@ -1,0 +1,17 @@
+{% extends "site/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block title %}{{ t('acc.orders') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="padding:36px 24px 64px">
+  <div class="flex between wrap mb"><div><div class="label">{{ t('nav.cabinet')|upper }}</div><h1>{{ user.full_name or user.email }}</h1></div>
+    <div class="flex"><a class="btn" href="{{ url_for('export.account_orders_xlsx') }}">⤓ Excel</a><a class="btn" href="{{ url_for('account.profile') }}">Профиль</a><a class="btn primary" href="{{ url_for('site.wizard_reset') }}">+ Новый заказ</a><form method="post" action="{{ url_for('account.logout') }}">{{ csrf() }}<button class="btn ghost">{{ t('acc.logout') }}</button></form></div></div>
+  {% if active %}<h3>Активные</h3><div class="grid g2 mb2">{% for o in active %}<a class="card" href="{{ url_for('account.order', oid=o.id) }}"><div class="flex between"><b>{{ o.number }}</b>{{ status_badge(o.status) }}</div>
+    <p class="small muted" style="margin:6px 0 0">{{ o.cargo }} {{ o.weight_t }} т · {{ o.equipment.brand ~ ' ' ~ o.equipment.model if o.equipment else 'техника подбирается' }}<br>{{ o.starts_at|dt }} · {{ o.address }}</p></a>{% endfor %}</div>{% endif %}
+  <h3>{{ t('acc.orders') }}</h3>
+  {% if not orders %}<div class="empty"><b>Заказов пока нет</b><a href="{{ url_for('site.wizard') }}" style="color:var(--accent)">Рассчитать первый →</a></div>{% endif %}
+  <div class="table-wrap"><table><thead><tr><th>№</th><th>Дата подачи</th><th>Груз</th><th>Техника</th><th>Стоимость</th><th>{{ t('common.status') }}</th><th></th></tr></thead><tbody>
+  {% for o in orders %}<tr><td><a href="{{ url_for('account.order', oid=o.id) }}"><b>{{ o.number }}</b></a></td><td>{{ o.starts_at|dt }}</td><td>{{ o.cargo }} {{ o.weight_t }} т</td><td>{{ o.equipment.brand ~ ' ' ~ o.equipment.model if o.equipment else '—' }}</td>
+    <td>{% if o.price_final %}{{ o.price_final|money(tenant.currency) }}{% elif o.price_max %}{{ o.price_min|money }}–{{ o.price_max|money }}{% else %}—{% endif %}</td><td>{{ status_badge(o.status) }}</td>
+    <td><form method="post" action="{{ url_for('account.repeat', oid=o.id) }}">{{ csrf() }}<button class="btn sm">{{ t('acc.repeat') }}</button></form></td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

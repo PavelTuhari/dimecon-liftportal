@@ -1,0 +1,20 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf, i18n_field, media_picker with context %}
+{% set names = {'services':'Услуга','products':'Товар','cases':'Кейс','pages':'Страница'} %}
+{% set labels = {'title':'Название','short':'Краткое описание','body':'Полный текст (HTML)','description':'Описание','slug':'Slug (адрес)','code':'Код','icon':'Иконка (эмодзи)','pricing_model':'Модель цены','image_url':'Изображение (URL)','sku':'Артикул','category':'Категория','unit':'Единица','client_name':'Заказчик','location':'Место','price_from':'Цена от','price':'Цена','stock':'Остаток','year':'Год','sort':'Порядок','is_orderable':'Можно заказать онлайн','is_published':'Опубликовано','made_to_order':'Под заказ','in_menu':'В меню'} %}
+{% block heading %}{{ names[kind] }}: {{ tr(obj.title) if obj else 'новая запись' }}{% endblock %}
+{% block content %}
+<a class="small muted" href="{{ url_for('admin.content_list', kind=kind) }}">← Список</a>
+<form class="card mt" method="post" style="max-width:900px">{{ csrf() }}
+  {% for f in i18n_fields %}{{ i18n_field(f, labels.get(f,f), obj[f] if obj else {}, textarea=(f in ('body','short','description')), rows=(8 if f=='body' else 3)) }}{% endfor %}
+  <div class="grid g3">{% for f in str_fields %}<div class="field"><label>{{ labels.get(f,f) }}</label>
+    {% if f=='pricing_model' %}<select name="{{ f }}">{% for v in ['hourly','shift','per_km','per_object','on_request'] %}<option value="{{ v }}" {{ 'selected' if obj and obj[f]==v }}>{{ v }}</option>{% endfor %}</select>
+    {% else %}<input name="{{ f }}" id="f_{{ f }}" value="{{ obj[f] if obj else '' }}">{% endif %}
+    {% if f=='image_url' %}{{ media_picker('#f_image_url', media) }}{% endif %}</div>{% endfor %}
+    {% for f in num_fields %}<div class="field"><label>{{ labels.get(f,f) }}</label><input type="number" step="any" name="{{ f }}" value="{{ obj[f] if obj and obj[f] is not none else '' }}"></div>{% endfor %}</div>
+  {% if kind=='cases' %}<div class="grid g3"><div class="field"><label>Масса, т</label><input type="number" step="0.1" name="m_weight" value="{{ obj.metrics.get('weight_t','') if obj }}"></div><div class="field"><label>Высота, м</label><input type="number" step="0.1" name="m_height" value="{{ obj.metrics.get('height_m','') if obj }}"></div><div class="field"><label>Часов</label><input type="number" step="0.5" name="m_hours" value="{{ obj.metrics.get('hours','') if obj }}"></div></div>{% endif %}
+  {% if kind=='products' %}<div class="field"><label>Атрибуты (JSON)</label><textarea name="attributes_json" class="code" style="min-height:90px">{{ (obj.attributes if obj else {})|tojson_pretty }}</textarea></div>{% endif %}
+  <div class="flex wrap">{% for f in bool_fields %}<label class="check"><input type="checkbox" name="{{ f }}" value="1" {{ 'checked' if (obj and obj[f]) or (not obj and f=='is_published') }}>{{ labels.get(f,f) }}</label>{% endfor %}</div>
+  <div class="flex between mt"><button class="btn primary">Сохранить</button>{% if obj %}<button class="btn danger" name="action" value="delete" onclick="return confirm('Удалить?')">Удалить</button>{% endif %}</div>
+</form>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ tenant.name }} — {{ tr(tenant.tagline) }}{% endblock %}
+{% block content %}
+<section class="hero">
+  {% if tenant.theme.get('hero_image_url') %}<div class="bg" style="background-image:url('{{ tenant.theme.hero_image_url }}')"></div>{% endif %}
+  <div class="container">
+    <div>
+      <span class="badge"><i class="dot pulse" style="color:#4CAF7D"></i> {{ stats.free }} {{ t('stats.fleet') }} {{ t('eq.available')|lower }}</span>
+      <h1 class="mt">{{ tr(tenant.hero.get('title')) or tenant.name }}{% if tenant.founded_year %} <em>{{ tenant.city }}</em>{% endif %}</h1>
+      <p class="lead">{{ tr(tenant.hero.get('subtitle')) or tr(tenant.tagline) }}</p>
+      <div class="flex wrap"><a class="btn primary lg" href="{{ url_for('site.wizard') }}">{{ t('hero.cta') }}</a><a class="btn lg" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" href="tel:{{ tenant.phone|replace(' ','') }}">{{ tenant.phone }}</a></div>
+      <p class="small mt" style="color:rgba(255,255,255,.6)">{{ t('hero.hint') }}</p>
+    </div>
+    <form class="quick" method="post" action="{{ url_for('site.wizard', step=1) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <h3>{{ t('wz.s1') }}</h3>
+      <div class="field"><select name="task">{% for code, ico, name in tasks %}<option value="{{ code }}">{{ ico }} {{ tr(name) }}</option>{% endfor %}</select></div>
+      <button class="btn primary block">{{ t('hero.cta') }}</button>
+      <p class="tiny muted center mt" style="margin-bottom:0">{{ t('hero.hint') }}</p>
+    </form>
+  </div>
+</section>
+
+<div class="container" style="margin-top:-28px;position:relative"><div class="stats">
+  <div><b>{{ tenant.founded_year or '—' }}</b><span>{{ t('stats.founded') }}</span></div>
+  <div><b>{{ stats.max_cap|int }} т</b><span>{{ t('stats.capacity') }}</span></div>
+  <div><b>{{ stats.max_r|int }} м</b><span>{{ t('stats.reach') }}</span></div>
+  <div><b>{{ stats.fleet }}</b><span>{{ t('stats.fleet') }}</span></div>
+</div></div>
+
+<section class="block"><div class="container">
+  <div class="sec-head"><div><div class="label">{{ t('sec.tasks.label') }}</div><h2>{{ t('sec.tasks.title') }}</h2></div></div>
+  <div class="grid g4">{% for code, ico, name in tasks[:-1] %}
+    <form method="post" action="{{ url_for('site.wizard', step=1) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="task" value="{{ code }}">
+      <button class="task-card" style="width:100%;text-align:left;cursor:pointer"><span class="ico">{{ ico }}</span><b>{{ tr(name) }}</b><span class="small" style="color:var(--accent);font-weight:800">{{ t('nav.calculate') }} →</span></button></form>
+  {% endfor %}</div>
+</div></section>
+
+<section class="block alt"><div class="container">
+  <div class="sec-head"><div><div class="label">{{ t('sec.fleet.label') }}</div><h2>{{ t('sec.fleet.title') }}</h2></div><a class="btn" href="{{ url_for('site.equipment') }}">{{ t('sec.fleet.all') }}</a></div>
+  <div class="grid g3">{% for eq in fleet %}{% include "site/_eq_card.html" %}{% endfor %}</div>
+</div></section>
+
+<section class="block"><div class="container">
+  <div class="sec-head"><div><div class="label">{{ t('sec.steps.label') }}</div><h2>{{ t('sec.steps.title') }}</h2></div></div>
+  <div class="grid g4">{% for i in range(1,5) %}<div class="step"><div class="n">{{ i }}</div><div><h4>{{ t('steps.%d.t'|format(i)) }}</h4><p class="small muted">{{ t('steps.%d.d'|format(i)) }}</p></div></div>{% endfor %}</div>
+</div></section>
+
+<section class="block alt"><div class="container grid g2" style="align-items:center">
+  <div><div class="label">{{ t('sec.price.label') }}</div><h2>{{ t('sec.price.title') }}</h2>
+    <p class="muted">Вы видите каждую строку расчёта до подтверждения заявки. Если факт превысил верхнюю границу озвученной вилки не по вашей вине — вы платите по верхней границе.</p>
+    <a class="btn primary" href="{{ url_for('site.wizard') }}">{{ t('nav.calculate') }}</a></div>
+  <div class="card"><table class="breakdown"><tbody>
+    <tr><td>Работа техники (мин. смена 4 ч)</td><td>4 × {{ (fleet[0].hourly_rate if fleet else 1200)|money }}</td></tr>
+    <tr><td>Подача техники (зона «Город»)</td><td>{{ (fleet[0].mobilization_fee if fleet else 1500)|money }}</td></tr>
+    <tr><td>Стропальщик</td><td>600</td></tr>
+    <tr><td class="muted">Скидка за гибкую дату</td><td class="muted">−7 %</td></tr>
+    <tr><td><b>{{ t('wz.total') }} с {{ t('wz.vat') }}</b></td><td><b>{{ (((fleet[0].hourly_rate*4 + fleet[0].mobilization_fee + 600)*0.93*1.2) if fleet else 8140)|money(tenant.currency) }}</b></td></tr>
+  </tbody></table><p class="tiny muted" style="margin:10px 0 0">Пример для {{ fleet[0].brand ~ ' ' ~ fleet[0].model if fleet else 'автокрана 25 т' }} в будний день</p></div>
+</div></section>
+
+{% if cases %}<section class="block"><div class="container">
+  <div class="sec-head"><div><div class="label">{{ t('sec.cases.label') }}</div><h2>{{ t('sec.cases.title') }}</h2></div><a class="btn" href="{{ url_for('site.cases') }}">{{ t('common.all') }} →</a></div>
+  <div class="grid g3">{% for c in cases %}<div class="eq-card"><div class="ph" style="background-image:url('{{ c.image_url }}')"></div><div class="body"><h3>{{ tr(c.title) }}</h3>
+    <div class="specs"><div><b>{{ c.metrics.get('weight_t',0) }} т</b><span>масса</span></div><div><b>{{ c.metrics.get('height_m',0)|int }} м</b><span>высота</span></div><div><b>{{ c.metrics.get('hours',0)|int }} ч</b><span>работы</span></div></div>
+    <span class="small muted">{{ c.client_name }} · {{ c.year }}</span></div></div>{% endfor %}</div>
+</div></section>{% endif %}
+
+<section class="block" style="background:var(--navy);color:#fff"><div class="container grid g2" style="align-items:center">
+  <div><div class="label">{{ t('sec.partners.label') }}</div><h2>{{ t('sec.partners.title') }}</h2><p style="color:rgba(255,255,255,.75)">{{ t('sec.partners.text') }}</p>
+    <div class="flex wrap"><a class="btn primary" href="{{ url_for('partner.apply') }}">{{ t('sec.partners.cta') }}</a><a class="btn" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" href="{{ url_for('site.partners_landing') }}">{{ t('common.more') }}</a></div></div>
+  <div class="grid g3">{% for tier, d in [('Бронза','3 %'),('Серебро','5 %'),('Золото','8 %')] %}<div class="card" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);color:#fff"><div class="label">{{ tier }}</div><b style="font-size:28px">−{{ d }}</b><p class="small" style="color:rgba(255,255,255,.6);margin:0">договорные ставки, отсрочка, приоритет</p></div>{% endfor %}</div>
+</div></section>
+
+{% if reviews %}<section class="block"><div class="container"><div class="label">ОТЗЫВЫ</div><h2>Что говорят клиенты</h2>
+<div class="grid g3 mt">{% for r in reviews %}<div class="review"><div class="stars">{{ '★'*r.rating }}{{ '☆'*(5-r.rating) }}</div><p>{{ r.body }}</p><b class="small">{{ r.author }}</b>{% if r.reply %}<p class="small muted mt" style="margin:8px 0 0">↳ {{ r.reply }}</p>{% endif %}</div>{% endfor %}</div></div></section>{% endif %}
+
+{% if tenant.faq %}<section class="block alt"><div class="container" style="max-width:820px">
+  <div class="label">FAQ</div><h2>{{ t('sec.faq.title') }}</h2>
+  <div class="faq mt">{% for f in tenant.faq %}<details><summary>{{ tr(f.q) }}</summary><div class="a">{{ tr(f.a) }}</div></details>{% endfor %}</div>
+</div></section>{% endif %}
+
+<section class="block"><div class="container grid g2">
+  <div><div class="label">{{ t('nav.contacts')|upper }}</div><h2>{{ t('sec.contacts.title') }}</h2>
+    <p><b>{{ tenant.phone }}</b>{% if tenant.phone2 %} · {{ tenant.phone2 }}{% endif %}<br>{{ tenant.email }}<br>{{ tenant.address }}</p></div>
+  <form class="card" method="post" action="{{ url_for('site.contacts') }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="grid g2"><div class="field"><label>{{ t('wz.name') }}</label><input name="name" required></div><div class="field"><label>{{ t('wz.phone') }}</label><input name="phone" type="tel" required></div></div>
+    <div class="field"><label>{{ t('wz.comment') }}</label><textarea name="message" rows="3"></textarea></div>
+    <button class="btn primary">Отправить</button></form>
+</div></section>
+{% endblock %}

@@ -1,0 +1,15 @@
+<a class="eq-card" href="{{ url_for('site.equipment_item', slug=eq.slug) }}">
+  <div class="ph" style="background-image:url('{{ eq.photo_url }}')">
+    <span class="badge {{ 'ok' if eq.status=='active' else 'warn' }}"><i class="dot"></i> {{ t('eq.available') if eq.status=='active' else t('eq.busy') }}</span>
+  </div>
+  <div class="body">
+    <div><span class="tiny muted">{{ tr(eq.category.name) if eq.category else '' }}</span><h3 style="margin:0">{{ eq.brand }} {{ eq.model }}</h3></div>
+    {% if eq.is_crane %}
+    <div class="specs"><div><b>{{ (eq.capacity_t|round|int ~ ' т') if eq.capacity_t else '—' }}</b><span>{{ t('eq.capacity') }}</span></div><div><b>{{ (eq.radius_m|round|int ~ ' м') if eq.radius_m else '—' }}</b><span>{{ t('eq.reach') }}</span></div><div><b>{{ (eq.height_m|round|int ~ ' м') if eq.height_m else '—' }}</b><span>{{ t('eq.height') }}</span></div></div>
+    {% else %}
+    <div class="specs"><div><b>{{ ((eq.payload_kg/1000)|round(1) ~ ' т') if eq.payload_kg else '—' }}</b><span>{{ t('eq.payload') }}</span></div><div><b>{{ ((eq.platform_l_mm/1000)|round(1) ~ ' м') if eq.platform_l_mm else '—' }}</b><span>длина</span></div><div><b>{{ ((eq.platform_w_mm/1000)|round(2) ~ ' м') if eq.platform_w_mm else '—' }}</b><span>ширина</span></div></div>
+    {% endif %}
+    <div class="price-from"><span class="small muted">{{ t('eq.from') }}</span>
+      <b>{% if eq.hourly_rate %}{{ eq.hourly_rate|money }} {{ tenant.currency }}/{{ t('eq.hour') }}{% elif eq.per_km_rate %}{{ eq.per_km_rate|money }} {{ tenant.currency }}/км{% elif eq.spec.get('monthly_rate') %}{{ eq.spec.monthly_rate|money }} {{ tenant.currency }}/мес{% else %}—{% endif %}</b></div>
+  </div>
+</a>

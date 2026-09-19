@@ -1,0 +1,51 @@
+{% extends "platform/_layout.html" %}
+{% block title %}{{ platform_name }} — компании спецтехники{% endblock %}
+{% block content %}
+<section class="mk-hero"><div class="container">
+  <div class="label" style="color:var(--accent)">МАРКЕТПЛЕЙС СПЕЦТЕХНИКИ</div>
+  <h1>Найдите кран, трал или монтажников рядом с объектом</h1>
+  <p>Каждая компания ведёт бизнес через собственный сайт и кабинет на платформе. Вы получаете единый стандарт: онлайн-расчёт, прозрачную цену, подтверждение за 15 минут.</p>
+  <form class="mk-search" method="get">
+    <input type="text" name="q" value="{{ q }}" placeholder="Название компании, город…">
+    <select name="city"><option value="">Все города</option>{% for c in cities %}<option value="{{ c }}" {{ 'selected' if c==city }}>{{ c }}</option>{% endfor %}</select>
+    <select name="profile"><option value="">Любой профиль</option><option value="cranes" {{ 'selected' if profile=='cranes' }}>Краны</option><option value="transport" {{ 'selected' if profile=='transport' }}>Перевозки</option><option value="mixed" {{ 'selected' if profile=='mixed' }}>Смешанный</option></select>
+    <button class="btn primary">Найти</button>
+  </form>
+</div></section>
+
+<section class="block"><div class="container">
+  <div class="sec-head"><div><div class="label">КОМПАНИИ</div><h2>{{ tenants|length }} компаний на платформе</h2></div>
+    <a class="btn" href="{{ url_for('platform.register') }}">+ Разместить свою компанию</a></div>
+  {% if not tenants %}<div class="empty"><b>Ничего не найдено</b>Попробуйте изменить фильтры</div>{% endif %}
+  <div class="grid g3">
+  {% for tnt in tenants %}
+    {% set s = stats[tnt.id] %}
+    <a class="co-card" href="{{ url_for('site.home', tenant_slug=tnt.slug) }}">
+      <div class="ph" style="background-image:url('{{ tnt.theme.get('hero_image_url','') }}');background-color:{{ tnt.theme.get('navy','#1F3A52') }}">
+        <span class="logo"><span class="mark" style="background:{{ tnt.theme.get('accent','#F5A623') }};color:#14181B">{{ tnt.name[0] }}</span></span>
+      </div>
+      <div class="body">
+        <div class="flex between"><h3 style="margin:0">{{ tnt.name }}</h3><span class="badge">{{ tnt.city }}</span></div>
+        <p class="small muted" style="margin:0">{{ tr(tnt.tagline) or tnt.legal_name }}</p>
+        <div class="specs">
+          <div><b>{{ s.fleet }}</b><span>техники</span></div>
+          <div><b>{{ s.max_cap|int }} т</b><span>макс. г/п</span></div>
+          <div><b>{{ tnt.founded_year or '—' }}</b><span>основана</span></div>
+        </div>
+        <div class="flex between small" style="margin-top:auto"><span class="muted">{{ s.orders }} заявок</span><span style="color:var(--accent);font-weight:800">Открыть сайт →</span></div>
+      </div>
+    </a>
+  {% endfor %}
+  </div>
+</div></section>
+
+<section class="block alt"><div class="container">
+  <div class="label">КАК ЭТО РАБОТАЕТ</div><h2>Одна платформа — сайт, CRM и портал партнёров для каждой компании</h2>
+  <div class="grid g4 mt">
+    <div class="card"><h3>1. Профиль</h3><p class="small muted">Регистрируете компанию — получаете сайт по адресу <code>/s/ваш-slug</code> или на своём домене.</p></div>
+    <div class="card"><h3>2. Парк и цены</h3><p class="small muted">Заводите технику, грузовые таблицы и тарифы. Подборщик и калькулятор начинают работать сразу.</p></div>
+    <div class="card"><h3>3. CRM</h3><p class="small muted">Заявки с сайта попадают в канбан, контакты и история — в карточки, документы — в один клик.</p></div>
+    <div class="card"><h3>4. Своя инфраструктура</h3><p class="small muted">Свой SMTP, своё хранилище файлов (диск, URL, S3), свой домен. Централизованы только портал и база.</p></div>
+  </div>
+</div></section>
+{% endblock %}

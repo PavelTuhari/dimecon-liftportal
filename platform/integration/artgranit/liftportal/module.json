@@ -1,0 +1,19 @@
+{
+  "title": {
+    "ru": "Спецтехника и аренда кранов",
+    "ro": "Utilaje și închiriere macarale",
+    "en": "Heavy equipment & crane rental"
+  },
+  "icon": "🏗",
+  "order": 40,
+  "url": "/UNA.md/orasldev/liftportal",
+  "docs": "docs/LiftPortal",
+  "sql_prefix": "LIFT_",
+  "descr": "Заявки на технику, парк, подбор крана, партнёры B2B и документы платформы LiftPortal",
+  "pages": {
+    "liftportal": "Сводка: заявки, подачи, парк",
+    "liftportal/orders": "Заявки и сделки",
+    "liftportal/fleet": "Парк техники",
+    "liftportal/docs": "Документация модуля"
+  }
+}

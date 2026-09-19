@@ -1,0 +1,11 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('acc.register') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:480px;padding:56px 24px"><div class="card"><h2>{{ t('acc.register') }}</h2><p class="small muted">Заявки, оставленные ранее по этому телефону или почте, появятся в кабинете автоматически.</p>
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label>{{ t('wz.name') }}</label><input name="name" required></div>
+  <div class="field"><label>{{ t('wz.phone') }}</label><input name="phone" type="tel"></div>
+  <div class="field"><label>E-mail</label><input type="email" name="email" required></div>
+  <div class="field"><label>{{ t('acc.password') }}</label><input type="password" name="password" required minlength="6"></div>
+  <button class="btn primary block">Создать кабинет</button></form></div></div>
+{% endblock %}

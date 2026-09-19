@@ -1,0 +1,18 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf, status_badge with context %}
+{% block heading %}Партнёры B2B{% endblock %}
+{% block content %}
+<div class="grid g2" style="align-items:start">
+<div class="table-wrap"><table><thead><tr><th>Компания</th><th>Контакт</th><th>Уровень</th><th>Скидка</th><th>Лимит / отсрочка</th><th>Оборот</th><th>Статус</th><th></th></tr></thead><tbody>
+{% for p in rows %}<tr><td><b>{{ p.name }}</b><br><span class="tiny muted">{{ p.idno }}</span></td><td class="small">{{ p.contact_name }}<br>{{ p.phone }}</td><td>{{ p.tier }}</td><td>{{ p.discount_pct }} %</td><td class="small">{{ p.credit_limit|money }} / {{ p.payment_days }} дн</td><td>{{ p.turnover|money }}</td><td>{{ status_badge(p.status) }}</td>
+  <td><a class="btn sm" href="{{ url_for('partner.index', partner_id=p.id) }}">портал</a> <button class="btn sm" onclick='fill({{ {"id":p.id,"name":p.name,"idno":p.idno,"contact_name":p.contact_name,"phone":p.phone,"email":p.email,"tier":p.tier,"discount_pct":p.discount_pct,"credit_limit":p.credit_limit,"payment_days":p.payment_days,"status":p.status}|tojson }})'>✎</button></td></tr>{% endfor %}</tbody></table></div>
+<form class="card" method="post" id="pf">{{ csrf() }}<h3 id="ph">Новый партнёр</h3><input type="hidden" name="id" id="p_id">
+  <div class="grid g2"><div class="field"><label>Компания</label><input name="name" id="p_name" required></div><div class="field"><label>IDNO</label><input name="idno" id="p_idno"></div>
+    <div class="field"><label>Контактное лицо</label><input name="contact_name" id="p_contact_name"></div><div class="field"><label>Телефон</label><input name="phone" id="p_phone"></div>
+    <div class="field"><label>E-mail</label><input name="email" id="p_email"></div><div class="field"><label>Уровень</label><select name="tier" id="p_tier">{% for t in ['base','bronze','silver','gold','platinum'] %}<option>{{ t }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Скидка, %</label><input type="number" step="0.5" name="discount_pct" id="p_discount_pct" value="0"></div><div class="field"><label>Кредитный лимит</label><input type="number" name="credit_limit" id="p_credit_limit" value="0"></div>
+    <div class="field"><label>Отсрочка, дней</label><input type="number" name="payment_days" id="p_payment_days" value="0"></div><div class="field"><label>Статус</label><select name="status" id="p_status"><option value="lead">lead</option><option value="active">active</option><option value="suspended">suspended</option></select></div></div>
+  <div class="field"><label>Пригласить в портал (e-mail)</label><input type="email" name="invite_email" placeholder="foreman@partner.md"><span class="hint">Ссылка активации будет показана здесь и отправлена письмом через ваш SMTP</span></div>
+  <button class="btn primary">Сохранить</button></form></div>
+{% endblock %}
+{% block scripts %}<script>function fill(p){for(const k in p){const e=document.getElementById('p_'+k);if(e)e.value=p[k];}document.getElementById('ph').textContent='Партнёр: '+p.name;document.getElementById('pf').scrollIntoView({behavior:'smooth'});}</script>{% endblock %}

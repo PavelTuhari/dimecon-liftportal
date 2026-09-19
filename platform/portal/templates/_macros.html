@@ -1,0 +1,35 @@
+{% macro flashes() %}
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="alert {{ cat }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+{% endmacro %}
+
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+
+{# многоязычное поле: name -> name_ru / name_ro / name_en #}
+{% macro i18n_field(name, label, value, textarea=False, rows=4) %}
+<div class="field i18n">
+  <label>{{ label }}</label>
+  <div class="i18n-tabs">{% for l in LANGS %}<button type="button" data-lang="{{ l }}" class="{{ 'on' if loop.first }}">{{ l|upper }}</button>{% endfor %}</div>
+  {% for l in LANGS %}
+    {% set v = (value or {}).get(l, '') if value is mapping else '' %}
+    {% if textarea %}<textarea name="{{ name }}_{{ l }}" data-lang="{{ l }}" rows="{{ rows }}" {% if not loop.first %}style="display:none"{% endif %}>{{ v }}</textarea>
+    {% else %}<input type="text" name="{{ name }}_{{ l }}" data-lang="{{ l }}" value="{{ v }}" {% if not loop.first %}style="display:none"{% endif %}>{% endif %}
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro status_badge(s) %}
+{% set cls = {'submitted':'info','under_review':'info','quoted':'warn','confirmed':'ok','scheduled':'ok','in_progress':'accent','completed':'ok','invoiced':'warn','paid':'ok','cancelled':'bad',
+              'new':'info','contacted':'info','won':'ok','lost':'bad','active':'ok','lead':'warn','suspended':'bad','approved':'ok','disputed':'bad','sent':'ok','failed':'bad','queued':'warn','pending':'warn'} %}
+{% set names = {'submitted':'Новая','under_review':'В работе','quoted':'КП выставлено','confirmed':'Подтверждён','scheduled':'Запланирован','in_progress':'Выполняется','completed':'Выполнен','invoiced':'Счёт','paid':'Оплачен','cancelled':'Отменён',
+                'new':'Новые','contacted':'В контакте','won':'Сделка','lost':'Потеряно','active':'Активен','lead':'Заявка','suspended':'Приостановлен','approved':'Подтверждён','disputed':'Оспорен','sent':'Отправлено','failed':'Ошибка','queued':'В очереди','maintenance':'ТО','order':'Заказ','soft':'Резерв'} %}
+<span class="badge {{ cls.get(s,'') }}">{{ names.get(s, s) }}</span>
+{% endmacro %}
+
+{% macro media_picker(target, media) %}
+{% if media %}
+<details class="mt"><summary class="small muted" style="cursor:pointer">Выбрать из медиатеки ({{ media|length }})</summary>
+<div class="media-grid mt">{% for m in media %}<div class="m pick" data-target="{{ target }}" data-url="{{ m.url }}"><img src="{{ m.url }}" alt="" loading="lazy"><div class="c">{{ m.filename }}</div></div>{% endfor %}</div></details>
+{% endif %}
+{% endmacro %}

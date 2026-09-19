@@ -1,0 +1,11 @@
+{% extends "partner/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block heading %}Документы и счета{% endblock %}
+{% block content %}
+<div class="grid g3 mb"><div class="kpi"><b>{{ p.credit_limit|money }}</b><span>кредитный лимит</span></div><div class="kpi"><b>{{ docs|selectattr('type','equalto','invoice')|rejectattr('status','equalto','paid')|map(attribute='amount')|sum|money }}</b><span>к оплате</span></div><div class="kpi"><b>{{ p.payment_days }} дн</b><span>отсрочка</span></div></div>
+{% set pq = {'partner_id': request.args.get('partner_id')} if request.args.get('partner_id') else {} %}
+<div class="toolbar"><a class="btn sm" href="{{ url_for('export.partner_documents_xlsx', **pq) }}">⤓ Счета, Excel</a>
+  <a class="btn sm" href="{{ url_for('export.partner_orders_xlsx', **pq) }}">⤓ Заявки, Excel</a>
+  <a class="btn sm" href="{{ url_for('export.partner_shifts_xlsx', **pq) }}">⤓ Табель смен, Excel</a></div>
+<div class="table-wrap"><table><thead><tr><th>Тип</th><th>Номер</th><th>Дата</th><th>Срок</th><th>Сумма</th><th>Статус</th><th></th></tr></thead><tbody>{% for d in docs %}<tr><td>{{ d.type|upper }}</td><td><b>{{ d.number }}</b></td><td>{{ d.issued_at }}</td><td>{{ d.due_at or '—' }}</td><td>{{ d.amount|money(tenant.currency) }}</td><td>{{ status_badge(d.status) }}</td><td><a class="btn sm" href="{{ url_for('export.document_pdf', did=d.id) }}">⤓ PDF</a></td></tr>{% else %}<tr><td colspan="7" class="center muted">Документов пока нет</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

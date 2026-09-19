@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Акт 2 · Сайт заказчика и перенос содержимого</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet"><style>
+:root{--paper:#FBFAF7;--raised:#fff;--sunken:#F4F2EC;--ink:#16191C;--ink-2:#55606A;--ink-3:#8A939B;
+--line:#E2DED4;--line-strong:#CFC9BC;--accent:#D98A0B;--accent-soft:#FBEFD8;--navy:#1F3A52;
+--ok:#2E7D4F;--bad:#B23B2E;--warn:#C77700;
+--sans:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+--mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px}
+a{color:var(--navy)}
+header.top{background:var(--navy);color:#fff;padding:26px 0 22px;margin-bottom:26px}
+header.top .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:8px 0 6px;letter-spacing:-.015em}
+header.top h1{color:#fff}
+header.top .lead{color:rgba(255,255,255,.78);max-width:70ch;margin:0}
+h2{font-family:var(--serif);font-size:23px;margin:34px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+h3{font-size:16.5px;margin:22px 0 8px}
+p{margin:0 0 .9em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.9)}
+.verdict{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:4px 13px;font-weight:700;font-size:13px}
+.verdict.ok{background:#E3F3EA;color:var(--ok)}.verdict.warn{background:#FCEFD9;color:var(--warn)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card b{display:block;font-family:var(--serif);font-size:27px;line-height:1.1;letter-spacing:-.02em}
+.card span{font-size:12.5px;color:var(--ink-2)}
+ul.scope{margin:0 0 1em;padding-left:1.15em}ul.scope li{margin:.25em 0}
+table{width:100%;border-collapse:collapse;font-size:13.6px;background:var(--raised);
+border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:12px 0}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunken);font-size:12.4px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+tbody tr:last-child td{border-bottom:0}
+td.st{white-space:nowrap;font-weight:700;width:1%}
+td.st.ok{color:var(--ok)}td.st.bad{color:var(--bad)}
+td.dt{color:var(--ink-2);font-family:var(--mono);font-size:12.2px}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+overflow-x:auto;font-family:var(--mono);font-size:12.4px;line-height:1.5;white-space:pre-wrap}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px;margin:16px 0}
+figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raised)}
+figure img{width:100%;display:block;background:var(--sunken);cursor:zoom-in}
+figcaption{padding:9px 12px;font-size:12.4px;color:var(--ink-2);border-top:1px solid var(--line)}
+figcaption b{color:var(--ink);font-family:var(--mono);font-size:11.4px;display:block;margin-bottom:2px}
+.note{border-left:3px solid var(--warn);background:#FCEFD9;padding:12px 15px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.6px;color:#7A4E00}
+.note.info{border-color:var(--accent);background:var(--accent-soft);color:#7A4E00}
+.foot{margin-top:40px;padding-top:16px;border-top:3px double var(--line-strong);font-size:13px;color:var(--ink-2)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.nav a{border:1px solid var(--line-strong);background:var(--raised);border-radius:8px;padding:6px 12px;
+font-size:13px;text-decoration:none;font-weight:600}
+.nav a:hover{border-color:var(--accent)}
+.lb{position:fixed;inset:0;background:rgba(10,12,14,.92);display:none;align-items:center;justify-content:center;z-index:99;padding:22px}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:100%;border-radius:8px}
+@media print{header.top{background:#fff;color:#000;border-bottom:2px solid #000}
+header.top h1,header.top .lead{color:#000}.pill{border-color:#999;color:#000}
+.nav,.lb{display:none!important}figure{break-inside:avoid}table{break-inside:auto}}
+</style></head><body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Акт тестирования № 2 · dimecon.md</div>
+  <h1>Сайт заказчика и перенос содержимого</h1>
+  <p class="lead">Полный перенос действующего сайта dimecon.md на платформу и проверка публичных страниц.</p>
+  <div class="meta">
+    <span class="pill">Дата: 19.09.2026</span>
+    <span class="pill">Стенд: Windows 10, MySQL 8.4.0, Python 3.12</span>
+    <span class="pill">Платформа: LiftPortal</span>
+    <span class="pill">Заказчик: SA «Dimecon 11»</span>
+  </div>
+</div></header>
+<div class="wrap">
+  <div class="cards"><div class="card"><b>16 / 16</b><span>проверок пройдено</span></div><div class="card"><b>67 / 67</b><span>адресов отвечают</span></div><div class="card"><b>14</b><span>снимков экрана</span></div><div class="card"><b style="color:var(--ok)">0</b><span>не пройдено</span></div></div>
+  <p><span class="verdict ok">Годен</span></p>
+
+  <h2>Что проверялось</h2>
+  <ul class="scope"><li>выгрузка разделов исходного сайта на трёх языках</li><li>перенос парка техники, услуг, товаров, страниц и фотографий</li><li>объединение расходящихся языковых версий каталога</li><li>работа публичных страниц трёх компаний и переключение языков</li></ul>
+
+  <h2>Результаты</h2>
+  <h3>1. РАЗМЕТКА ИЗ ИСТОЧНИКА СОХРАНЯЕТСЯ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>абзацы и выделение выводятся разметкой</td><td class="dt">&lt;p&gt;, &lt;strong&gt;</td></tr><tr><td class="st ok">✔ OK</td><td>таблица характеристик открывается</td><td class="dt">тег &lt;table&gt; восстановлен</td></tr><tr><td class="st ok">✔ OK</td><td>строки и ячейки таблицы на месте</td><td class="dt">2 строки, 4 ячейки</td></tr><tr><td class="st ok">✔ OK</td><td>таблице возвращён служебный класс оформления</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>экранированных тегов в выводе не осталось</td><td class="dt"></td></tr></tbody></table><h3>2. ОПАСНАЯ РАЗМЕТКА ОБЕЗВРЕЖИВАЕТСЯ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>скрипт не выводится тегом</td><td class="dt">в выводе нет «&lt;script»</td></tr><tr><td class="st ok">✔ OK</td><td>картинка с обработчиком не выводится</td><td class="dt">в выводе нет «&lt;img»</td></tr><tr><td class="st ok">✔ OK</td><td>ссылка с javascript: не выводится</td><td class="dt">в выводе нет «&lt;a»</td></tr><tr><td class="st ok">✔ OK</td><td>обработчик события у разрешённого тега отброшен</td><td class="dt">в выводе нет «onclick»</td></tr><tr><td class="st ok">✔ OK</td><td>встроенный фрейм не выводится</td><td class="dt">в выводе нет «&lt;iframe»</td></tr><tr><td class="st ok">✔ OK</td><td>обработчик у таблицы отброшен</td><td class="dt">в выводе нет «onmouseover»</td></tr><tr><td class="st ok">✔ OK</td><td>разрешённый тег с опасным атрибутом остаётся тегом</td><td class="dt">атрибут убран, абзац сохранён</td></tr></tbody></table><h3>3. ТЕКСТ БЕЗ РАЗМЕТКИ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>plain убирает теги</td><td class="dt">Стальные канаты Диаметр, мм Масса, кг/м</td></tr><tr><td class="st ok">✔ OK</td><td>plain обрезает по длине с многоточием</td><td class="dt">Стальные канаты Диам…</td></tr><tr><td class="st ok">✔ OK</td><td>поле i18n берётся по основному языку</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>пустое значение не ломает вывод</td><td class="dt"></td></tr></tbody></table>
+  <h3>Контрольные показатели переноса</h3><table><thead><tr><th>Сценарий</th><th>Ожидание</th><th>Факт</th></tr></thead><tbody><tr><td>Единиц техники перенесено</td><td class="dt">весь парк исходного сайта</td><td class="st ok">22 из 22</td></tr><tr><td>Названия техники на трёх языках</td><td class="dt">22 / 22 / 22</td><td class="st ok">ru 22, ro 22, en 22</td></tr><tr><td>Фотографии техники</td><td class="dt">у каждой карточки</td><td class="st ok">без фотографии — 0, всего 57 файлов</td></tr><tr><td>Услуги</td><td class="dt">14</td><td class="st ok">14</td></tr><tr><td>Товары, страницы, кейсы</td><td class="dt">перенесены</td><td class="st ok">5 товаров, 3 страницы, 2 кейса</td></tr><tr><td>Контакты и год основания</td><td class="dt">как на сайте</td><td class="st ok">+373 22 47 35 32, office@dimecon.md, 1968</td></tr><tr><td>Технические характеристики</td><td class="dt">по данным источника</td><td class="st ok">нет у 2 машин — GROVE GMK 2035 и GMK 3055</td></tr><tr><td>Товары: соответствие языковых версий</td><td class="dt">карточка совпадает по смыслу, а не по позиции</td><td class="st ok">5 карточек сопоставлены по названию; у «аренды помещений» английской версии на сайте нет</td></tr><tr><td>Товары: описание и таблицы</td><td class="dt">выводятся разметкой, а не кодом</td><td class="st ok">3 таблицы характеристик, 0 экранированных тегов</td></tr><tr><td>Товары: фотографии</td><td class="dt">не растягивать значки 86×92</td><td class="st ok">мелкие изображения показаны миниатюрами</td></tr></tbody></table>
+  <h3>ПЕРЕНЕСЕНО С dimecon.md</h3><pre>техника ................ 22
+  строк грузовых таблиц .. 126 (ориентировочные, конфигурация &#x27;approx&#x27;)
+  услуги ................. 14
+  товары ................. 5
+  страницы ............... 3
+  кейсы .................. 2
+  файлы в медиатеке ...... 57
+  контакты ............... +373 22 47 35 32 / + 373 68140336 / office@dimecon.md, основана 1968</pre><h3>ПО КАТЕГОРИЯМ</h3><pre>Гусеничные краны        1: RDK 250
+  Автокраны               6: GROVE GMK 2035, GROVE GMK 3055, GROVE GMK 5100, KC-6471, КС-3577, КС-4562
+  Транспорт и тралы       6: 3PT 40-206, 3PT 40-206M, 555-102, A-441, CMZAP 93853, FAYMONVILLE SNT-4U, SJ-45S
+  Башенные краны          9: COMANSA 10LC 140, Irmaos Tavares IT-54 5fd, КБ-308, КБ-308А, КБ-309ХЛ, КБ-403А, КБ-403Б, КБ-405-1А, КБ-405-1АМ, КБ-405-2А, КБ-408, POTAIN MC-85B, POTAIN MCT-88</pre><h3>ПОЛНОТА ДАННЫХ</h3><pre>без ТТХ на сайте-источнике: 2 — GROVE GMK 2035, GROVE GMK 3055
+  без фотографии ...........: 0
+  названий на «ru» ........: 22 из 22
+  названий на «ro» ........: 22 из 22
+  названий на «en» ........: 22 из 22</pre><h3>РАССИНХРОН ЯЗЫКОВ НА ИСХОДНОМ САЙТЕ (карточек в разделе)</h3><pre>auto       RU= 3  RO= 5  EN= 4  &lt;-- расходится
+  turn       RU= 9  RO= 9  EN= 9
+  senile     RU= 1  RO= 1  EN= 1
+  transport  RU= 6  RO= 6  EN= 6
+  servicii   RU=14  RO=14  EN=14
+  vinzari    RU= 5  RO= 5  EN= 4  &lt;-- расходится
+  noutati    RU= 0  RO= 0  EN= 0</pre>
+  <h3>Проверенные адреса</h3><table><thead><tr><th>Код</th><th>Адрес</th></tr></thead><tbody><tr><td class="st ok">200</td><td class="dt">/s/dimecon/</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/equipment</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/equipment/ks-3577</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/services</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/services/predostavlyaem-uslugi-bashennymi-avto-i-samohodnymi-kranami-1</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/products</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/cases</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/about</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/contacts</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/p/terms</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/calculator</td></tr><tr><td class="st ok">200</td><td class="dt">/s/macara-nord/</td></tr><tr><td class="st ok">200</td><td class="dt">/s/sudlift/?lang=ro</td></tr><tr><td class="st ok">200</td><td class="dt">/s/sudlift/equipment?lang=en</td></tr><tr><td class="st ok">200</td><td class="dt">/s/dimecon/track/DIM-2026-00069</td></tr></tbody></table>
+  
+
+  <h2>Снимки экрана</h2><div class="shots"><figure><img loading="lazy" src="../screens/61_source_site.png" alt="Исходный сайт dimecon.md до переноса"><figcaption><b>61_source_site</b>Исходный сайт dimecon.md до переноса</figcaption></figure><figure><img loading="lazy" src="../screens/62_ported_catalog.png" alt="Тот же парк после переноса на платформу"><figcaption><b>62_ported_catalog</b>Тот же парк после переноса на платформу</figcaption></figure><figure><img loading="lazy" src="../screens/63_ported_services.png" alt="14 услуг заказчика после переноса"><figcaption><b>63_ported_services</b>14 услуг заказчика после переноса</figcaption></figure><figure><img loading="lazy" src="../screens/04_site_home.png" alt="Сайт компании: главная страница целиком (тема Dimecon)"><figcaption><b>04_site_home</b>Сайт компании: главная страница целиком (тема Dimecon)</figcaption></figure><figure><img loading="lazy" src="../screens/05_site_home_ro.png" alt="Тот же сайт на румынском языке"><figcaption><b>05_site_home_ro</b>Тот же сайт на румынском языке</figcaption></figure><figure><img loading="lazy" src="../screens/06_site_equipment.png" alt="Каталог техники с фасетными фильтрами"><figcaption><b>06_site_equipment</b>Каталог техники с фасетными фильтрами</figcaption></figure><figure><img loading="lazy" src="../screens/07_site_equipment_item.png" alt="Карточка техники: ТТХ, график грузоподъёмности, занятость"><figcaption><b>07_site_equipment_item</b>Карточка техники: ТТХ, график грузоподъёмности, занятость</figcaption></figure><figure><img loading="lazy" src="../screens/08_site_services.png" alt="Услуги компании"><figcaption><b>08_site_services</b>Услуги компании</figcaption></figure><figure><img loading="lazy" src="../screens/09_site_products.png" alt="Раздел «В продаже»"><figcaption><b>09_site_products</b>Раздел «В продаже»</figcaption></figure><figure><img loading="lazy" src="../screens/10_site_partners.png" alt="Лендинг для подрядчиков и уровни партнёрства"><figcaption><b>10_site_partners</b>Лендинг для подрядчиков и уровни партнёрства</figcaption></figure><figure><img loading="lazy" src="../screens/11_site_tenant2.png" alt="Вторая компания: свой бренд, цвета, парк, контакты"><figcaption><b>11_site_tenant2</b>Вторая компания: свой бренд, цвета, парк, контакты</figcaption></figure><figure><img loading="lazy" src="../screens/12_site_tenant3_en.png" alt="Третья компания на английском языке"><figcaption><b>12_site_tenant3_en</b>Третья компания на английском языке</figcaption></figure><figure><img loading="lazy" src="../screens/50_mobile_home.png" alt="Мобильная версия сайта, 390 px, со sticky-CTA"><figcaption><b>50_mobile_home</b>Мобильная версия сайта, 390 px, со sticky-CTA</figcaption></figure><figure><img loading="lazy" src="../screens/51_mobile_wizard.png" alt="Мобильный визард: один вопрос на экран"><figcaption><b>51_mobile_wizard</b>Мобильный визард: один вопрос на экран</figcaption></figure></div>
+
+  <h2>Выводы</h2>
+  <ul class="scope"><li>22 единицы техники, 14 услуг, 5 товарных позиций, 3 страницы, 57 фотографий</li><li>языковые версии исходного сайта расходятся: 3 автокрана в русской против 22 единиц фактически</li><li>перенос объединил версии по модели — весь парк доступен на всех трёх языках</li></ul>
+  <div class="note"><b>Ограничения испытаний.</b><ul class="scope"><li>У GROVE GMK 3055 и GMK 2035 на исходном сайте нет технических характеристик — карточки перенесены, характеристики показаны как «—», в подборе не участвуют.</li><li>Грузовые таблицы производителя на сайте отсутствуют: построены ориентировочные кривые с занижением 15 % и явным предупреждением на карточке.</li></ul></div>
+
+  <div class="nav"><a href="index.html">← Все акты</a> <a href="01_infrastruktura.html">№1 Инфраструктура и база данных</a> <a href="02_sajt_zakazchika.html">№2 Сайт заказчика и перенос содержимого</a> <a href="03_podbor_i_raschet.html">№3 Подбор техники и расчёт стоимости</a> <a href="04_zakazy_crm.html">№4 Оформление заказов, формы и CRM компании</a> <a href="05_b2b_portal.html">№5 Портал партнёра B2B</a> <a href="06_dokumenty.html">№6 Документы: PDF и Excel</a> <a href="07_bezopasnost.html">№7 Мультиарендность и разграничение доступа</a> <a href="08_integracii.html">№8 Интеграции с экосистемой заказчика</a> <a href="09_vhod_i_roli.html">№9 Вход и роли пользователей</a> <a href="../presentation.html">Презентация →</a></div>
+  <div class="foot">Акт сформирован автоматически 19.09.2026 21:33 по протоколам прогонов в <code>docs/*.log</code>.
+  Испытания провёл: Claude (Claude Code), автоматизированный прогон.</div>
+</div><div class="lb" id="lb"><img alt=""></div><script>
+const lb=document.getElementById('lb');document.querySelectorAll('figure img').forEach(i=>i.onclick=()=>{
+lb.querySelector('img').src=i.src;lb.classList.add('on')});lb.onclick=()=>lb.classList.remove('on');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});</script></body></html>

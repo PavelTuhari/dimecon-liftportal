@@ -1,0 +1,3 @@
+{% extends "partner/_layout.html" %}
+{% block heading %}Портал партнёра{% endblock %}
+{% block content %}<div class="empty"><b>Ваш аккаунт не привязан к компании-партнёру</b>Сотрудник {{ tenant.name }} может открыть портал любого партнёра из раздела «Партнёры B2B» кабинета.<br><a href="{{ url_for('admin.partners') }}" class="btn mt">Партнёры</a></div>{% endblock %}

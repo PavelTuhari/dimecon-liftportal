@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" data-theme="{{ 'dark' if (tenant and tenant.theme.get('dark')) else 'light' }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ tenant.name if tenant else platform_name }}{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+{% if tenant %}
+<style>:root{--accent:{{ tenant.theme.get('accent','#F5A623') }};--navy:{{ tenant.theme.get('navy','#1F3A52') }};--navy-dark:color-mix(in srgb,{{ tenant.theme.get('navy','#1F3A52') }} 80%,#000);--accent-hover:color-mix(in srgb,{{ tenant.theme.get('accent','#F5A623') }} 85%,#000);--accent-soft:color-mix(in srgb,{{ tenant.theme.get('accent','#F5A623') }} 18%,#fff)}</style>
+{% endif %}
+{% block head %}{% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+<script>
+// переключение вкладок RU/RO/EN у многоязычных полей форм
+document.addEventListener('click',e=>{const b=e.target.closest('.i18n-tabs button');if(!b)return;e.preventDefault();
+  const wrap=b.closest('.i18n');wrap.querySelectorAll('.i18n-tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  wrap.querySelectorAll('[data-lang]').forEach(x=>x.style.display=x.dataset.lang===b.dataset.lang?'':'none');});
+// выбор картинки из медиатеки в поле
+document.addEventListener('click',e=>{const p=e.target.closest('.pick');if(!p)return;const inp=document.querySelector(p.dataset.target);if(inp){inp.value=p.dataset.url;inp.dispatchEvent(new Event('input'));}});
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

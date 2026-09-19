@@ -1,0 +1,16 @@
+{% extends "site/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block title %}{{ order.number }}{% endblock %}
+{% block content %}
+<div class="wz"><div class="label">ОТСЛЕЖИВАНИЕ</div><h1>{{ order.number }} {{ status_badge(order.status) }}</h1>
+{% set steps = ['submitted','under_review','quoted','confirmed','scheduled','in_progress','completed'] %}
+{% set idx = steps.index(order.status) if order.status in steps else (7 if order.status in ('invoiced','paid') else -1) %}
+<div class="progress mt"><i style="width:{{ ((idx+1)/7*100)|int if idx>=0 else 0 }}%"></i></div>
+<div class="grid g2 mt"><div class="card"><h3>Заявка</h3><table class="breakdown"><tbody>
+  <tr><td>Груз</td><td>{{ order.cargo }} {{ order.weight_t }} т</td></tr><tr><td>Высота / вылет</td><td>{{ order.height_m }} м / {{ order.radius_m }} м</td></tr>
+  <tr><td>Подача</td><td>{{ order.starts_at|dt }}</td></tr><tr><td>Адрес</td><td>{{ order.address }}</td></tr>
+  <tr><td>Техника</td><td>{{ order.equipment.brand ~ ' ' ~ order.equipment.model if order.equipment else '—' }}</td></tr>
+  <tr><td><b>Стоимость</b></td><td><b>{% if order.price_final %}{{ order.price_final|money(tenant.currency) }}{% else %}{{ order.price_min|money }} – {{ order.price_max|money(tenant.currency) }}{% endif %}</b></td></tr></tbody></table></div>
+<div class="card"><h3>История</h3><ul class="activity">{% for a in order.activities %}<li>{{ a.body }}<div class="who">{{ a.created_at|dt }}</div></li>{% endfor %}</ul></div></div>
+<p class="small muted mt">Вопросы — {{ tenant.phone }}</p></div>
+{% endblock %}

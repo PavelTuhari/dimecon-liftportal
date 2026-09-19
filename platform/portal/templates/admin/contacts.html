@@ -1,0 +1,10 @@
+{% extends "admin/_layout.html" %}
+{% block heading %}Контакты{% endblock %}
+{% block content %}
+<div class="toolbar"><div class="seg"><a href="?" class="{{ 'on' if not kind }}">Все</a><a href="?kind=b2c" class="{{ 'on' if kind=='b2c' }}">Частные</a><a href="?kind=b2b" class="{{ 'on' if kind=='b2b' }}">Компании</a></div>
+<form method="get"><input name="q" value="{{ request.args.get('q','') }}" placeholder="имя, телефон, e-mail, компания"><button class="btn sm">Найти</button></form>
+<a class="btn sm" href="{{ url_for('export.contacts_xlsx') }}">⤓ Excel</a></div>
+<div class="table-wrap"><table><thead><tr><th>Имя</th><th>Компания</th><th>Телефон</th><th>E-mail</th><th>Тип</th><th>Заказов</th><th>Источник</th><th>Теги</th><th>Создан</th></tr></thead><tbody>
+{% for c in rows %}<tr><td><a href="{{ url_for('admin.contact', cid=c.id) }}"><b>{{ c.name }}</b></a>{% if c.user_id %} <span class="badge ok">кабинет</span>{% endif %}</td><td>{{ c.company }}</td><td>{{ c.phone }}</td><td>{{ c.email }}</td><td>{{ c.kind|upper }}</td><td>{{ c.orders_count }}</td><td class="small">{{ c.source }}</td><td class="small">{{ c.tags }}</td><td class="small muted">{{ c.created_at|dt('%d.%m.%Y') }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

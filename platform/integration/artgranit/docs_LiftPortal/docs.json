@@ -1,0 +1,20 @@
+{
+  "title": "LiftPortal — спецтехника и аренда кранов",
+  "icon": "🏗",
+  "order": 40,
+  "public": false,
+  "docs": {
+    "README.md": {"title": "Платформа LiftPortal: устройство и запуск", "audience": "разработка", "order": 1},
+    "00_Obzor_i_opcii.md": {"title": "Том 0. Обзор, опции, пакеты", "audience": "заказчик", "order": 2},
+    "01_B2C_podborshchik.md": {"title": "Том 1. Подборщик техники и заявка", "audience": "UX, разработка", "order": 3},
+    "02_Pricing_engine.md": {"title": "Том 2. Движок ценообразования", "audience": "коммерция", "order": 4},
+    "03_B2B_portal.md": {"title": "Том 3. Портал партнёра B2B", "audience": "UX, разработка", "order": 5},
+    "04_Uderzhanie_klienta.md": {"title": "Том 4. Удержание клиента", "audience": "маркетинг", "order": 6},
+    "05_Model_dannyh_DDL.md": {"title": "Том 5. Модель данных и DDL", "audience": "разработка", "order": 7},
+    "06_Plan_realizacii.md": {"title": "Том 6. План реализации", "audience": "PM", "order": 8},
+    "07_Figma_TZ.md": {"title": "Том 7. ТЗ для дизайнера", "audience": "UX", "order": 9},
+    "AKT_testirovaniya.md": {"title": "Акт № 1: развёртывание MySQL и платформы", "audience": "приёмка", "order": 10},
+    "AKT_testirovaniya_2_portirovanie.md": {"title": "Акт № 2: перенос сайта, расчёты, PDF и Excel", "audience": "приёмка", "order": 11},
+    "INTEGRATION.md": {"title": "Интеграция с OfficePlus и порталом Artgranit", "audience": "разработка", "order": 12}
+  }
+}

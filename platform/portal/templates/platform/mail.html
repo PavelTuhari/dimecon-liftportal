@@ -1,0 +1,8 @@
+{% extends "platform/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block content %}
+<div class="container" style="padding:32px 24px"><h1>Журнал почты (все компании)</h1>
+<div class="table-wrap"><table><thead><tr><th>Когда</th><th>Компания</th><th>Кому</th><th>Тема</th><th>Транспорт</th><th>Статус</th></tr></thead><tbody>
+{% for r in rows %}<tr><td class="small">{{ r.created_at|dt }}</td><td>{{ r.tenant_id or '—' }}</td><td>{{ r.to_email }}</td><td>{{ r.subject }}</td><td class="small">{{ r.transport }}</td><td>{{ status_badge(r.status) }}{% if r.error %}<div class="tiny muted">{{ r.error[:120] }}</div>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

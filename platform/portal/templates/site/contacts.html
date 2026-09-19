@@ -1,0 +1,15 @@
+{% extends "site/_layout.html" %}
+{% block title %}{{ t('nav.contacts') }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container grid g2" style="padding:44px 24px 64px">
+  <div><div class="label">{{ t('nav.contacts')|upper }}</div><h1>{{ t('sec.contacts.title') }}</h1>
+    <p style="font-size:18px"><b>{{ tenant.phone }}</b>{% if tenant.phone2 %}<br>{{ tenant.phone2 }}{% endif %}</p><p>{{ tenant.email }}<br>{{ tenant.address }}</p>
+    <p class="small muted">Рабочее время: пн–пт 08:00–18:00, сб 09:00–14:00. Срочные заявки — круглосуточно через форму.</p>
+    {% if tenant.social %}<div class="flex wrap">{% for k,v in tenant.social.items() if v %}<a class="btn sm" href="{{ v }}">{{ k }}</a>{% endfor %}</div>{% endif %}</div>
+  <form class="card" method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><h3>Написать нам</h3>
+    <div class="field"><label>{{ t('wz.name') }}</label><input name="name" required></div>
+    <div class="grid g2"><div class="field"><label>{{ t('wz.phone') }}</label><input name="phone" type="tel" required></div><div class="field"><label>E-mail</label><input name="email" type="email"></div></div>
+    <div class="field"><label>Сообщение</label><textarea name="message" rows="4">{% if request.args.get('subject') %}Интересует: {{ request.args.get('subject')[:120] }}. Прошу прислать цену и сроки.{% endif %}</textarea></div>
+    <button class="btn primary block">Отправить</button></form>
+</div>
+{% endblock %}

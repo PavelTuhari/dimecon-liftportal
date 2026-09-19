@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes, csrf with context %}
+{% block body %}
+<div class="app">
+  <aside class="side">
+    <a class="logo" href="{{ url_for('partner.index') }}"><span class="mark">{{ tenant.name[0] }}</span><span>{{ tenant.name }}<br><span class="tiny" style="opacity:.5;font-weight:500">портал партнёра</span></span></a>
+    {% set ep = request.endpoint %}{% set pq = ('?partner_id=' ~ request.args.partner_id) if request.args.get('partner_id') else '' %}
+    <h5>Работа</h5>
+    <a href="{{ url_for('partner.index') }}{{ pq }}" class="{{ 'on' if ep=='partner.index' }}">📊 Обзор и проекты</a>
+    <a href="{{ url_for('partner.schedule') }}{{ pq }}" class="{{ 'on' if ep=='partner.schedule' }}">📅 График техники</a>
+    <a href="{{ url_for('partner.documents') }}{{ pq }}" class="{{ 'on' if ep=='partner.documents' }}">📄 Документы и счета</a>
+    <h5>Компания</h5>
+    <a href="{{ url_for('site.equipment') }}">🏗 Каталог техники</a>
+    <a href="{{ url_for('site.home') }}" target="_blank">🌐 Сайт ↗</a>
+    {% if is_staff %}<a href="{{ url_for('admin.partners') }}">← Кабинет компании</a>{% endif %}
+  </aside>
+  <div class="main"><div class="topbar"><h1>{% block heading %}{% endblock %}</h1><div style="flex:1"></div><span class="small muted">{{ user.full_name or user.email }}</span><form method="post" action="{{ url_for('account.logout') }}">{{ csrf() }}<button class="btn sm">Выйти</button></form></div>
+    <div class="content">{{ flashes() }}{% block content %}{% endblock %}</div></div>
+</div>
+{% endblock %}

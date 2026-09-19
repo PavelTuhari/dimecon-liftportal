@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes, csrf with context %}
+{% block body %}
+<header class="site-head">
+  <div class="container">
+    <a class="logo" href="{{ url_for('platform.index') }}"><span class="mark">L</span>{{ platform_name }}</a>
+    <nav class="site-nav">
+      <a href="{{ url_for('platform.index') }}">Компании</a>
+      <a href="{{ url_for('platform.pricing') }}">Тарифы платформы</a>
+      {% if user and user.is_platform_admin %}<a href="{{ url_for('platform.admin') }}">Суперадмин</a>{% endif %}
+    </nav>
+    {% if user %}
+      <span class="small muted">{{ user.full_name or user.email }}</span>
+      <form method="post" action="{{ url_for('platform.logout') }}">{{ csrf() }}<button class="btn sm">Выйти</button></form>
+    {% else %}
+      <a class="btn sm" href="{{ url_for('platform.login') }}">Войти</a>
+      <a class="btn sm primary" href="{{ url_for('platform.register') }}">Создать компанию</a>
+    {% endif %}
+  </div>
+</header>
+<main>{{ flashes() }}{% block content %}{% endblock %}</main>
+<footer class="site-foot"><div class="container bottom" style="border:0;margin:0;padding:0">
+  <span>© {{ now.year }} {{ platform_name }} — white-label платформа для компаний спецтехники</span>
+  <span class="faint">БД: {{ active_db }}</span>
+</div></footer>
+{% endblock %}

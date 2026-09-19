@@ -1,0 +1,26 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import status_badge with context %}
+{% block heading %}Дашборд{% endblock %}
+{% block content %}
+<div class="grid g4 mb">
+  <a class="kpi" href="{{ url_for('admin.orders') }}"><b>{{ kpi.new }}</b><span>новых заявок ждут ответа</span></a>
+  <div class="kpi"><b>{{ kpi.today }}</b><span>подач сегодня</span></div>
+  <div class="kpi"><b>{{ kpi.month_orders }}</b><span>заявок за месяц</span></div>
+  <div class="kpi"><b>{{ kpi.month_revenue|money }}</b><span>выручка за месяц, {{ tenant.currency }}</span></div>
+</div>
+<div class="grid g4 mb2">
+  <a class="kpi" href="{{ url_for('admin.orders') }}?q=" style="{{ 'border-color:var(--warn)' if kpi.escalated }}"><b>{{ kpi.escalated }}</b><span>эскалаций — нужен инженер</span></a>
+  <a class="kpi" href="{{ url_for('admin.shifts') }}"><b>{{ kpi.pending_shifts }}</b><span>рапортов ждут подтверждения</span></a>
+  <a class="kpi" href="{{ url_for('admin.partners') }}"><b>{{ kpi.partners }}</b><span>активных партнёров</span></a>
+  <a class="kpi" href="{{ url_for('admin.mail_settings') }}" style="{{ 'border-color:var(--bad)' if kpi.mail_issues }}"><b>{{ kpi.mail_issues }}</b><span>писем не отправлено</span></a>
+</div>
+<div class="grid g2">
+  <div class="card"><h3>Воронка</h3>{% set total = funnel.values()|sum or 1 %}
+    {% for s, n in funnel.items() %}<div class="flex between small"><span>{{ status_badge(s) }}</span><b>{{ n }}</b></div><div class="progress mb" style="margin-top:4px"><i style="width:{{ (n/total*100)|int }}%"></i></div>{% endfor %}</div>
+  <div class="card"><h3>Ближайшие подачи</h3>{% if not upcoming %}<p class="small muted">Нет запланированных подач.</p>{% endif %}
+    <table class="small"><tbody>{% for o in upcoming %}<tr><td>{{ o.starts_at|dt('%d.%m %H:%M') }}</td><td><a href="{{ url_for('admin.order', oid=o.id) }}"><b>{{ o.number }}</b></a><br><span class="muted">{{ o.address }}</span></td><td>{{ o.equipment.model if o.equipment else '—' }}</td></tr>{% endfor %}</tbody></table></div>
+</div>
+<div class="card mt"><h3>Последние заявки</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>Клиент</th><th>Задача</th><th>Подача</th><th>Цена</th><th>Этап</th><th>Статус</th></tr></thead><tbody>
+{% for o in recent %}<tr><td><a href="{{ url_for('admin.order', oid=o.id) }}"><b>{{ o.number }}</b></a>{% if o.escalated %} <span class="badge warn">инженер</span>{% endif %}</td><td>{{ o.contact.name if o.contact }}<br><span class="tiny muted">{{ o.contact.phone if o.contact }}</span></td><td>{{ o.cargo }} {{ o.weight_t }} т</td><td>{{ o.starts_at|dt }}</td><td>{% if o.price_final %}{{ o.price_final|money }}{% else %}{{ o.price_min|money }}–{{ o.price_max|money }}{% endif %}</td><td>{{ status_badge(o.stage) }}</td><td>{{ status_badge(o.status) }}</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

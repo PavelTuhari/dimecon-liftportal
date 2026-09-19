@@ -1,0 +1,36 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf, i18n_field, media_picker with context %}
+{% block heading %}Сайт и бренд{% endblock %}
+{% block content %}
+<form method="post" class="grid g2" style="align-items:start">{{ csrf() }}
+<div>
+  <div class="card"><h3>Компания</h3>
+    <div class="grid g2"><div class="field"><label>Название</label><input name="name" value="{{ tenant.name }}" required></div><div class="field"><label>Юр. название</label><input name="legal_name" value="{{ tenant.legal_name }}"></div>
+      <div class="field"><label>Город</label><input name="city" value="{{ tenant.city }}"></div><div class="field"><label>IDNO</label><input name="idno" value="{{ tenant.idno }}"></div>
+      <div class="field"><label>Телефон</label><input name="phone" value="{{ tenant.phone }}"></div><div class="field"><label>Телефон 2</label><input name="phone2" value="{{ tenant.phone2 }}"></div>
+      <div class="field"><label>E-mail (заявки приходят сюда)</label><input name="email" value="{{ tenant.email }}"></div><div class="field"><label>Год основания</label><input type="number" name="founded_year" value="{{ tenant.founded_year or '' }}"></div></div>
+    <div class="field"><label>Адрес</label><input name="address" value="{{ tenant.address }}"></div>
+    {{ i18n_field('tagline', 'Слоган', tenant.tagline) }}
+    {{ i18n_field('about', 'О компании (HTML)', tenant.about, textarea=True, rows=6) }}
+    <div class="grid g3"><div class="field"><label>Язык по умолчанию</label><select name="default_locale">{% for l in LANGS %}<option value="{{ l }}" {{ 'selected' if tenant.default_locale==l }}>{{ LANG_NAMES[l] }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Валюта</label><input name="currency" value="{{ tenant.currency }}"></div><div class="field"><label>НДС, %</label><input type="number" step="0.1" name="vat_rate" value="{{ tenant.vat_rate }}"></div></div>
+    <div class="flex wrap">{% for l in LANGS %}<label class="check"><input type="checkbox" name="locales" value="{{ l }}" {{ 'checked' if l in tenant.locales }}>{{ LANG_NAMES[l] }}</label>{% endfor %}</div>
+    <div class="flex wrap mt"><label class="check"><input type="checkbox" name="is_listed" value="1" {{ 'checked' if tenant.is_listed }}>Показывать в каталоге платформы</label>
+      <div class="field" style="margin:0"><select name="profile"><option value="cranes" {{ 'selected' if tenant.profile=='cranes' }}>Краны</option><option value="transport" {{ 'selected' if tenant.profile=='transport' }}>Перевозки</option><option value="mixed" {{ 'selected' if tenant.profile=='mixed' }}>Смешанный</option></select></div></div>
+  </div>
+  <div class="card mt"><h3>FAQ (до 8)</h3>{% for i in range(1,9) %}{% set f = tenant.faq[i-1] if tenant.faq|length >= i else {} %}
+    <details {{ 'open' if f }}><summary class="small" style="cursor:pointer;font-weight:700">Вопрос {{ i }}{% if f %}: {{ tr(f.q) }}{% endif %}</summary>{{ i18n_field('faq%d_q'|format(i), 'Вопрос', f.get('q')) }}{{ i18n_field('faq%d_a'|format(i), 'Ответ', f.get('a'), textarea=True, rows=2) }}</details>{% endfor %}</div>
+</div>
+<div>
+  <div class="card"><h3>Оформление</h3>
+    <div class="grid g2"><div class="field"><label>Акцентный цвет</label><div class="flex"><input type="color" name="accent" value="{{ tenant.theme.get('accent','#F5A623') }}" style="width:60px;height:44px;padding:3px"><span class="small muted">кнопки, CTA</span></div></div>
+      <div class="field"><label>Основной цвет</label><div class="flex"><input type="color" name="navy" value="{{ tenant.theme.get('navy','#1F3A52') }}" style="width:60px;height:44px;padding:3px"><span class="small muted">герой, подвал, меню кабинета</span></div></div></div>
+    <div class="field"><label>Логотип (URL)</label><input id="logo" name="logo_url" value="{{ tenant.theme.get('logo_url','') }}" placeholder="https://…/logo.svg">{{ media_picker('#logo', media) }}</div>
+    <div class="field"><label>Фото героя (URL)</label><input id="heroimg" name="hero_image_url" value="{{ tenant.theme.get('hero_image_url','') }}">{{ media_picker('#heroimg', media) }}</div>
+    <label class="check"><input type="checkbox" name="dark" value="1" {{ 'checked' if tenant.theme.get('dark') }}>Тёмная тема сайта</label></div>
+  <div class="card mt"><h3>Первый экран</h3>{{ i18n_field('hero_title', 'Заголовок', tenant.hero.get('title')) }}{{ i18n_field('hero_subtitle', 'Подзаголовок', tenant.hero.get('subtitle'), textarea=True, rows=2) }}</div>
+  <div class="card mt"><h3>Соцсети и мессенджеры</h3>{% for k in ['facebook','instagram','telegram','whatsapp','viber'] %}<div class="field"><label>{{ k }}</label><input name="social_{{ k }}" value="{{ tenant.social.get(k,'') }}"></div>{% endfor %}</div>
+  <button class="btn primary lg block mt">Сохранить</button>
+  <p class="small muted center mt">Сайт: <a href="{{ url_for('site.home') }}" target="_blank" style="color:var(--accent)">{{ platform_host }}/s/{{ tenant.slug }}</a>{% if tenant.custom_domain %} · {{ tenant.custom_domain }}{% endif %}</p>
+</div></form>
+{% endblock %}

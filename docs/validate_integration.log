@@ -1,0 +1,23 @@
+﻿=== Синтаксис ===
+  OK   integration/artgranit/liftportal/__init__.py
+  OK   integration/artgranit/liftportal/routes.py
+  OK   portal/services/officeplus.py
+  OK   portal/services/crm_import.py
+
+=== Манифесты ===
+  OK   module.json разбирается
+  OK   название на трёх языках — ru, ro, en
+  OK   есть иконка, порядок, url, docs, sql_prefix — 🏗 /UNA.md/orasldev/liftportal LIFT_
+  OK   url под /UNA.md/orasldev/ — /UNA.md/orasldev/liftportal
+  OK   docs.json разбирается, документов перечислено — 12
+  OK   публичность выключена по умолчанию — False
+
+=== Контракт ядра ===
+  OK   blueprint назван ключом модуля
+  OK   экспортируется переменная blueprint
+  OK   нет вызовов app.add_url_rule / register_blueprint
+  OK   маршруты объявлены без префикса модуля
+  OK   страницы манифеста совпадают с маршрутами — liftportal, liftportal/orders, liftportal/fleet, liftportal/docs
+  OK   ошибка связи не роняет страницу
+
+ИТОГО: ошибок 0

@@ -1,0 +1,8 @@
+{% extends "site/_layout.html" %}
+{% block content %}
+<div class="container" style="max-width:480px;padding:56px 24px"><div class="card"><div class="label">ПРИГЛАШЕНИЕ</div><h2>{{ tenant.name }}</h2><p class="muted">Вас пригласили с ролью <b>{{ inv.role }}</b>. E-mail: <b>{{ inv.email }}</b></p>
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label>Имя</label><input name="name"></div><div class="field"><label>Телефон</label><input name="phone"></div>
+  <div class="field"><label>Пароль (если у вас ещё нет аккаунта)</label><input type="password" name="password" minlength="6"></div>
+  <button class="btn primary block">Активировать доступ</button></form></div></div>
+{% endblock %}

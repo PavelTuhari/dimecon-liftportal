@@ -1,0 +1,16 @@
+{% extends "platform/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block title %}Вход — {{ platform_name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:440px;padding:60px 24px">
+  <div class="card"><h2>Вход на платформу</h2>
+    <form method="post">{{ csrf() }}
+      <div class="field"><label>E-mail</label><input type="email" name="email" required autofocus></div>
+      <div class="field"><label>Пароль</label><input type="password" name="password" required></div>
+      <button class="btn primary block">Войти</button>
+    </form>
+    <p class="small muted mt">Нет компании? <a href="{{ url_for('platform.register') }}" style="color:var(--accent);font-weight:700">Создать</a></p>
+    {% include "_demo_login.html" %}
+  </div>
+</div>
+{% endblock %}

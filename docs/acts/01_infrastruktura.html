@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Акт 1 · Инфраструктура и база данных</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet"><style>
+:root{--paper:#FBFAF7;--raised:#fff;--sunken:#F4F2EC;--ink:#16191C;--ink-2:#55606A;--ink-3:#8A939B;
+--line:#E2DED4;--line-strong:#CFC9BC;--accent:#D98A0B;--accent-soft:#FBEFD8;--navy:#1F3A52;
+--ok:#2E7D4F;--bad:#B23B2E;--warn:#C77700;
+--sans:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+--mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px}
+a{color:var(--navy)}
+header.top{background:var(--navy);color:#fff;padding:26px 0 22px;margin-bottom:26px}
+header.top .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:8px 0 6px;letter-spacing:-.015em}
+header.top h1{color:#fff}
+header.top .lead{color:rgba(255,255,255,.78);max-width:70ch;margin:0}
+h2{font-family:var(--serif);font-size:23px;margin:34px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+h3{font-size:16.5px;margin:22px 0 8px}
+p{margin:0 0 .9em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.9)}
+.verdict{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:4px 13px;font-weight:700;font-size:13px}
+.verdict.ok{background:#E3F3EA;color:var(--ok)}.verdict.warn{background:#FCEFD9;color:var(--warn)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card b{display:block;font-family:var(--serif);font-size:27px;line-height:1.1;letter-spacing:-.02em}
+.card span{font-size:12.5px;color:var(--ink-2)}
+ul.scope{margin:0 0 1em;padding-left:1.15em}ul.scope li{margin:.25em 0}
+table{width:100%;border-collapse:collapse;font-size:13.6px;background:var(--raised);
+border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:12px 0}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunken);font-size:12.4px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+tbody tr:last-child td{border-bottom:0}
+td.st{white-space:nowrap;font-weight:700;width:1%}
+td.st.ok{color:var(--ok)}td.st.bad{color:var(--bad)}
+td.dt{color:var(--ink-2);font-family:var(--mono);font-size:12.2px}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+overflow-x:auto;font-family:var(--mono);font-size:12.4px;line-height:1.5;white-space:pre-wrap}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px;margin:16px 0}
+figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raised)}
+figure img{width:100%;display:block;background:var(--sunken);cursor:zoom-in}
+figcaption{padding:9px 12px;font-size:12.4px;color:var(--ink-2);border-top:1px solid var(--line)}
+figcaption b{color:var(--ink);font-family:var(--mono);font-size:11.4px;display:block;margin-bottom:2px}
+.note{border-left:3px solid var(--warn);background:#FCEFD9;padding:12px 15px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.6px;color:#7A4E00}
+.note.info{border-color:var(--accent);background:var(--accent-soft);color:#7A4E00}
+.foot{margin-top:40px;padding-top:16px;border-top:3px double var(--line-strong);font-size:13px;color:var(--ink-2)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.nav a{border:1px solid var(--line-strong);background:var(--raised);border-radius:8px;padding:6px 12px;
+font-size:13px;text-decoration:none;font-weight:600}
+.nav a:hover{border-color:var(--accent)}
+.lb{position:fixed;inset:0;background:rgba(10,12,14,.92);display:none;align-items:center;justify-content:center;z-index:99;padding:22px}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:100%;border-radius:8px}
+@media print{header.top{background:#fff;color:#000;border-bottom:2px solid #000}
+header.top h1,header.top .lead{color:#000}.pill{border-color:#999;color:#000}
+.nav,.lb{display:none!important}figure{break-inside:avoid}table{break-inside:auto}}
+</style></head><body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Акт тестирования № 1 · dimecon.md</div>
+  <h1>Инфраструктура и база данных</h1>
+  <p class="lead">Развёртывание MySQL 8.4, схема, целостность данных, кодировка и быстродействие.</p>
+  <div class="meta">
+    <span class="pill">Дата: 19.09.2026</span>
+    <span class="pill">Стенд: Windows 10, MySQL 8.4.0, Python 3.12</span>
+    <span class="pill">Платформа: LiftPortal</span>
+    <span class="pill">Заказчик: SA «Dimecon 11»</span>
+  </div>
+</div></header>
+<div class="wrap">
+  <div class="cards"><div class="card"><b>3</b><span>снимков экрана</span></div><div class="card"><b style="color:var(--ok)">0</b><span>не пройдено</span></div></div>
+  <p><span class="verdict ok">Годен</span></p>
+
+  <h2>Что проверялось</h2>
+  <ul class="scope"><li>установка и настройка СУБД, создание схемы и учётной записи приложения</li><li>автоматическое создание 24 таблиц и заполнение демонстрационными данными</li><li>проверка ссылочной целостности между компаниями-арендаторами</li><li>хранение кириллицы, румынской диакритики и эмодзи</li><li>замер времени отклика ключевых страниц и API</li><li>очередь исходящих писем</li></ul>
+
+  <h2>Результаты</h2>
+  
+  <h3>Контрольные показатели стенда</h3><table><thead><tr><th>Сценарий</th><th>Ожидание</th><th>Факт</th></tr></thead><tbody><tr><td>Сервер СУБД</td><td class="dt">MySQL 8.x, InnoDB</td><td class="st ok">MySQL 8.4.0, все 24 таблицы InnoDB</td></tr><tr><td>Кодировка базы</td><td class="dt">utf8mb4</td><td class="st ok">utf8mb4 / utf8mb4_unicode_ci</td></tr><tr><td>Схема развёрнута</td><td class="dt">24 таблицы, внешние ключи</td><td class="st ok">24 таблицы, 82 индекса, 41 внешний ключ</td></tr><tr><td>Кириллица, диакритика, эмодзи</td><td class="dt">запись равна чтению</td><td class="st ok">совпадение: да</td></tr><tr><td>Заказы без компании-владельца</td><td class="dt">0</td><td class="st ok">0</td></tr><tr><td>Заказы с техникой чужой компании</td><td class="dt">0</td><td class="st ok">0</td></tr><tr><td>Отклик страниц под нагрузкой</td><td class="dt">не более 200 мс</td><td class="st ok">медиана 5–74 мс, максимум 84 мс</td></tr><tr><td>Письма при недоступном SMTP</td><td class="dt">не теряются</td><td class="st ok">130 писем в очереди со статусом queued</td></tr></tbody></table>
+  <h3>1. СУБД</h3><pre>драйвер приложения : mysql / pymysql
+сервер             : MySQL 8.4.0, порт 3306
+кодировка БД       : utf8mb4 / utf8mb4_unicode_ci
+таблиц в схеме     : 24, движок: {&#x27;InnoDB&#x27;}
+индексов / внешних ключей : 82 / 41</pre><h3>2. ДАННЫЕ</h3><pre>tenants        3
+  users          6
+  memberships    8
+  equipment      34
+  load_charts    196
+  bookings       25
+  services       28
+  products       15
+  cases          6
+  pages          5
+  contacts       9
+  orders         69
+  activities     107
+  documents      34
+  partners       9
+  projects       1
+  shifts         9
+  reviews        2
+  media          57
+  outbox         130
+  audit_log      0</pre><h3>3. ЦЕЛОСТНОСТЬ МУЛЬТИАРЕНДНОСТИ</h3><pre>заказов без компании                : 0 (норма 0)
+заказов с техникой чужой компании   : 0 (норма 0)
+заказов с контактом чужой компании  : 0 (норма 0)
+  dimecon        техники  22, строк грузовых таблиц  126, заявок  69
+  macara-nord    техники   6, строк грузовых таблиц   35, заявок   0
+  sudlift        техники   6, строк грузовых таблиц   35, заявок   0</pre><h3>4. КОДИРОВКА utf8mb4: кириллица, румынская диакритика, эмодзи</h3><pre>записано : Проверка ăâîșț «Дименкон» 🏗 100 т
+прочитано: Проверка ăâîșț «Дименкон» 🏗 100 т
+совпадение: ДА</pre><h3>5. ПРОИЗВОДИТЕЛЬНОСТЬ (10 замеров на страницу, сервер MySQL)</h3><pre>Маркетплейс                  HTTP 200  медиана     31 мс  макс     74 мс
+  Сайт компании (главная)      HTTP 200  медиана     31 мс  макс     44 мс
+  Каталог техники              HTTP 200  медиана     31 мс  макс     35 мс
+  Карточка техники + график    HTTP 200  медиана     31 мс  макс     49 мс
+  Визард, шаг 1                HTTP 200  медиана      5 мс  макс     77 мс
+  API: каталог                 HTTP 200  медиана     48 мс  макс     54 мс
+  Выгрузка прайса XLSX         HTTP 200  медиана     74 мс  макс     84 мс</pre><h3>7. ПОЧТА</h3><pre>статус queued   транспорт none               130
+  (SMTP компаний не настроен в тестовом контуре — письма фиксируются в журнале, не теряются)
+
+ГОТОВО</pre>
+  
+  
+
+  <h2>Снимки экрана</h2><div class="shots"><figure><img loading="lazy" src="../screens/46_superadmin.png" alt="Суперадмин: все компании, статусы, пакеты, листинг"><figcaption><b>46_superadmin</b>Суперадмин: все компании, статусы, пакеты, листинг</figcaption></figure><figure><img loading="lazy" src="../screens/47_superadmin_mail.png" alt="Журнал почты по всем компаниям"><figcaption><b>47_superadmin_mail</b>Журнал почты по всем компаниям</figcaption></figure><figure><img loading="lazy" src="../screens/24_admin_dashboard.png" alt="Дашборд: KPI, воронка, ближайшие подачи, последние заявки"><figcaption><b>24_admin_dashboard</b>Дашборд: KPI, воронка, ближайшие подачи, последние заявки</figcaption></figure></div>
+
+  <h2>Выводы</h2>
+  <ul class="scope"><li>MySQL 8.4.0 LTS, база в utf8mb4, 24 таблицы InnoDB, 82 индекса, 41 внешний ключ</li><li>перекрёстных ссылок между компаниями в данных — ноль</li><li>медиана отклика страниц 5–74 мс при требовании ТЗ не более 200 мс</li><li>письма при ненастроенном SMTP остаются в очереди и не теряются</li></ul>
+  <div class="note"><b>Ограничения испытаний.</b><ul class="scope"><li>Резервное копирование и перенос на выделенный сервер СУБД в объём испытаний не входили.</li><li>SMTP компаний в тестовом контуре не настроен: проверялась постановка писем в очередь, не фактическая доставка.</li></ul></div>
+
+  <div class="nav"><a href="index.html">← Все акты</a> <a href="01_infrastruktura.html">№1 Инфраструктура и база данных</a> <a href="02_sajt_zakazchika.html">№2 Сайт заказчика и перенос содержимого</a> <a href="03_podbor_i_raschet.html">№3 Подбор техники и расчёт стоимости</a> <a href="04_zakazy_crm.html">№4 Оформление заказов, формы и CRM компании</a> <a href="05_b2b_portal.html">№5 Портал партнёра B2B</a> <a href="06_dokumenty.html">№6 Документы: PDF и Excel</a> <a href="07_bezopasnost.html">№7 Мультиарендность и разграничение доступа</a> <a href="08_integracii.html">№8 Интеграции с экосистемой заказчика</a> <a href="09_vhod_i_roli.html">№9 Вход и роли пользователей</a> <a href="../presentation.html">Презентация →</a></div>
+  <div class="foot">Акт сформирован автоматически 19.09.2026 21:33 по протоколам прогонов в <code>docs/*.log</code>.
+  Испытания провёл: Claude (Claude Code), автоматизированный прогон.</div>
+</div><div class="lb" id="lb"><img alt=""></div><script>
+const lb=document.getElementById('lb');document.querySelectorAll('figure img').forEach(i=>i.onclick=()=>{
+lb.querySelector('img').src=i.src;lb.classList.add('on')});lb.onclick=()=>lb.classList.remove('on');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});</script></body></html>

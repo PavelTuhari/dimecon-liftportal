@@ -1,0 +1,15 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf, status_badge with context %}
+{% block heading %}Почта — свой SMTP-сервер{% endblock %}
+{% block content %}
+<div class="grid g2" style="align-items:start">
+<form class="card" method="post">{{ csrf() }}<h3>SMTP компании</h3><p class="small muted">Все письма клиентам и партнёрам уходят с вашего почтового сервера и вашего адреса. Если поле «хост» пустое — используется почта платформы, а при её отсутствии письма сохраняются в журнал.</p>
+  {% set s = tenant.smtp or {} %}
+  <div class="grid g2"><div class="field"><label>Хост</label><input name="host" value="{{ s.get('host','') }}" placeholder="mail.company.md"></div><div class="field"><label>Порт</label><input name="port" value="{{ s.get('port','587') }}"></div>
+    <div class="field"><label>Логин</label><input name="user" value="{{ s.get('user','') }}"></div><div class="field"><label>Пароль</label><input type="password" name="password" placeholder="{{ '••••••' if s.get('password') else '' }}"></div>
+    <div class="field"><label>От кого (e-mail)</label><input name="from_email" value="{{ s.get('from_email','') }}"></div><div class="field"><label>От кого (имя)</label><input name="from_name" value="{{ s.get('from_name', tenant.name) }}"></div></div>
+  <div class="flex wrap"><label class="check"><input type="radio" name="tls" value="1" {{ 'checked' if s.get('tls','1')=='1' }}>STARTTLS (587)</label><label class="check"><input type="radio" name="tls" value="0" {{ 'checked' if s.get('tls')=='0' }}>без TLS</label><label class="check"><input type="checkbox" name="ssl" value="1" {{ 'checked' if s.get('ssl')=='1' }}>SSL (465)</label></div>
+  <button class="btn primary mt">Сохранить</button></form>
+<div><form class="card" method="post">{{ csrf() }}<input type="hidden" name="action" value="test"><h3>Проверка</h3><div class="field"><label>Отправить тестовое письмо на</label><input type="email" name="test_to" value="{{ user.email }}"></div><button class="btn">Отправить тест</button></form>
+<div class="card mt"><h3>Журнал писем</h3><table class="small"><tbody>{% for r in outbox %}<tr><td class="muted">{{ r.created_at|dt('%d.%m %H:%M') }}</td><td>{{ r.to_email }}<br><span class="muted">{{ r.subject }}</span></td><td>{{ status_badge(r.status) }}<div class="tiny muted">{{ r.transport }}{% if r.error %} · {{ r.error[:90] }}{% endif %}</div></td></tr>{% else %}<tr><td class="muted">Писем ещё нет</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

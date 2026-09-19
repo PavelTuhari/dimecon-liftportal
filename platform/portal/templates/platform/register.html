@@ -1,0 +1,35 @@
+{% extends "platform/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block title %}Создать компанию — {{ platform_name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:760px;padding:48px 24px">
+  <div class="label">ОНБОРДИНГ</div><h1>Разместите компанию за 2 минуты</h1>
+  <p class="muted">Вы получите сайт, кабинет с CRM, подборщик техники и портал партнёров. Всё редактируется в кабинете без программиста.</p>
+  <form method="post" class="card mt">{{ csrf() }}
+    <h3>1. Компания</h3>
+    <div class="grid g2">
+      <div class="field"><label>Название *</label><input type="text" name="name" value="{{ form.get('name','') }}" required placeholder="Macara Grup"></div>
+      <div class="field"><label>Адрес сайта (slug)</label><input type="text" name="slug" value="{{ form.get('slug','') }}" placeholder="macara-grup"><span class="hint">Сайт: {{ platform_host }}/s/<b>slug</b>. Свой домен подключается в настройках.</span></div>
+      <div class="field"><label>Юридическое название</label><input type="text" name="legal_name" value="{{ form.get('legal_name','') }}"></div>
+      <div class="field"><label>Город</label><input type="text" name="city" value="{{ form.get('city','Chișinău') }}"></div>
+      <div class="field"><label>Профиль</label><select name="profile"><option value="cranes">Краны</option><option value="transport">Негабаритные перевозки</option><option value="mixed">Смешанный</option></select></div>
+      <div class="field"><label>Год основания</label><input type="number" name="founded_year" value="{{ form.get('founded_year','') }}"></div>
+    </div>
+    <div class="field"><label>Слоган (RU)</label><input type="text" name="tagline" value="{{ form.get('tagline','') }}" placeholder="Краны до 100 т с подачей за 24 часа"></div>
+    <h3 class="mt">2. Владелец кабинета</h3>
+    <div class="grid g2">
+      <div class="field"><label>Имя</label><input type="text" name="owner_name" value="{{ form.get('owner_name','') }}"></div>
+      <div class="field"><label>Телефон</label><input type="tel" name="phone" value="{{ form.get('phone','') }}"></div>
+      <div class="field"><label>E-mail *</label><input type="email" name="email" value="{{ form.get('email','') }}" required></div>
+      <div class="field"><label>Пароль *</label><input type="password" name="password" required minlength="6"></div>
+    </div>
+    <h3 class="mt">3. Оформление</h3>
+    <div class="grid g2">
+      <div class="field"><label>Акцентный цвет</label><input type="color" name="accent" value="{{ form.get('accent','#F5A623') }}" style="height:44px;padding:4px"></div>
+      <div class="field"><label>Основной цвет</label><input type="color" name="navy" value="{{ form.get('navy','#1F3A52') }}" style="height:44px;padding:4px"></div>
+    </div>
+    <label class="check"><input type="checkbox" name="demo" value="1" checked><span><b>Заполнить демо-парком</b><br><span class="small muted">6 единиц техники с грузовыми таблицами, товары и кейсы — чтобы сразу увидеть работу подборщика. Удаляется в кабинете.</span></span></label>
+    <button class="btn primary lg block mt">Создать компанию и открыть кабинет</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Тарифы и коэффициенты{% endblock %}
+{% block content %}
+<div class="grid g2" style="align-items:start">
+<form class="card" method="post">{{ csrf() }}<h3>Правила расчёта (JSON)</h3><p class="small muted">Ставки конкретной техники — в её карточке. Здесь — коэффициенты времени, сезона, условий, срочности, зоны подачи, допуслуги и скидки. Каждая строка расчёта показывается клиенту с названием.</p>
+  <textarea name="pricing_json" class="code">{{ pricing|tojson_pretty }}</textarea><button class="btn primary mt">Сохранить</button></form>
+<div class="card"><h3>Справка по ключам</h3><table class="small"><tbody>
+  <tr><td><code>time</code></td><td>коэффициенты по времени: day, evening (19–22), night (22–7), saturday, sunday</td></tr>
+  <tr><td><code>season</code></td><td>коэффициент по месяцу («11»: 0.9 = зимой −10 %)</td></tr>
+  <tr><td><code>conditions</code></td><td>условия площадки: tight, soft_ground, power_line…; <code>conditions_cap</code> — потолок</td></tr>
+  <tr><td><code>urgency</code></td><td>[[часов до подачи, коэффициент], …] — от большего к меньшему</td></tr>
+  <tr><td><code>zones</code></td><td>зоны подачи: fee, free_km, per_km, max_km (граница зоны)</td></tr>
+  <tr><td><code>addons</code></td><td>стропальщик, подкладки, разрешение, освещение</td></tr>
+  <tr><td><code>discounts</code></td><td>flexible_date, first_online, max_total (потолок суммарной скидки)</td></tr>
+  <tr><td><code>range_width</code></td><td>ширина вилки «до» (0.35 = +35 %)</td></tr></tbody></table>
+  <details class="mt"><summary class="small" style="cursor:pointer">Значения по умолчанию</summary><pre>{{ defaults|tojson_pretty }}</pre></details></div></div>
+{% endblock %}

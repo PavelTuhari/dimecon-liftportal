@@ -1,0 +1,26 @@
+{% extends "partner/_layout.html" %}
+{% from "_macros.html" import status_badge, csrf with context %}
+{% block heading %}{{ pr.name }}{% endblock %}
+{% block content %}
+{% set pq = ('?partner_id=' ~ request.args.partner_id) if request.args.get('partner_id') else '' %}
+<a class="small muted" href="{{ url_for('partner.index') }}{{ pq }}">← Объекты</a>
+<div class="grid g4 mt mb"><div class="kpi"><b>{{ orders|length }}</b><span>заявок</span></div><div class="kpi"><b>{{ hours }}</b><span>подтверждённых часов</span></div><div class="kpi"><b>{{ shifts|length }}</b><span>смен</span></div><div class="kpi"><b>{{ orders|map(attribute='price_final')|sum|money }}</b><span>сумма, {{ tenant.currency }}</span></div></div>
+<div class="grid g2" style="align-items:start">
+<div>
+  <div class="toolbar"><div class="seg"><a href="?view=list{{ pq|replace('?','&') }}" class="{{ 'on' if view=='list' }}">Список</a><a href="?view=kanban{{ pq|replace('?','&') }}" class="{{ 'on' if view=='kanban' }}">Канбан</a></div></div>
+  {% if view=='kanban' %}<div class="kanban" style="grid-template-columns:repeat(3,1fr)">{% for grp, sts in [('Ожидают',['submitted','under_review','quoted']),('Запланированы',['confirmed','scheduled','in_progress']),('Выполнены',['completed','invoiced','paid'])] %}<div class="kcol"><h4>{{ grp }}</h4>{% for o in orders if o.status in sts %}<div class="kcard"><b>{{ o.number }}</b>{{ o.starts_at|dt }} · {{ o.equipment.model if o.equipment }}<div class="meta"><span>{{ o.cargo }}</span><span>{{ o.price_final|money }}</span></div></div>{% endfor %}</div>{% endfor %}</div>
+  {% else %}<div class="table-wrap"><table><thead><tr><th>№</th><th>Подача</th><th>Техника</th><th>Задача</th><th>Часы</th><th>Сумма</th><th>Статус</th></tr></thead><tbody>{% for o in orders %}<tr><td><b>{{ o.number }}</b></td><td>{{ o.starts_at|dt }}</td><td>{{ o.equipment.brand ~ ' ' ~ o.equipment.model if o.equipment else 'подбор' }}</td><td>{{ o.cargo }}</td><td>{{ o.hours|int }}</td><td>{{ o.price_final|money }}</td><td>{{ status_badge(o.status) }}</td></tr>{% else %}<tr><td colspan="7" class="center muted">Создайте первую заявку →</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+  <div class="card mt"><h3>Сменные рапорты</h3><table class="small"><tbody>{% for s in shifts %}<tr><td>{{ s.work_date }}</td><td>{{ s.operator }}</td><td><b>{{ s.hours_worked }} ч</b>{% if s.hours_idle %} <span class="muted">+{{ s.hours_idle }} простой</span>{% endif %}</td><td>{{ status_badge(s.status) }}</td>
+    <td>{% if s.status=='submitted' %}<form method="post" action="{{ url_for('partner.shift_action', sid=s.id, action='approve') }}{{ pq }}">{{ csrf() }}<button class="btn sm primary">Подтвердить</button></form>{% endif %}</td></tr>{% else %}<tr><td class="muted">Рапортов нет</td></tr>{% endfor %}</tbody></table></div>
+</div>
+<form class="card" method="post" action="{{ url_for('partner.request_new', pid=pr.id) }}{{ pq }}">{{ csrf() }}<h3>Новая заявка <span class="small muted">— ≤ 30 секунд</span></h3>
+  {% if templates %}<div class="flex wrap mb">{% for o in templates %}<button type="button" class="btn sm" onclick="tpl({{ o.equipment_id or 'null' }},'{{ o.cargo }}',{{ o.hours }},{{ o.weight_t }})">↺ как {{ o.number }}</button>{% endfor %}</div>{% endif %}
+  <div class="field"><label>Техника</label><select name="equipment_id" id="r_eq"><option value="">— подберите по параметрам —</option>{% for e in fleet %}<option value="{{ e.id }}">{{ e.brand }} {{ e.model }} · {{ e.capacity_t|int }} т · {{ e.hourly_rate|money }}/ч</option>{% endfor %}</select></div>
+  <div class="grid g2"><div class="field"><label>Подача</label><input type="datetime-local" name="start" required value="{{ now.strftime('%Y-%m-%dT08:00') }}"></div><div class="field"><label>Часы</label><select name="hours" id="r_hours"><option value="4">4</option><option value="8" selected>8</option><option value="10">10</option><option value="12">12</option></select></div>
+    <div class="field"><label>Задача / груз</label><input name="cargo" id="r_cargo" placeholder="бетонирование, монтаж ферм…"></div><div class="field"><label>Макс. масса, т</label><input type="number" step="0.1" name="weight" id="r_weight" value="2.5"></div>
+    <div class="field"><label>Повторять недель</label><input type="number" name="repeat_weeks" value="1" min="1" max="26"><span class="hint">каждую неделю в это же время</span></div><div class="field"><label>Расстояние, км</label><input type="number" name="distance" value="10"></div></div>
+  <div class="flex wrap">{% for c,n in [('rigger','стропальщик'),('night','ночь'),('weekend','выходной'),('soft_ground','мягкий грунт')] %}<label class="check"><input type="checkbox" name="cond" value="{{ c }}" {{ 'checked' if c=='rigger' }}>{{ n }}</label>{% endfor %}</div>
+  <div class="field mt"><textarea name="comment" rows="2" placeholder="Комментарий диспетчеру"></textarea></div>
+  <button class="btn primary block">Отправить заявку</button><p class="tiny muted center mt">Договорная цена −{{ p.discount_pct }} % применится автоматически</p></form></div>
+{% endblock %}
+{% block scripts %}<script>function tpl(eq,cargo,h,w){if(eq)document.getElementById('r_eq').value=eq;document.getElementById('r_cargo').value=cargo;document.getElementById('r_hours').value=h;document.getElementById('r_weight').value=w;}</script>{% endblock %}

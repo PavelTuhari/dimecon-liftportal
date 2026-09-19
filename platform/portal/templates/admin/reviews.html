@@ -1,0 +1,10 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Отзывы{% endblock %}
+{% block content %}
+{% if not rows %}<div class="empty"><b>Отзывов ещё нет</b>Клиенты оценивают заказ в кабинете после выполнения</div>{% endif %}
+<div class="grid g2">{% for r in rows %}<form class="card" method="post">{{ csrf() }}<input type="hidden" name="id" value="{{ r.id }}">
+  <div class="flex between"><b>{{ r.author }}</b><span class="stars">{{ '★'*r.rating }}</span></div><p>{{ r.body }}</p>
+  <div class="field"><label>Ответ компании</label><textarea name="reply" rows="2">{{ r.reply }}</textarea></div>
+  <div class="flex between"><label class="check"><input type="checkbox" name="is_published" value="1" {{ 'checked' if r.is_published }}>Показывать на сайте</label><button class="btn sm primary">Сохранить</button></div></form>{% endfor %}</div>
+{% endblock %}

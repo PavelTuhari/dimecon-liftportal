@@ -1,0 +1,7 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Задачи{% endblock %}
+{% block content %}
+{% if not rows %}<div class="empty"><b>Открытых задач нет</b>Задачи создаются из карточки заявки (тип «Задача»)</div>{% endif %}
+<div class="table-wrap"><table><tbody>{% for a in rows %}<tr><td>{{ a.body }}</td><td class="small muted">{{ a.created_at|dt }}</td><td>{% if a.order_id %}<a href="{{ url_for('admin.order', oid=a.order_id) }}">заявка</a>{% endif %}</td><td><form method="post" action="{{ url_for('admin.task_done', aid=a.id) }}">{{ csrf() }}<button class="btn sm">Готово</button></form></td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}
