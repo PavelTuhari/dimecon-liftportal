@@ -21,7 +21,7 @@
   {% for tnt in tenants %}
     {% set s = stats[tnt.id] %}
     <a class="co-card" href="{{ url_for('site.home', tenant_slug=tnt.slug) }}">
-      <div class="ph" style="background-image:url('{{ tnt.theme.get('hero_image_url','') }}');background-color:{{ tnt.theme.get('navy','#1F3A52') }}">
+      <div class="ph" style="background-image:url('{{ tnt.theme.get('hero_image_url','')|asset }}');background-color:{{ tnt.theme.get('navy','#1F3A52') }}">
         <span class="logo"><span class="mark" style="background:{{ tnt.theme.get('accent','#F5A623') }};color:#14181B">{{ tnt.name[0] }}</span></span>
       </div>
       <div class="body">

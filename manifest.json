@@ -1,6 +1,6 @@
 {
  "project": "dimecon.md — ТЗ, платформа LiftPortal и документы",
- "generated": "19.09.2026 23:48",
+ "generated": "20.09.2026 01:43",
  "groups": [
   {
    "name": "Проект",
@@ -2241,7 +2241,7 @@
    "viewer": "json",
    "size": 6991,
    "size_h": "6.8 КБ",
-   "mtime": "19.09.2026 23:48",
+   "mtime": "20.09.2026 01:43",
    "searchable": true
   },
   {
@@ -3448,9 +3448,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 5529,
-   "size_h": "5.4 КБ",
-   "mtime": "19.09.2026 22:59",
+   "size": 6541,
+   "size_h": "6.4 КБ",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -3838,9 +3838,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 2848,
+   "size": 2854,
    "size_h": "2.8 КБ",
-   "mtime": "19.09.2026 16:07",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4085,9 +4085,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 1900,
-   "size_h": "1.9 КБ",
-   "mtime": "19.09.2026 16:20",
+   "size": 1894,
+   "size_h": "1.8 КБ",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4358,9 +4358,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 4521,
+   "size": 4527,
    "size_h": "4.4 КБ",
-   "mtime": "19.09.2026 16:08",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4423,9 +4423,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 1727,
+   "size": 1733,
    "size_h": "1.7 КБ",
-   "mtime": "19.09.2026 17:00",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4436,9 +4436,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 3521,
+   "size": 3491,
    "size_h": "3.4 КБ",
-   "mtime": "19.09.2026 17:01",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4462,9 +4462,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 1085,
+   "size": 1091,
    "size_h": "1.1 КБ",
-   "mtime": "19.09.2026 21:13",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4501,9 +4501,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 5175,
+   "size": 5181,
    "size_h": "5.1 КБ",
-   "mtime": "19.09.2026 17:00",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4514,9 +4514,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 8702,
+   "size": 8714,
    "size_h": "8.5 КБ",
-   "mtime": "19.09.2026 16:09",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4553,9 +4553,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 3046,
+   "size": 3058,
    "size_h": "3.0 КБ",
-   "mtime": "19.09.2026 21:19",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4566,9 +4566,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 1086,
+   "size": 1092,
    "size_h": "1.1 КБ",
-   "mtime": "19.09.2026 21:13",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -4605,9 +4605,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 12837,
+   "size": 12843,
    "size_h": "12.5 КБ",
-   "mtime": "19.09.2026 16:12",
+   "mtime": "20.09.2026 00:46",
    "searchable": true
   },
   {
@@ -5289,7 +5289,7 @@
  ],
  "stats": {
   "files": 402,
-  "bytes": 24955555,
+  "bytes": 24956597,
   "by_group": {
    "Проект": 2,
    "Техническое задание": 8,

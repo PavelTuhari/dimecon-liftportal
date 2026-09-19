@@ -12,7 +12,7 @@
 <div class="prod-list">
 {% for p in items if p.category == c %}
   <article class="card prod">
-    {% if p.image_url %}<div class="prod-ph" style="background-image:url('{{ p.image_url }}')"></div>{% endif %}
+    {% if p.image_url %}<div class="prod-ph" style="background-image:url('{{ p.image_url|asset }}')"></div>{% endif %}
     <div class="prod-body">
       <div class="flex between wrap" style="gap:8px">
         <div>
@@ -29,7 +29,7 @@
 
       {% set thumbs = (p.attributes or {}).get('thumbs') or [] %}
       {% if thumbs %}<div class="prod-thumbs">{% for u in thumbs %}
-        <img src="{{ u }}" alt="{{ tr(p.title) }}" loading="lazy">{% endfor %}</div>{% endif %}
+        <img src="{{ u|asset }}" alt="{{ tr(p.title) }}" loading="lazy">{% endfor %}</div>{% endif %}
 
       {% if tr(p.description) %}
       <details class="prod-more">

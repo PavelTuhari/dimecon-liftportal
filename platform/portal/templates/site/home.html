@@ -2,7 +2,7 @@
 {% block title %}{{ tenant.name }} — {{ tr(tenant.tagline) }}{% endblock %}
 {% block content %}
 <section class="hero">
-  {% if tenant.theme.get('hero_image_url') %}<div class="bg" style="background-image:url('{{ tenant.theme.hero_image_url }}')"></div>{% endif %}
+  {% if tenant.theme.get('hero_image_url') %}<div class="bg" style="background-image:url('{{ tenant.theme.hero_image_url|asset }}')"></div>{% endif %}
   <div class="container">
     <div>
       <span class="badge"><i class="dot pulse" style="color:#4CAF7D"></i> {{ stats.free }} {{ t('stats.fleet') }} {{ t('eq.available')|lower }}</span>
@@ -61,7 +61,7 @@
 
 {% if cases %}<section class="block"><div class="container">
   <div class="sec-head"><div><div class="label">{{ t('sec.cases.label') }}</div><h2>{{ t('sec.cases.title') }}</h2></div><a class="btn" href="{{ url_for('site.cases') }}">{{ t('common.all') }} →</a></div>
-  <div class="grid g3">{% for c in cases %}<div class="eq-card"><div class="ph" style="background-image:url('{{ c.image_url }}')"></div><div class="body"><h3>{{ tr(c.title) }}</h3>
+  <div class="grid g3">{% for c in cases %}<div class="eq-card"><div class="ph" style="background-image:url('{{ c.image_url|asset }}')"></div><div class="body"><h3>{{ tr(c.title) }}</h3>
     <div class="specs"><div><b>{{ c.metrics.get('weight_t',0) }} т</b><span>масса</span></div><div><b>{{ c.metrics.get('height_m',0)|int }} м</b><span>высота</span></div><div><b>{{ c.metrics.get('hours',0)|int }} ч</b><span>работы</span></div></div>
     <span class="small muted">{{ c.client_name }} · {{ c.year }}</span></div></div>{% endfor %}</div>
 </div></section>{% endif %}

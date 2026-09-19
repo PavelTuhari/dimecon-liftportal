@@ -4,7 +4,7 @@
 <div class="container" style="padding:36px 24px 64px">
   <a class="small muted" href="{{ url_for('site.equipment') }}">← {{ t('nav.equipment') }}</a>
   <div class="grid g2 mt" style="align-items:start">
-    <div><div class="eq-card"><div class="ph" style="aspect-ratio:4/3;background-image:url('{{ eq.photo_url }}')"></div></div>
+    <div><div class="eq-card"><div class="ph" style="aspect-ratio:4/3;background-image:url('{{ eq.photo_url|asset }}')"></div></div>
       {% if chart %}<div class="card mt"><h3>{{ t('eq.loadchart') }}</h3>
       {% if chart[0].cfg == 'approx' %}<div class="disclaimer" style="margin-bottom:10px">Кривая ориентировочная: построена по паспортным максимумам с занижением на 15 %. Точный подбор — по грузовой таблице производителя, её загружает компания в кабинете.</div>{% endif %}
       <canvas id="lc" width="560" height="280" style="width:100%"></canvas>

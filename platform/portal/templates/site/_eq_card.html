@@ -1,5 +1,5 @@
 <a class="eq-card" href="{{ url_for('site.equipment_item', slug=eq.slug) }}">
-  <div class="ph" style="background-image:url('{{ eq.photo_url }}')">
+  <div class="ph" style="background-image:url('{{ eq.photo_url|asset }}')">
     <span class="badge {{ 'ok' if eq.status=='active' else 'warn' }}"><i class="dot"></i> {{ t('eq.available') if eq.status=='active' else t('eq.busy') }}</span>
   </div>
   <div class="body">

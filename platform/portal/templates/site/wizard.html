@@ -78,7 +78,7 @@
   <div class="grid {{ 'g3' if offers|length==3 else ('g2' if offers|length==2 else '') }} mt">
   {% for o in offers %}{% set c=o.c %}{% set eq=c.equipment %}
     <div class="offer {{ c.label }}"><div class="tag">{{ t('wz.' ~ ('optimal' if c.label=='optimal' else ('cheaper' if c.label=='cheaper' else 'reserve'))) }}</div>
-      <div class="ph" style="background-image:url('{{ eq.photo_url }}')"></div>
+      <div class="ph" style="background-image:url('{{ eq.photo_url|asset }}')"></div>
       <div class="in"><div><b>{{ eq.brand }} {{ eq.model }}</b><div class="tiny muted">{{ eq.capacity_t|int }} т · вылет {{ eq.radius_m|int }} м · высота {{ eq.height_m|int }} м</div></div>
         <span class="badge {{ 'ok' if c.available else 'warn' }}"><i class="dot"></i> {{ 'свободен на эту дату' if c.available else ('занят до ' ~ (c.next_free|dt('%d.%m %H:%M'))) }}</span>
         <div class="price">{{ o.price.min|money }} – {{ o.price.max|money(tenant.currency) }}</div>

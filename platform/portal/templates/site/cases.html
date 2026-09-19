@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container page-head"><div class="label">{{ t('sec.cases.label') }}</div><h1>{{ t('sec.cases.title') }}</h1></div>
 <div class="container" style="padding-bottom:64px">{% for c in items %}
-<div class="card grid g2 mb" style="align-items:center">{% if c.image_url %}<img src="{{ c.image_url }}" alt="" style="border-radius:8px;aspect-ratio:16/10;object-fit:cover">{% endif %}
+<div class="card grid g2 mb" style="align-items:center">{% if c.image_url %}<img src="{{ c.image_url|asset }}" alt="" style="border-radius:8px;aspect-ratio:16/10;object-fit:cover">{% endif %}
   <div><span class="tiny muted">{{ c.client_name }} · {{ c.location }} · {{ c.year }}</span><h2>{{ tr(c.title) }}</h2><div class="muted rich">{{ tr(c.body)|richtext }}</div>
   <div class="specs mt"><div><b>{{ c.metrics.get('weight_t',0) }} т</b><span>масса</span></div><div><b>{{ c.metrics.get('height_m',0)|int }} м</b><span>высота</span></div><div><b>{{ c.metrics.get('hours',0)|int }} ч</b><span>работы</span></div></div></div></div>
 {% else %}<div class="empty"><b>Кейсы скоро появятся</b></div>{% endfor %}</div>

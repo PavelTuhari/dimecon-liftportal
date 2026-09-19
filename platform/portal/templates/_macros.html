@@ -30,6 +30,6 @@
 {% macro media_picker(target, media) %}
 {% if media %}
 <details class="mt"><summary class="small muted" style="cursor:pointer">Выбрать из медиатеки ({{ media|length }})</summary>
-<div class="media-grid mt">{% for m in media %}<div class="m pick" data-target="{{ target }}" data-url="{{ m.url }}"><img src="{{ m.url }}" alt="" loading="lazy"><div class="c">{{ m.filename }}</div></div>{% endfor %}</div></details>
+<div class="media-grid mt">{% for m in media %}<div class="m pick" data-target="{{ target }}" data-url="{{ m.url }}"><img src="{{ m.url|asset }}" alt="" loading="lazy"><div class="c">{{ m.filename }}</div></div>{% endfor %}</div></details>
 {% endif %}
 {% endmacro %}

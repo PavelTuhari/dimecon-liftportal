@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, abort, g, render_template, request, send_from_directory, session
+from flask import Flask, abort, g, has_request_context, render_template, request, send_from_directory, session
 
 from config import Config
 from . import auth, hosting, i18n, richtext
@@ -108,6 +108,23 @@ def create_app(config_object=Config) -> Flask:
         except (TypeError, ValueError):
             return v
         return f"{s} {cur}" if cur else s
+
+    @app.template_filter("asset")
+    def asset(url):
+        """Ссылка на файл, записанная в базе (/media/…, /static/…), с префиксом размещения.
+
+        В базе адреса хранятся от корня сайта. Когда приложение живёт в подкаталоге
+        чужого домена (https://host/TehnCons/), такой адрес ведёт мимо слота — картинки
+        не грузятся. Здесь подставляется SCRIPT_NAME текущего запроса; внешние ссылки
+        (http://…, data:…) остаются как есть.
+        """
+        if not url:
+            return ""
+        u = str(url)
+        if not u.startswith(("/media/", "/static/", "/uploads/")):
+            return u
+        root = request.script_root if has_request_context() else app.config.get("URL_PREFIX", "")
+        return f"{root}{u}" if root else u
 
     @app.template_filter("richtext")
     def richtext_filter(v):

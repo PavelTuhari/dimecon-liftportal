@@ -3,7 +3,7 @@
 {% block body %}
 <header class="site-head"><div class="container">
   <a class="logo" href="{{ url_for('site.home') }}">
-    {% if tenant.theme.get('logo_url') %}<img src="{{ tenant.theme.logo_url }}" alt="{{ tenant.name }}">{% else %}<span class="mark">{{ tenant.name[0] }}</span>{% endif %}{{ tenant.name }}
+    {% if tenant.theme.get('logo_url') %}<img src="{{ tenant.theme.logo_url|asset }}" alt="{{ tenant.name }}">{% else %}<span class="mark">{{ tenant.name[0] }}</span>{% endif %}{{ tenant.name }}
   </a>
   <nav class="site-nav">
     <a href="{{ url_for('site.equipment') }}" class="{{ 'on' if request.endpoint in ('site.equipment','site.equipment_item') }}">{{ t('nav.equipment') }}</a>
