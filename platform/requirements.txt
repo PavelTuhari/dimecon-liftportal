@@ -4,5 +4,8 @@ pymysql>=1.1
 cryptography>=42
 waitress>=3.0
 python-dotenv>=1.0
+# документы: PDF-бланки и выгрузки Excel
+fpdf2>=2.7
+openpyxl>=3.1
 # опционально: S3-совместимое хранилище файлов (MinIO, R2, AWS)
 # boto3>=1.34

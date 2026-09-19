@@ -18,7 +18,9 @@ import urllib.request
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8090"
+BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8090").rstrip("/")
+# приложение может жить в подкаталоге домена: https://eminescu.md/TehnCons
+PREFIX = urllib.parse.urlparse(BASE).path.rstrip("/")
 LOG: list[str] = []
 passed = failed = 0
 
@@ -84,7 +86,11 @@ class Client:
 
 
 def path_of(url: str) -> str:
-    return urllib.parse.urlparse(url).path
+    """Путь без префикса размещения — чтобы ожидания не зависели от слота на хостинге."""
+    path = urllib.parse.urlparse(url).path
+    if PREFIX and path.startswith(PREFIX):
+        path = path[len(PREFIX):] or "/"
+    return path
 
 
 # ------------------------------------------------------------------ 1. вход ролями

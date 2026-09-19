@@ -156,7 +156,8 @@ wz(1, {"task": "place"}); wz(2, {"preset": "cabin6"}); wz(3, {"height": "3"})
 wz(4, {"radius_code": "sidewalk"}); wz(5, {"cond": ["rigger"]})
 res = wz(6, {"start": "2026-10-01T09:00", "hours": "4", "address": "Chișinău, str. Test 1", "distance": "9"})
 html = res.get_data(as_text=True)
-check("визард дошёл до результата", "Ваш вариант" in html, f"вариантов: {html.count('class=\"offer ')}")
+offers = html.count('class="offer ')  # отдельной строкой: до Python 3.12 в f-строке нельзя обратный слэш
+check("визард дошёл до результата", "Ваш вариант" in html, f"вариантов: {offers}")
 eq_id = re.search(r'name="equipment_id" id="eqid" value="(\d+)"', html)
 sub = c.post("/s/dimecon/calculator/submit", follow_redirects=True,
              data={"_csrf": csrf(), "equipment_id": eq_id.group(1) if eq_id else "",

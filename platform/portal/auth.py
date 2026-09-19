@@ -85,7 +85,8 @@ def check_csrf():
             # не пугаем кодом 400, а просто просим повторить на свежей странице
             if request.path.endswith("/login"):
                 flash("Страница входа устарела — сессия началась заново. Введите данные ещё раз.", "warning")
-                return redirect(request.path)
+                # script_root обязателен: в подкаталоге домена (/TehnCons/…) без него уходим на чужой путь
+                return redirect(request.script_root + request.path)
             abort(400, "CSRF token invalid")
 
 

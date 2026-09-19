@@ -6,6 +6,10 @@ __pycache__/
 *.pyo
 
 # локальные секреты и базы
+keys/
+*.pem
+*.key
+id_rsa*
 platform/.env
 .env
 *.db

@@ -122,6 +122,7 @@ def write_files():
     env.write_text(
         "# Конфигурация слота TehnCons на eminescu.md. Копируется в app/.env при установке.\n"
         f"PORT={PORT}\n"
+        f"LISTEN=127.0.0.1:{PORT}\n"
         f"URL_PREFIX={SLOT}\n"
         "BEHIND_PROXY=1\n"
         "SESSION_COOKIE_SECURE=1\n"

@@ -23,18 +23,35 @@ app = create_app()
 print("=" * 78)
 print("1. СУБД")
 print("=" * 78)
+IS_MYSQL = _db.engine.dialect.name == "mysql"
 with _db.engine.connect() as c:
-    ver = c.execute(text("SELECT VERSION()")).scalar()
-    charset = c.execute(text("SELECT @@character_set_database, @@collation_database")).one()
-    port = c.execute(text("SELECT @@port")).scalar()
     print(f"драйвер приложения : {_db.engine.dialect.name} / {_db.engine.driver}")
-    print(f"сервер             : MySQL {ver}, порт {port}")
-    print(f"кодировка БД       : {charset[0]} / {charset[1]}")
-    rows = c.execute(text("""SELECT table_name, engine, table_rows FROM information_schema.tables
-                             WHERE table_schema='liftportal' ORDER BY table_name""")).all()
-    print(f"таблиц в схеме     : {len(rows)}, движок: {set(r[1] for r in rows)}")
-    idx = c.execute(text("""SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema='liftportal'""")).scalar()
-    fk = c.execute(text("""SELECT COUNT(*) FROM information_schema.referential_constraints WHERE constraint_schema='liftportal'""")).scalar()
+    if IS_MYSQL:
+        ver = c.execute(text("SELECT VERSION()")).scalar()
+        charset = c.execute(text("SELECT @@character_set_database, @@collation_database")).one()
+        port = c.execute(text("SELECT @@port")).scalar()
+        print(f"сервер             : MySQL {ver}, порт {port}")
+        print(f"кодировка БД       : {charset[0]} / {charset[1]}")
+        rows = c.execute(text("""SELECT table_name, engine, table_rows FROM information_schema.tables
+                                 WHERE table_schema='liftportal' ORDER BY table_name""")).all()
+        print(f"таблиц в схеме     : {len(rows)}, движок: {set(r[1] for r in rows)}")
+    else:
+        # демо-стенд работает на SQLite: у него нет ни VERSION(), ни information_schema
+        import sqlite3
+        rows = c.execute(text("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")).all()
+        enc = c.execute(text("PRAGMA encoding")).scalar()
+        print(f"сервер             : SQLite {sqlite3.sqlite_version}, файл {_db.engine.url.database}")
+        print(f"кодировка БД       : {enc}")
+        print(f"таблиц в схеме     : {len(rows)}")
+    if IS_MYSQL:
+        idx = c.execute(text("""SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema='liftportal'""")).scalar()
+        fk = c.execute(text("""SELECT COUNT(*) FROM information_schema.referential_constraints WHERE constraint_schema='liftportal'""")).scalar()
+    else:
+        from sqlalchemy import inspect as sa_inspect
+        insp = sa_inspect(_db.engine)
+        names = insp.get_table_names()
+        idx = sum(len(insp.get_indexes(t)) for t in names)
+        fk = sum(len(insp.get_foreign_keys(t)) for t in names)
     print(f"индексов / внешних ключей : {idx} / {fk}")
 
 print("\n" + "=" * 78)
@@ -70,19 +87,26 @@ print("\n" + "=" * 78)
 print("4. КОДИРОВКА utf8mb4: кириллица, румынская диакритика, эмодзи")
 print("=" * 78)
 probe = "Проверка ăâîșț «Дименкон» 🏗 100 т"
-db.execute(text("UPDATE tenants SET tagline=JSON_SET(tagline,'$.test',:v) WHERE slug='dimecon'"), {"v": probe})
+# json_set есть и в MySQL, и в SQLite; различается только извлечение строки
+db.execute(text("UPDATE tenants SET tagline=json_set(tagline,'$.test',:v) WHERE slug='dimecon'"), {"v": probe})
 db.commit()
-back = db.execute(text("SELECT JSON_UNQUOTE(JSON_EXTRACT(tagline,'$.test')) FROM tenants WHERE slug='dimecon'")).scalar()
+read_sql = ("SELECT JSON_UNQUOTE(JSON_EXTRACT(tagline,'$.test')) FROM tenants WHERE slug='dimecon'"
+            if IS_MYSQL else
+            "SELECT json_extract(tagline,'$.test') FROM tenants WHERE slug='dimecon'")
+back = db.execute(text(read_sql)).scalar()
 print(f"записано : {probe}")
 print(f"прочитано: {back}")
 print(f"совпадение: {'ДА' if back == probe else 'НЕТ'}")
-db.execute(text("UPDATE tenants SET tagline=JSON_REMOVE(tagline,'$.test') WHERE slug='dimecon'"))
+db.execute(text("UPDATE tenants SET tagline=json_remove(tagline,'$.test') WHERE slug='dimecon'"))
 db.commit()
 
 print("\n" + "=" * 78)
-print("5. ПРОИЗВОДИТЕЛЬНОСТЬ (10 замеров на страницу, сервер MySQL)")
+print(f"5. ПРОИЗВОДИТЕЛЬНОСТЬ (10 замеров на страницу, {'сервер MySQL' if IS_MYSQL else 'база SQLite'}, {BASE})")
 print("=" * 78)
 eq_slug = db.query(Equipment.slug).filter_by(tenant_id=1, is_published=True).order_by(Equipment.sort).first()[0]
+# отпускаем транзакцию: на SQLite открытый читающий сеанс блокирует работающую службу,
+# и замеры упираются в таймаут вместо реального времени ответа
+db.commit()
 pages = [("Маркетплейс", "/"), ("Сайт компании (главная)", "/s/dimecon/"),
          ("Каталог техники", "/s/dimecon/equipment"),
          ("Карточка техники + график", f"/s/dimecon/equipment/{eq_slug}"),
