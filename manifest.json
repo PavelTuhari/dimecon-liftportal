@@ -1,6 +1,6 @@
 {
  "project": "dimecon.md — ТЗ, платформа LiftPortal и документы",
- "generated": "19.09.2026 23:46",
+ "generated": "19.09.2026 23:48",
  "groups": [
   {
    "name": "Проект",
@@ -239,7 +239,7 @@
    "viewer": "html",
    "size": 14614,
    "size_h": "14.3 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -252,7 +252,7 @@
    "viewer": "html",
    "size": 21801,
    "size_h": "21.3 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -265,7 +265,7 @@
    "viewer": "html",
    "size": 16196,
    "size_h": "15.8 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -278,7 +278,7 @@
    "viewer": "html",
    "size": 18424,
    "size_h": "18.0 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -291,7 +291,7 @@
    "viewer": "html",
    "size": 12760,
    "size_h": "12.5 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -304,7 +304,7 @@
    "viewer": "html",
    "size": 15241,
    "size_h": "14.9 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -317,7 +317,7 @@
    "viewer": "html",
    "size": 13372,
    "size_h": "13.1 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -330,7 +330,7 @@
    "viewer": "html",
    "size": 30637,
    "size_h": "29.9 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -343,7 +343,7 @@
    "viewer": "html",
    "size": 25105,
    "size_h": "24.5 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -356,7 +356,7 @@
    "viewer": "html",
    "size": 11139,
    "size_h": "10.9 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -395,7 +395,7 @@
    "viewer": "html",
    "size": 14647,
    "size_h": "14.3 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -499,7 +499,7 @@
    "viewer": "text",
    "size": 1936,
    "size_h": "1.9 КБ",
-   "mtime": "19.09.2026 21:33",
+   "mtime": "19.09.2026 23:47",
    "searchable": true
   },
   {
@@ -512,7 +512,7 @@
    "viewer": "text",
    "size": 5743,
    "size_h": "5.6 КБ",
-   "mtime": "19.09.2026 23:27",
+   "mtime": "19.09.2026 23:47",
    "searchable": true
   },
   {
@@ -604,6 +604,19 @@
    "size": 26992,
    "size_h": "26.4 КБ",
    "mtime": "19.09.2026 23:27",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/14_Сменный рапорт.pdf",
+   "name": "14_Сменный рапорт.pdf",
+   "title": "14_Сменный рапорт.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 26931,
+   "size_h": "26.3 КБ",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -880,6 +893,45 @@
    "searchable": false
   },
   {
+   "path": "docs/generated/51_quote.pdf",
+   "name": "51_quote.pdf",
+   "title": "51_quote.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 30668,
+   "size_h": "29.9 КБ",
+   "mtime": "19.09.2026 23:47",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/52_invoice.pdf",
+   "name": "52_invoice.pdf",
+   "title": "52_invoice.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 29145,
+   "size_h": "28.5 КБ",
+   "mtime": "19.09.2026 23:47",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/53_act.pdf",
+   "name": "53_act.pdf",
+   "title": "53_act.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 32388,
+   "size_h": "31.6 КБ",
+   "mtime": "19.09.2026 23:47",
+   "searchable": false
+  },
+  {
    "path": "docs/generated/7_Сменный рапорт.pdf",
    "name": "7_Сменный рапорт.pdf",
    "title": "7_Сменный рапорт.pdf",
@@ -926,9 +978,9 @@
    "group": "Сгенерированные документы",
    "ext": ".pdf",
    "viewer": "pdf",
-   "size": 29865,
-   "size_h": "29.2 КБ",
-   "mtime": "19.09.2026 23:27",
+   "size": 30119,
+   "size_h": "29.4 КБ",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -939,9 +991,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 7604,
-   "size_h": "7.4 КБ",
-   "mtime": "19.09.2026 23:27",
+   "size": 7794,
+   "size_h": "7.6 КБ",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -952,9 +1004,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 16119,
-   "size_h": "15.7 КБ",
-   "mtime": "19.09.2026 23:27",
+   "size": 16994,
+   "size_h": "16.6 КБ",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -965,9 +1017,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6269,
+   "size": 6273,
    "size_h": "6.1 КБ",
-   "mtime": "19.09.2026 23:27",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -978,9 +1030,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 12184,
+   "size": 12182,
    "size_h": "11.9 КБ",
-   "mtime": "19.09.2026 23:27",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -993,7 +1045,7 @@
    "viewer": "xlsx",
    "size": 10560,
    "size_h": "10.3 КБ",
-   "mtime": "19.09.2026 23:27",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -1004,9 +1056,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6435,
+   "size": 6484,
    "size_h": "6.3 КБ",
-   "mtime": "19.09.2026 23:27",
+   "mtime": "19.09.2026 23:47",
    "searchable": false
   },
   {
@@ -2189,7 +2241,7 @@
    "viewer": "json",
    "size": 6991,
    "size_h": "6.8 КБ",
-   "mtime": "19.09.2026 23:46",
+   "mtime": "19.09.2026 23:48",
    "searchable": true
   },
   {
@@ -5236,14 +5288,14 @@
   }
  ],
  "stats": {
-  "files": 398,
-  "bytes": 24835053,
+  "files": 402,
+  "bytes": 24955555,
   "by_group": {
    "Проект": 2,
    "Техническое задание": 8,
    "Акты и отчёты": 2,
    "Протоколы испытаний": 26,
-   "Сгенерированные документы": 35,
+   "Сгенерированные документы": 39,
    "Скриншоты": 87,
    "Исходные данные заказчика": 5,
    "Медиатека компании": 90,
