@@ -302,6 +302,48 @@ def quote_pdf(tenant, order, doc) -> bytes:
     return pdf.out()
 
 
+def sales_pdf(tenant, so) -> bytes:
+    """Коммерческое предложение из модуля продаж: строки сметы, скидка, НДС, допработы."""
+    from ..db import SessionLocal as db
+    from ..models import Contact, Partner
+
+    pdf = DocPDF(tenant, "Коммерческое предложение", so.number)
+    valid = f" Действительно до {so.valid_until:%d.%m.%Y}." if so.valid_until else ""
+    pdf.title_block(f"от {so.created_at:%d.%m.%Y}.{valid}")
+
+    client = ""
+    if so.contact_id:
+        c = db.get(Contact, so.contact_id)
+        client = (c.company or c.name) if c else ""
+    elif so.partner_id:
+        p = db.get(Partner, so.partner_id)
+        client = p.name if p else ""
+    rows = [("Заказчик", client or "—"), ("Исполнитель", tenant.legal_name or tenant.name)]
+    if tenant.idno:
+        rows.append(("IDNO", tenant.idno))
+    if so.discount_pct:
+        rows.append(("Скидка", f"{so.discount_pct:g} %"))
+    pdf.kv_table(rows)
+
+    lines = [{"title": f"{l.name} ({l.qty:g} {l.unit} × {money(l.price)})", "amount": l.amount}
+             for l in so.lines if not l.is_optional]
+    if so.discount_pct:
+        lines.append({"title": f"Скидка {so.discount_pct:g} %",
+                      "amount": -round(sum(l["amount"] for l in lines) * so.discount_pct / 100, 2)})
+    lines.append({"title": f"НДС {so.vat_pct:g} %", "amount": so.amount_vat})
+    pdf.money_table(lines, so.amount_total, so.currency)
+
+    optional = [l for l in so.lines if l.is_optional]
+    if optional:
+        pdf.note("Дополнительно, по желанию заказчика: "
+                 + "; ".join(f"{l.name} — {money(l.amount, so.currency)}" for l in optional))
+    if so.terms:
+        pdf.note(so.terms)
+    pdf.note(f"Сумма прописью: {amount_in_words(so.amount_total, so.currency)}.")
+    pdf.signatures("Исполнитель — " + tenant.name, "Заказчик")
+    return pdf.out()
+
+
 def invoice_pdf(tenant, order, doc) -> bytes:
     pdf = DocPDF(tenant, DOC_TITLES["invoice"], doc.number)
     pdf.title_block(f"от {doc.issued_at:%d.%m.%Y} по заявке {order.number}"

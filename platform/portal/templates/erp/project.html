@@ -1,0 +1,189 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}{{ p.name }}{% endblock %}
+{% block content %}
+
+<div class="stats">
+  <div class="kpi"><b>{{ progress.pct }} %</b><span>готовность: {{ progress.done }} из {{ progress.total }} задач</span></div>
+  <div class="kpi"><b>{{ money.revenue|money(tenant.currency) }}</b><span>выручка (план {{ money.budget|money }})</span></div>
+  <div class="kpi"><b>{{ money.cost|money(tenant.currency) }}</b><span>затраты (план {{ money.planned_cost|money }})</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--ok)' if money.margin >= 0 else 'var(--danger)' }}">{{ money.margin|money }}</b><span>маржа, {{ money.margin_pct }} %</span></div>
+  <div class="kpi"><b>{{ totals.hours }}</b><span>часов ({{ totals.billable }} к оплате)</span></div>
+</div>
+
+<div class="grid g2 mt">
+  <div class="card">
+    <h3>Деньги по объекту</h3>
+    <table class="breakdown"><tbody>
+      <tr><td>Предложения приняты</td><td class="right">{{ money.quoted|money(tenant.currency) }}</td></tr>
+      <tr><td>Выставлено счетами и актами</td><td class="right">{{ money.invoiced|money }}</td></tr>
+      <tr><td>Оплачено</td><td class="right"><b>{{ money.paid|money }}</b></td></tr>
+      <tr><td>Заказы техники по объекту</td><td class="right">{{ money.orders|money }}</td></tr>
+      <tr><td>Закупки</td><td class="right">−{{ money.purchases|money }}</td></tr>
+      <tr><td>Труд по табелям ({{ money.hours }} ч)</td><td class="right">−{{ money.labour|money }}</td></tr>
+      <tr><td><b>Маржа</b></td><td class="right"><b>{{ money.margin|money }}</b></td></tr>
+    </tbody></table>
+    {% if money.budget_used_pct %}<div class="bar mt"><i style="width:{{ [money.budget_used_pct, 100]|min }}%;background:{{ 'var(--danger)' if money.budget_used_pct > 100 else 'var(--accent)' }}"></i></div>
+    <span class="tiny muted">бюджет затрат использован на {{ money.budget_used_pct }} %</span>{% endif %}
+    <form method="post" class="flex mt" style="gap:6px">{{ csrf() }}
+      <input type="hidden" name="action" value="invoice_time">
+      <button class="btn sm">Выставить счёт по отработанным часам ({{ totals.not_invoiced|money }})</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Карточка объекта</h3>
+    <form method="post">{{ csrf() }}<input type="hidden" name="action" value="save">
+      <div class="grid g2">
+        <div class="field"><label>Название</label><input name="name" value="{{ p.name }}"></div>
+        <div class="field"><label>Код</label><input name="code" value="{{ p.code }}"></div>
+      </div>
+      <div class="field"><label>Адрес</label><input name="address" value="{{ p.address }}"></div>
+      <div class="grid g2">
+        <div class="field"><label>Стадия</label><select name="stage">
+          {% for code, title in project_stages %}<option value="{{ code }}" {{ 'selected' if p.stage==code }}>{{ title }}</option>{% endfor %}</select></div>
+        <div class="field"><label>Состояние</label><select name="status">
+          {% for code, title in [('active','В работе'),('paused','Пауза'),('done','Завершён'),('archived','Архив')] %}
+          <option value="{{ code }}" {{ 'selected' if p.status==code }}>{{ title }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="grid g4">
+        <div class="field"><label>План выручки</label><input name="budget_amount" type="number" step="0.01" value="{{ p.budget_amount }}"></div>
+        <div class="field"><label>План затрат</label><input name="planned_cost" type="number" step="0.01" value="{{ p.planned_cost }}"></div>
+        <div class="field"><label>Себест. часа</label><input name="hour_cost" type="number" step="0.01" value="{{ p.hour_cost }}"></div>
+        <div class="field"><label>Ставка часа</label><input name="hour_rate" type="number" step="0.01" value="{{ p.hour_rate }}"></div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Начало</label><input name="starts_at" type="date" value="{{ p.starts_at or '' }}"></div>
+        <div class="field"><label>Сдача</label><input name="ends_at" type="date" value="{{ p.ends_at or '' }}"></div>
+      </div>
+      <div class="field"><label>Руководитель</label><select name="manager_id"><option value="">— не назначен —</option>
+        {% for u in users %}<option value="{{ u.id }}" {{ 'selected' if p.manager_id==u.id }}>{{ u.full_name or u.email }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Заметки</label><textarea name="notes" rows="2">{{ p.notes }}</textarea></div>
+      <div class="flex"><button class="btn primary sm">Сохранить</button></div>
+    </form>
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="template">
+      <button class="btn sm ghost">Сохранить как шаблон объекта</button></form>
+  </div>
+</div>
+
+<h3 class="mt2">Иерархия работ</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Задача</th><th>Исполнитель</th><th>Сроки</th><th class="right">План/факт, ч</th><th>Стадия</th><th></th></tr></thead>
+  <tbody>
+  {% for row in tree %}
+    {% set t = row.task %}
+    <tr>
+      <td style="padding-left:{{ 12 + row.level * 22 }}px">
+        {% if t.is_milestone %}<span title="веха">🏁</span> {% endif %}<b>{{ t.title }}</b>
+        {% if t.priority == 2 %}<span class="badge danger">срочно</span>{% elif t.priority == 1 %}<span class="badge warn">важно</span>{% endif %}
+        {% if row.blocked %}<div class="tiny" style="color:var(--danger)">ждёт: {{ row.blocked.title }}</div>{% endif %}
+        {% if t.tags %}<div class="tiny muted">{{ t.tags }}</div>{% endif %}
+        {% if t.is_milestone and t.milestone_amount %}<div class="tiny muted">этап на {{ t.milestone_amount|money(tenant.currency) }}{{ ' · счёт выставлен' if t.invoiced }}</div>{% endif %}
+      </td>
+      <td class="small">{% for u in users %}{{ u.full_name or u.email if u.id == t.assignee_id }}{% endfor %}</td>
+      <td class="small">{{ t.starts_on.strftime('%d.%m') if t.starts_on else '' }}{% if t.due_on %} — {{ t.due_on.strftime('%d.%m.%Y') }}{% endif %}</td>
+      <td class="right small">{{ t.planned_hours|round(1) }} / {{ row.spent_total }}</td>
+      <td>
+        <form method="post" action="{{ url_for('erp.task_stage', tid=t.id) }}" class="flex" style="gap:4px">{{ csrf() }}
+          <select name="stage" onchange="this.form.submit()" class="sm">
+            {% for code, title in stages %}<option value="{{ code }}" {{ 'selected' if t.stage==code }}>{{ title }}</option>{% endfor %}
+          </select>
+        </form>
+      </td>
+      <td>{% if t.is_milestone and t.milestone_amount and not t.invoiced %}
+        <form method="post" action="{{ url_for('erp.milestone_invoice', tid=t.id) }}">{{ csrf() }}
+          <button class="btn sm">Счёт по этапу</button></form>{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6" class="muted">Задач нет — добавьте первую ниже.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+
+<div class="grid g2 mt">
+  <form method="post" class="card">{{ csrf() }}<input type="hidden" name="action" value="task">
+    <h3>Новая задача</h3>
+    <div class="field"><label>Название *</label><input name="title" required placeholder="Монтаж башенного крана"></div>
+    <div class="grid g2">
+      <div class="field"><label>Исполнитель</label><select name="assignee_id"><option value="">—</option>
+        {% for u in users %}<option value="{{ u.id }}">{{ u.full_name or u.email }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Приоритет</label><select name="priority">
+        <option value="0">обычная</option><option value="1">важная</option><option value="2">срочная</option></select></div>
+    </div>
+    <div class="grid g2">
+      <div class="field"><label>Подзадача для</label><select name="parent_id"><option value="">— верхний уровень —</option>
+        {% for row in tree %}<option value="{{ row.task.id }}">{{ '— ' * row.level }}{{ row.task.title }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Начинать после</label><select name="depends_on_id"><option value="">— без зависимости —</option>
+        {% for row in tree %}<option value="{{ row.task.id }}">{{ row.task.title }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="grid g4">
+      <div class="field"><label>Начало</label><input name="starts_on" type="date"></div>
+      <div class="field"><label>Срок</label><input name="due_on" type="date"></div>
+      <div class="field"><label>План, ч</label><input name="planned_hours" type="number" step="0.5" value="0"></div>
+      <div class="field"><label>Теги</label><input name="tags" placeholder="монтаж, кран"></div>
+    </div>
+    <div class="grid g4">
+      <div class="field"><label>Повторять каждые</label><input name="recur_every" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Единица</label><select name="recur_unit"><option value="day">дней</option><option value="week" selected>недель</option><option value="month">месяцев</option></select></div>
+      <div class="field"><label>Сумма этапа</label><input name="milestone_amount" type="number" step="0.01" value="0"></div>
+      <div class="field" style="align-self:end"><label class="small"><input type="checkbox" name="is_milestone" value="1"> это веха</label></div>
+    </div>
+    <button class="btn primary">Добавить задачу</button>
+  </form>
+
+  <form method="post" class="card">{{ csrf() }}<input type="hidden" name="action" value="time">
+    <h3>Списать время</h3>
+    <div class="grid g2">
+      <div class="field"><label>Дата</label><input name="work_date" type="date" value="{{ now.strftime('%Y-%m-%d') }}"></div>
+      <div class="field"><label>Часы *</label><input name="hours" type="number" step="0.25" required></div>
+    </div>
+    <div class="field"><label>Задача</label><select name="task_id"><option value="">— по объекту в целом —</option>
+      {% for row in tree %}<option value="{{ row.task.id }}">{{ row.task.title }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Комментарий</label><input name="note" placeholder="Монтаж секций, смена 8 ч"></div>
+    <label class="small"><input type="checkbox" name="billable" value="1" checked> выставлять заказчику по ставке {{ p.hour_rate|money(tenant.currency) }}</label>
+    <div class="mt"><button class="btn primary">Записать</button></div>
+
+    <h4 class="mt2">Последние записи</h4>
+    <div class="table-wrap" style="max-height:220px;overflow:auto"><table>
+      <tbody>{% for ts in times %}
+        <tr><td class="small">{{ ts.work_date.strftime('%d.%m') }}</td>
+          <td class="small">{{ ts.note or '—' }}</td>
+          <td class="right small">{{ ts.hours }} ч</td>
+          <td class="small">{{ '✓' if ts.invoiced else ('к оплате' if ts.billable else 'внутр.') }}</td></tr>
+      {% else %}<tr><td class="muted small">Записей нет</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </form>
+</div>
+
+{% if timeline.rows %}
+<h3 class="mt2">Календарь работ</h3>
+<div class="card" style="overflow-x:auto">
+  <div class="tiny muted mb">с {{ timeline.start.strftime('%d.%m.%Y') }}, 30 дней</div>
+  {% for row in timeline.rows %}
+  <div class="flex" style="gap:8px;align-items:center;margin-bottom:6px">
+    <div style="width:220px;flex:none" class="small">{{ row.task.title }}</div>
+    <div style="flex:1;position:relative;height:18px;background:var(--bg-sunken);border-radius:4px">
+      <div style="position:absolute;left:{{ row.offset / 30 * 100 }}%;width:{{ row.length / 30 * 100 }}%;height:100%;border-radius:4px;background:{{ 'var(--danger)' if row.late else ('var(--ok)' if row.task.stage=='done' else 'var(--accent)') }}"></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="grid g3 mt2">
+  <div class="card"><h4>Предложения</h4>
+    {% for s in sales %}<div class="small"><a href="{{ url_for('erp.sale', sid=s.id) }}">{{ s.number }}</a> — {{ s.amount_total|money }} · {{ s.status }}</div>
+    {% else %}<span class="muted small">нет</span>{% endfor %}</div>
+  <div class="card"><h4>Закупки</h4>
+    {% for po in purchases %}<div class="small"><a href="{{ url_for('erp.purchase_order', poid=po.id) }}">{{ po.number }}</a> — {{ po.amount_total|money }} · {{ po.status }}</div>
+    {% else %}<span class="muted small">нет</span>{% endfor %}</div>
+  <div class="card"><h4>Документы</h4>
+    {% for d in docs %}<div class="small"><a href="{{ url_for('erp.invoice', did=d.id) }}">{{ d.number }}</a> — {{ d.amount|money }} · {{ d.status }}</div>
+    {% else %}<span class="muted small">нет</span>{% endfor %}</div>
+</div>
+
+{% if shifts %}<h3 class="mt2">Сменные рапорты по объекту</h3>
+<div class="table-wrap"><table><thead><tr><th>Дата</th><th class="right">Часы</th><th class="right">Простой</th><th>Статус</th></tr></thead>
+<tbody>{% for s in shifts %}<tr><td>{{ s.work_date.strftime('%d.%m.%Y') }}</td><td class="right">{{ s.hours_worked }}</td>
+<td class="right">{{ s.hours_idle }}</td><td>{{ s.status }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+{% endblock %}

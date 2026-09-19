@@ -1,0 +1,69 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}{{ type_names.get(doc.type, doc.type) }} {{ doc.number }}{% endblock %}
+{% block content %}
+<div class="grid g2">
+  <div class="card">
+    <div class="flex between"><span class="badge {{ 'ok' if doc.status=='paid' else ('danger' if doc.status=='overdue' else '') }}">{{ names.get(doc.status, doc.status) }}</span>
+      <span class="small muted">выставлен {{ doc.issued_at.strftime('%d.%m.%Y') }}{% if doc.due_at %} · срок {{ doc.due_at.strftime('%d.%m.%Y') }}{% endif %}</span></div>
+    <table class="breakdown mt"><tbody>
+      {% for line in (doc.payload or {}).get('lines', []) %}
+      <tr><td>{{ line.get('title', '') }}{% if line.get('qty') %} <span class="tiny muted">{{ line.qty }} {{ line.get('unit','') }} × {{ line.get('price', 0)|money }}</span>{% endif %}</td>
+        <td class="right">{{ line.get('amount', 0)|money }}</td></tr>
+      {% endfor %}
+      <tr><td><b>Итого</b></td><td class="right"><b>{{ doc.amount|money(doc.currency) }}</b></td></tr>
+      <tr><td>Оплачено</td><td class="right">{{ paid|money }}</td></tr>
+      <tr><td><b>К оплате</b></td><td class="right"><b style="color:{{ 'var(--ok)' if balance <= 0 else 'var(--danger)' }}">{{ balance|money }}</b></td></tr>
+    </tbody></table>
+    {% if (doc.payload or {}).get('note') %}<p class="small muted">{{ doc.payload.note }}</p>{% endif %}
+    <div class="flex mt" style="gap:6px">
+      {% if doc.order_id %}<a class="btn sm" target="_blank" href="{{ url_for('export.document', doc_id=doc.id) }}">PDF</a>{% endif %}
+      {% if doc.project_id %}<a class="btn sm ghost" href="{{ url_for('erp.project', pid=doc.project_id) }}">Объект</a>{% endif %}
+      {% if doc.sales_id %}<a class="btn sm ghost" href="{{ url_for('erp.sale', sid=doc.sales_id) }}">Предложение</a>{% endif %}
+    </div>
+  </div>
+
+  <div>
+    {% if doc.type == 'invoice' and doc.status != 'cancelled' %}
+    <form method="post" class="card">{{ csrf() }}<input type="hidden" name="action" value="pay">
+      <h3>Записать оплату</h3>
+      <div class="grid g2">
+        <div class="field"><label>Сумма *</label><input name="amount" type="number" step="0.01" value="{{ balance if balance > 0 else 0 }}" required></div>
+        <div class="field"><label>Дата</label><input name="paid_on" type="date" value="{{ now.strftime('%Y-%m-%d') }}"></div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Способ</label><select name="method">
+          <option value="bank">банковский перевод</option><option value="cash">наличные</option>
+          <option value="card">карта</option><option value="offset">взаимозачёт</option></select></div>
+        <div class="field"><label>Документ</label><input name="reference" placeholder="п/п 128"></div>
+      </div>
+      <button class="btn primary">Записать</button>
+    </form>
+
+    <form method="post" class="card mt">{{ csrf() }}<input type="hidden" name="action" value="credit">
+      <h3>Кредит-нота</h3>
+      <div class="grid g2">
+        <div class="field"><label>Сумма (пусто = вся)</label><input name="amount" type="number" step="0.01"></div>
+        <div class="field"><label>Причина</label><input name="reason" placeholder="возврат аванса"></div>
+      </div>
+      <button class="btn">Создать кредит-ноту</button>
+    </form>
+
+    <form method="post" class="flex mt" style="gap:6px">{{ csrf() }}
+      <button class="btn sm" name="action" value="remind">Напомнить об оплате</button>
+      <button class="btn sm" name="action" value="cancel">Отменить счёт</button>
+    </form>
+    {% endif %}
+
+    {% if payments %}
+    <div class="card mt"><h3>Платежи</h3>
+      <table class="breakdown"><tbody>
+        {% for p in payments %}<tr>
+          <td>{{ p.paid_on.strftime('%d.%m.%Y') }} · {{ p.method }}{% if p.reference %} · {{ p.reference }}{% endif %}</td>
+          <td class="right">{{ p.amount|money }}</td></tr>{% endfor %}
+      </tbody></table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

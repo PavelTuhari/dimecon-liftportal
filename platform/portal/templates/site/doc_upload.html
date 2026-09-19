@@ -1,0 +1,24 @@
+{% extends "site/_layout.html" %}
+{% block title %}Загрузка документа — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:620px;padding:56px 24px 64px">
+  <div class="label">ЗАПРОС ДОКУМЕНТА</div>
+  <h1>{{ req.name }}</h1>
+  {% if req.due_on %}<p class="muted">Просим прислать до {{ req.due_on.strftime('%d.%m.%Y') }}.</p>{% endif %}
+
+  {% if req.status == 'received' %}
+    <div class="alert success">Документ получен {{ req.received_at.strftime('%d.%m.%Y в %H:%M') }}. Спасибо!</div>
+  {% elif req.status == 'cancelled' %}
+    <div class="alert warning">Запрос отменён — загрузка больше не нужна.</div>
+  {% else %}
+  <form method="post" enctype="multipart/form-data" class="card">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field"><label>Файл *</label><input type="file" name="file" required></div>
+    <button class="btn primary block">Отправить</button>
+    <p class="tiny muted mt">Файл попадёт напрямую в документы компании {{ tenant.name }}. Регистрация не нужна.</p>
+  </form>
+  {% endif %}
+
+  <p class="small muted mt2">Вопросы: {{ tenant.phone }}{% if tenant.email %} · {{ tenant.email }}{% endif %}</p>
+</div>
+{% endblock %}

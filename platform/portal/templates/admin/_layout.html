@@ -12,6 +12,14 @@
     <a href="{{ url_for('admin.tasks') }}" class="{{ 'on' if ep=='admin.tasks' }}">✅ Задачи</a>
     <a href="{{ url_for('admin.partners') }}" class="{{ 'on' if ep=='admin.partners' }}">🏢 Партнёры B2B</a>
     <a href="{{ url_for('admin.shifts') }}" class="{{ 'on' if ep=='admin.shifts' }}">⏱ Сменные рапорты</a>
+    <a href="{{ url_for('erp.sales') }}" class="{{ 'on' if ep in ('erp.sales','erp.sale') }}">📝 Предложения</a>
+    <h5>Управление</h5>
+    <a href="{{ url_for('erp.projects') }}" class="{{ 'on' if ep in ('erp.projects','erp.project','erp.project_new') }}">🏢 Объекты и проекты</a>
+    <a href="{{ url_for('erp.tasks_board') }}" class="{{ 'on' if ep=='erp.tasks_board' }}">🗂 Задачи (канбан)</a>
+    <a href="{{ url_for('erp.purchase') }}" class="{{ 'on' if ep in ('erp.purchase','erp.purchase_order','erp.vendors','erp.reorder') }}">🚚 Закупки</a>
+    <a href="{{ url_for('erp.invoices') }}" class="{{ 'on' if ep in ('erp.invoices','erp.invoice','erp.plans') }}">💳 Счета и оплаты</a>
+    <a href="{{ url_for('erp.sheets') }}" class="{{ 'on' if ep in ('erp.sheets','erp.sheet') }}">📈 Таблицы</a>
+    <a href="{{ url_for('erp.docs') }}" class="{{ 'on' if ep=='erp.docs' }}">📁 Документы</a>
     <h5>Парк и контент</h5>
     <a href="{{ url_for('admin.fleet') }}" class="{{ 'on' if ep in ('admin.fleet','admin.equipment') }}">🏗 Техника и график</a>
     <a href="{{ url_for('admin.content_list', kind='services') }}" class="{{ 'on' if request.view_args.get('kind')=='services' }}">🛠 Услуги</a>

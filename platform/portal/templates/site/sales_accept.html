@@ -1,0 +1,52 @@
+{% extends "site/_layout.html" %}
+{% block title %}Предложение {{ so.number }} — {{ tenant.name }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:820px;padding:44px 24px 64px">
+  <div class="label">КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ</div>
+  <h1>{{ so.number }}</h1>
+  <p class="muted">от {{ so.created_at.strftime('%d.%m.%Y') }}{% if so.valid_until %} · действительно до {{ so.valid_until.strftime('%d.%m.%Y') }}{% endif %}</p>
+
+  {% if so.status == 'accepted' or so.accepted_at %}
+    <div class="alert success">Предложение принято {{ so.accepted_at.strftime('%d.%m.%Y в %H:%M') }}. Менеджер свяжется с вами.</div>
+  {% elif so.status in ('confirmed', 'invoiced') %}
+    <div class="alert success">Предложение подтверждено, работа началась.</div>
+  {% elif expired %}
+    <div class="alert warning">Срок действия предложения истёк. Позвоните нам — пересчитаем по актуальным ценам.</div>
+  {% endif %}
+
+  <div class="card">
+    <table class="breakdown"><tbody>
+      {% for l in so.lines if not l.is_optional %}
+      <tr><td>{{ l.name }}<div class="tiny muted">{{ l.qty|round(2) }} {{ l.unit }} × {{ l.price|money(so.currency) }}</div></td>
+        <td class="right">{{ l.amount|money }}</td></tr>
+      {% endfor %}
+      {% if so.discount_pct %}<tr><td>Скидка {{ so.discount_pct|round(1) }} %</td><td class="right">включена</td></tr>{% endif %}
+      <tr><td>НДС {{ so.vat_pct|round(0) }} %</td><td class="right">{{ so.amount_vat|money }}</td></tr>
+      <tr><td><b>Итого</b></td><td class="right"><b>{{ so.amount_total|money(so.currency) }}</b></td></tr>
+    </tbody></table>
+    {% if so.terms %}<p class="small muted mt">{{ so.terms }}</p>{% endif %}
+  </div>
+
+  {% set optional = so.lines|selectattr('is_optional')|list %}
+  {% if so.status in ('draft', 'sent') and not expired %}
+  <form method="post" class="card mt">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    {% if optional %}
+      <h3>Дополнительно, по желанию</h3>
+      {% for l in optional %}
+      <label class="flex between" style="gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span><input type="checkbox" name="optional" value="{{ l.id }}"> {{ l.name }}
+          <span class="tiny muted">{{ l.qty|round(2) }} {{ l.unit }}</span></span>
+        <b>{{ l.amount|money(so.currency) }}</b>
+      </label>
+      {% endfor %}
+    {% endif %}
+    <div class="field mt"><label>Ваше имя *</label><input name="name" required placeholder="Ион Русу"></div>
+    <button class="btn primary block">Принять предложение</button>
+    <p class="tiny muted mt">Принятие фиксирует состав работ и цену. Договор и счёт пришлёт менеджер.</p>
+  </form>
+  {% endif %}
+
+  <p class="small muted mt2">Вопросы: {{ tenant.phone }}{% if tenant.email %} · {{ tenant.email }}{% endif %}</p>
+</div>
+{% endblock %}

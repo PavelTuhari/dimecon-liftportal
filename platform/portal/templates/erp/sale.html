@@ -1,0 +1,123 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Предложение {{ so.number }}{% endblock %}
+{% block content %}
+
+<div class="flex between wrap">
+  <div class="flex" style="gap:8px;align-items:center">
+    <span class="badge {{ 'ok' if so.status in ('confirmed','invoiced') else ('warn' if so.status in ('sent','accepted') else '') }}">{{ names.get(so.status, so.status) }}</span>
+    <span class="small muted">создано {{ so.created_at.strftime('%d.%m.%Y') }}{% if so.accepted_at %} · принято клиентом {{ so.accepted_at.strftime('%d.%m.%Y %H:%M') }} ({{ so.accepted_by }}){% endif %}</span>
+  </div>
+  <div class="flex" style="gap:6px">
+    <a class="btn sm" target="_blank" href="{{ url_for('erp.sale_pdf', sid=so.id) }}">PDF</a>
+    {% if so.status in ('draft','sent') %}
+      <form method="post">{{ csrf() }}<input type="hidden" name="action" value="send"><button class="btn sm primary">Отправить клиенту</button></form>
+    {% endif %}
+    {% if so.status in ('accepted','sent') %}
+      <form method="post" class="flex" style="gap:4px">{{ csrf() }}<input type="hidden" name="action" value="confirm">
+        <label class="tiny"><input type="checkbox" name="create_project" value="1"> открыть объект</label>
+        <button class="btn sm primary">Подтвердить</button></form>
+    {% endif %}
+    {% if so.status in ('confirmed','accepted') %}
+      <form method="post" class="flex" style="gap:4px">{{ csrf() }}<input type="hidden" name="action" value="invoice">
+        <input name="advance_pct" type="number" step="1" min="0" max="100" placeholder="аванс %" style="width:110px">
+        <button class="btn sm primary">Выставить счёт</button></form>
+    {% endif %}
+    {% if so.status != 'cancelled' %}
+      <form method="post">{{ csrf() }}<input type="hidden" name="action" value="cancel"><button class="btn sm">Отменить</button></form>
+    {% endif %}
+  </div>
+</div>
+
+<div class="alert info mt small">Ссылка для клиента (принять без регистрации): <code>{{ accept_url }}</code></div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Позиция</th><th class="right">Кол-во</th><th class="right">Цена</th><th class="right">Скидка</th><th class="right">Себест.</th><th class="right">Сумма</th><th></th></tr></thead>
+  <tbody>
+  {% for l in so.lines %}
+    <tr {% if l.is_optional %}style="opacity:.7"{% endif %}>
+      <td>{{ l.name }}{% if l.is_optional %} <span class="badge">допработа</span>{% endif %}
+        {% if l.kind != 'text' %}<div class="tiny muted">из каталога: {{ l.kind }}</div>{% endif %}</td>
+      <td class="right">{{ l.qty|round(2) }} {{ l.unit }}</td>
+      <td class="right">{{ l.price|money }}</td>
+      <td class="right">{{ (l.discount_pct|round(1)) ~ ' %' if l.discount_pct else '—' }}</td>
+      <td class="right small muted">{{ l.cost|money if l.cost else '—' }}</td>
+      <td class="right"><b>{{ l.amount|money }}</b></td>
+      <td><form method="post">{{ csrf() }}<input type="hidden" name="action" value="line_delete">
+        <input type="hidden" name="line_id" value="{{ l.id }}"><button class="btn sm ghost">✕</button></form></td>
+    </tr>
+  {% else %}<tr><td colspan="7" class="muted">Строк нет — добавьте позиции ниже</td></tr>{% endfor %}
+  </tbody>
+  <tfoot>
+    <tr><td colspan="5" class="right">Без НДС{% if so.discount_pct %} (со скидкой {{ so.discount_pct|round(1) }} %){% endif %}</td><td class="right">{{ so.amount_net|money }}</td><td></td></tr>
+    <tr><td colspan="5" class="right">НДС {{ so.vat_pct|round(0) }} %</td><td class="right">{{ so.amount_vat|money }}</td><td></td></tr>
+    <tr><td colspan="5" class="right"><b>Итого</b></td><td class="right"><b>{{ so.amount_total|money(so.currency) }}</b></td><td></td></tr>
+    {% if so.amount_optional %}<tr><td colspan="5" class="right muted">Допработы по выбору клиента</td><td class="right muted">{{ so.amount_optional|money }}</td><td></td></tr>{% endif %}
+  </tfoot>
+</table></div>
+
+<div class="grid g2 mt">
+  <form method="post" class="card">{{ csrf() }}<input type="hidden" name="action" value="line">
+    <h3>Добавить позицию</h3>
+    <div class="grid g2">
+      <div class="field"><label>Из каталога</label>
+        <select name="kind" id="kind" onchange="document.querySelectorAll('.ref').forEach(e=>e.style.display='none'); const el=document.getElementById('ref_'+this.value); if(el) el.style.display='';">
+          <option value="text">Произвольная строка</option>
+          <option value="equipment">Техника</option>
+          <option value="service">Услуга</option>
+          <option value="product">Товар</option>
+        </select></div>
+      <div class="field"><label>Позиция каталога</label>
+        <span class="ref" id="ref_equipment" style="display:none"><select name="ref_id">{% for e in equipment %}<option value="{{ e.id }}">{{ tr(e.title) }} — {{ e.hourly_rate|money }}/ч</option>{% endfor %}</select></span>
+        <span class="ref" id="ref_service" style="display:none"><select name="ref_id">{% for s in services %}<option value="{{ s.id }}">{{ tr(s.title) }}</option>{% endfor %}</select></span>
+        <span class="ref" id="ref_product" style="display:none"><select name="ref_id">{% for p in products %}<option value="{{ p.id }}">{{ tr(p.title) }}</option>{% endfor %}</select></span>
+        <span class="ref" id="ref_text"><input name="name" placeholder="Монтаж металлоконструкций"></span>
+      </div>
+    </div>
+    <div class="grid g4">
+      <div class="field"><label>Кол-во</label><input name="qty" type="number" step="0.01" value="1"></div>
+      <div class="field"><label>Единица</label><input name="unit" value="шт"></div>
+      <div class="field"><label>Цена</label><input name="price" type="number" step="0.01" value="0"></div>
+      <div class="field"><label>Себестоимость</label><input name="cost" type="number" step="0.01" value="0"></div>
+    </div>
+    <div class="grid g2">
+      <div class="field"><label>Скидка на строку, %</label><input name="line_discount" type="number" step="0.1" value="0"></div>
+      <div class="field" style="align-self:end"><label class="small"><input type="checkbox" name="optional" value="1"> допработа (клиент выбирает сам)</label></div>
+    </div>
+    <button class="btn primary">Добавить</button>
+  </form>
+
+  <div class="card">
+    <h3>Условия и маржа</h3>
+    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi"><b>{{ margin.revenue|money }}</b><span>выручка</span></div>
+      <div class="kpi"><b>{{ margin.cost|money }}</b><span>себестоимость</span></div>
+      <div class="kpi"><b style="color:{{ 'var(--ok)' if margin.margin >= 0 else 'var(--danger)' }}">{{ margin.pct }} %</b><span>маржа {{ margin.margin|money }}</span></div>
+    </div>
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="save">
+      <div class="grid g2">
+        <div class="field"><label>Клиент</label><select name="contact_id"><option value="">—</option>
+          {% for c in contacts %}<option value="{{ c.id }}" {{ 'selected' if so.contact_id==c.id }}>{{ c.company or c.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label>Партнёр</label><select name="partner_id"><option value="">—</option>
+          {% for p in partners %}<option value="{{ p.id }}" {{ 'selected' if so.partner_id==p.id }}>{{ p.name }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="grid g4">
+        <div class="field"><label>Скидка, %</label><input name="discount_pct" type="number" step="0.1" value="{{ so.discount_pct }}"></div>
+        <div class="field"><label>НДС, %</label><input name="vat_pct" type="number" step="0.1" value="{{ so.vat_pct }}"></div>
+        <div class="field"><label>Действует до</label><input name="valid_until" type="date" value="{{ so.valid_until or '' }}"></div>
+        <div class="field"><label>Объект</label><select name="project_id"><option value="">—</option>
+          {% for p in projects %}<option value="{{ p.id }}" {{ 'selected' if so.project_id==p.id }}>{{ p.name }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="field"><label>Условия (попадут в PDF)</label><textarea name="terms" rows="2">{{ so.terms }}</textarea></div>
+      <div class="field"><label>Заметка для своих</label><textarea name="note" rows="2">{{ so.note }}</textarea></div>
+      <button class="btn primary sm">Сохранить</button>
+    </form>
+    <form method="post" class="flex mt" style="gap:6px">{{ csrf() }}<input type="hidden" name="action" value="template">
+      <input name="template_name" placeholder="Название шаблона">
+      <button class="btn sm">Сохранить как шаблон</button></form>
+    {% if docs %}<h4 class="mt2">Счета по предложению</h4>
+      {% for d in docs %}<div class="small"><a href="{{ url_for('erp.invoice', did=d.id) }}">{{ d.number }}</a> — {{ d.amount|money }} · {{ d.status }}</div>{% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

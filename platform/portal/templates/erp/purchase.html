@@ -1,0 +1,64 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Закупки{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ summary.open }}</b><span>в работе (запросы и заказы)</span></div>
+  <div class="kpi"><b>{{ summary.total_amount|money(tenant.currency) }}</b><span>сумма всех заказов</span></div>
+  <div class="kpi"><b>{{ summary.to_pay|money }}</b><span>к оплате поставщикам</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--danger)' if summary.overdue else 'inherit' }}">{{ summary.overdue|money }}</b><span>просрочено</span></div>
+</div>
+
+<div class="card mt">
+  <form method="post" action="{{ url_for('erp.purchase_new') }}" class="grid g4" style="align-items:end">{{ csrf() }}
+    <div class="field"><label>Поставщик</label><select name="vendor_id"><option value="">— выбрать позже —</option>
+      {% for v in vendors.values() %}<option value="{{ v.id }}">{{ v.name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Объект</label><select name="project_id"><option value="">—</option>
+      {% for p in projects.values() %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Комментарий</label><input name="note" placeholder="Материалы для монтажа"></div>
+    <div class="flex" style="gap:6px"><button class="btn primary">+ Запрос цены</button>
+      <a class="btn" href="{{ url_for('erp.vendors') }}">Поставщики</a>
+      <a class="btn" href="{{ url_for('erp.reorder') }}">Пополнение</a></div>
+  </form>
+</div>
+
+<div class="seg mt">
+  <a class="{{ 'on' if not status }}" href="{{ url_for('erp.purchase') }}">Все</a>
+  {% for code, title in statuses %}<a class="{{ 'on' if status==code }}" href="{{ url_for('erp.purchase', status=code) }}">{{ title }} ({{ summary.by[code].count }})</a>{% endfor %}
+</div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Номер</th><th>Поставщик</th><th>Объект</th><th class="right">Сумма</th><th>Ожидается</th><th>Статус</th></tr></thead>
+  <tbody>
+  {% for po in rows %}
+    <tr>
+      <td><a href="{{ url_for('erp.purchase_order', poid=po.id) }}"><b>{{ po.number }}</b></a>
+        <div class="tiny muted">{{ po.created_at.strftime('%d.%m.%Y') }}</div></td>
+      <td class="small">{{ vendors[po.vendor_id].name if po.vendor_id and vendors.get(po.vendor_id) else '—' }}</td>
+      <td class="small">{% if po.project_id and projects.get(po.project_id) %}<a href="{{ url_for('erp.project', pid=po.project_id) }}">{{ projects[po.project_id].name }}</a>{% else %}—{% endif %}</td>
+      <td class="right"><b>{{ po.amount_total|money(po.currency) }}</b></td>
+      <td class="small">{{ po.expected_on.strftime('%d.%m.%Y') if po.expected_on else '—' }}
+        {% if po.received_on %}<div class="tiny muted">принято {{ po.received_on.strftime('%d.%m') }}</div>{% endif %}</td>
+      <td><span class="badge {{ 'ok' if po.status in ('received','billed') else ('warn' if po.status in ('sent','confirmed') else '') }}">{{ names.get(po.status, po.status) }}</span></td>
+    </tr>
+  {% else %}<tr><td colspan="6" class="muted">Закупок нет</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+
+{% if to_pay %}
+<h3 class="mt2">К оплате поставщикам</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Заказ</th><th>Поставщик</th><th>Срок</th><th class="right">Оплачено</th><th class="right">Остаток</th></tr></thead>
+  <tbody>{% for row in to_pay %}
+    <tr {% if row.overdue %}style="background:var(--danger-soft)"{% endif %}>
+      <td><a href="{{ url_for('erp.purchase_order', poid=row.po.id) }}">{{ row.po.number }}</a></td>
+      <td class="small">{{ vendors[row.po.vendor_id].name if row.po.vendor_id and vendors.get(row.po.vendor_id) else '—' }}</td>
+      <td class="small">{{ row.po.bill_due_on.strftime('%d.%m.%Y') if row.po.bill_due_on else '—' }}
+        {% if row.overdue %}<b style="color:var(--danger)"> просрочено {{ row.days }} дн.</b>{% endif %}</td>
+      <td class="right">{{ row.paid|money }}</td>
+      <td class="right"><b>{{ row.balance|money }}</b></td>
+    </tr>
+  {% endfor %}</tbody>
+</table></div>
+{% endif %}
+{% endblock %}

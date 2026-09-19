@@ -1,0 +1,37 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Задачи по всем объектам{% endblock %}
+{% block content %}
+<form class="flex mb" style="gap:8px">
+  <select name="assignee" onchange="this.form.submit()">
+    <option value="">Все исполнители</option>
+    {% for u in users %}<option value="{{ u.id }}" {{ 'selected' if request.args.get('assignee')|int == u.id }}>{{ u.full_name or u.email }}</option>{% endfor %}
+  </select>
+  <a class="btn sm" href="{{ url_for('erp.projects') }}">К объектам</a>
+</form>
+
+<div class="kanban">
+  {% for code, title in stages %}
+  <div class="col" data-stage="{{ code }}">
+    <h4>{{ title }} <span class="badge">{{ by_stage[code]|length }}</span></h4>
+    {% for t in by_stage[code] %}
+      <div class="card sm">
+        <b>{{ t.title }}</b>
+        {% if t.project_id %}<div class="tiny muted">{{ names.get(t.project_id, '') }}</div>{% endif %}
+        <div class="tiny muted">
+          {% if t.due_on %}<span style="color:{{ 'var(--danger)' if t.due_on < today and t.stage != 'done' else 'inherit' }}">до {{ t.due_on.strftime('%d.%m.%Y') }}</span>{% endif %}
+          {% if t.planned_hours %} · {{ t.planned_hours|round(1) }} ч{% endif %}
+          {% if t.priority == 2 %} · <b style="color:var(--danger)">срочно</b>{% elif t.priority == 1 %} · важно{% endif %}
+        </div>
+        <form method="post" action="{{ url_for('erp.task_stage', tid=t.id) }}" class="flex mt" style="gap:4px">{{ csrf() }}
+          <select name="stage" class="sm" onchange="this.form.submit()">
+            {% for c, tt in stages %}<option value="{{ c }}" {{ 'selected' if t.stage==c }}>{{ tt }}</option>{% endfor %}
+          </select>
+          {% if t.project_id %}<a class="btn sm ghost" href="{{ url_for('erp.project', pid=t.project_id) }}">↗</a>{% endif %}
+        </form>
+      </div>
+    {% else %}<p class="tiny muted">пусто</p>{% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

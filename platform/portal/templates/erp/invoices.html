@@ -1,0 +1,58 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Счета и оплаты{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ summary.issued|money(tenant.currency) }}</b><span>выставлено всего</span></div>
+  <div class="kpi"><b>{{ summary.paid|money }}</b><span>оплачено</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--danger)' if summary.debt else 'inherit' }}">{{ summary.debt|money }}</b><span>дебиторка ({{ summary.overdue_count }} просрочено)</span></div>
+  <div class="kpi"><b>{{ summary.collected_month|money }}</b><span>поступило в этом месяце</span></div>
+  <div class="kpi"><b>{{ summary.avg_days_to_pay }}</b><span>дней до оплаты в среднем</span></div>
+</div>
+
+<div class="card mt">
+  <h3>Дебиторка по срокам</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Не просрочено</th><th>1–30 дней</th><th>31–60</th><th>61–90</th><th>свыше 90</th><th class="right">Итого</th></tr></thead>
+    <tbody><tr>
+      <td>{{ aging.buckets.current|money }}</td>
+      <td>{{ aging.buckets.d1_30|money }}</td>
+      <td>{{ aging.buckets.d31_60|money }}</td>
+      <td style="color:var(--warn)">{{ aging.buckets.d61_90|money }}</td>
+      <td style="color:var(--danger)"><b>{{ aging.buckets.d90|money }}</b></td>
+      <td class="right"><b>{{ aging.total|money }}</b></td>
+    </tr></tbody>
+  </table></div>
+  <form method="post" action="{{ url_for('erp.invoice_actions') }}" class="flex mt" style="gap:6px">{{ csrf() }}
+    <button class="btn sm" name="action" value="refresh">Пересчитать статусы</button>
+    <button class="btn sm" name="action" value="remind">Отправить напоминания</button>
+    <button class="btn sm" name="action" value="run_plans">Выставить регулярные счета</button>
+    <a class="btn sm ghost" href="{{ url_for('erp.plans') }}">Планы повторяющихся счетов</a>
+  </form>
+</div>
+
+<div class="seg mt">
+  <a class="{{ 'on' if not status }}" href="{{ url_for('erp.invoices') }}">Все</a>
+  {% for code in ['issued','partial','paid','overdue','cancelled'] %}
+  <a class="{{ 'on' if status==code }}" href="{{ url_for('erp.invoices', status=code) }}">{{ names.get(code, code) }}</a>{% endfor %}
+</div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Документ</th><th>Плательщик</th><th>Выставлен</th><th>Срок</th><th class="right">Сумма</th><th class="right">Остаток</th><th>Статус</th></tr></thead>
+  <tbody>
+  {% for d in rows %}
+    <tr {% if d.status == 'overdue' %}style="background:var(--danger-soft)"{% endif %}>
+      <td><a href="{{ url_for('erp.invoice', did=d.id) }}"><b>{{ d.number }}</b></a>
+        <div class="tiny muted">{{ type_names.get(d.type, d.type) }}</div></td>
+      <td class="small">{% if d.contact_id and contacts.get(d.contact_id) %}{{ contacts[d.contact_id].company or contacts[d.contact_id].name }}
+        {% elif d.partner_id and partners.get(d.partner_id) %}{{ partners[d.partner_id].name }}{% else %}—{% endif %}</td>
+      <td class="small">{{ d.issued_at.strftime('%d.%m.%Y') }}</td>
+      <td class="small">{{ d.due_at.strftime('%d.%m.%Y') if d.due_at else '—' }}</td>
+      <td class="right">{{ d.amount|money(d.currency) }}</td>
+      <td class="right"><b>{{ balances[d.id]|money }}</b></td>
+      <td><span class="badge {{ 'ok' if d.status=='paid' else ('danger' if d.status=='overdue' else 'warn' if d.status=='partial' else '') }}">{{ names.get(d.status, d.status) }}</span></td>
+    </tr>
+  {% else %}<tr><td colspan="7" class="muted">Счетов нет</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

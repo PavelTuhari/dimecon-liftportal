@@ -1,0 +1,113 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Закупка {{ po.number }}{% endblock %}
+{% block content %}
+
+<div class="flex between wrap">
+  <span class="badge {{ 'ok' if po.status in ('received','billed') else ('warn' if po.status in ('sent','confirmed') else '') }}">{{ names.get(po.status, po.status) }}</span>
+  <div class="flex" style="gap:6px">
+    {% if po.status == 'rfq' %}<form method="post">{{ csrf() }}<input type="hidden" name="action" value="send"><button class="btn sm primary">Отправить запрос</button></form>{% endif %}
+    {% if po.status in ('rfq','sent') %}<form method="post">{{ csrf() }}<input type="hidden" name="action" value="confirm"><button class="btn sm primary">Подтвердить заказ</button></form>{% endif %}
+  </div>
+</div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Позиция</th><th class="right">Заказано</th><th class="right">Цена</th><th class="right">Сумма</th><th class="right">Принято</th><th></th></tr></thead>
+  <tbody>
+  {% for l in po.lines %}
+    <tr>
+      <td>{{ l.name }}</td>
+      <td class="right">{{ l.qty|round(2) }} {{ l.unit }}</td>
+      <td class="right">{{ l.price|money }}</td>
+      <td class="right"><b>{{ l.amount|money }}</b></td>
+      <td class="right">{{ l.received_qty|round(2) }}
+        {% if l.received_qty >= l.qty %}<span class="badge ok">полностью</span>{% endif %}</td>
+      <td><form method="post">{{ csrf() }}<input type="hidden" name="action" value="line_delete">
+        <input type="hidden" name="line_id" value="{{ l.id }}"><button class="btn sm ghost">✕</button></form></td>
+    </tr>
+  {% else %}<tr><td colspan="6" class="muted">Позиций нет</td></tr>{% endfor %}
+  </tbody>
+  <tfoot>
+    <tr><td colspan="3" class="right">Без НДС</td><td class="right">{{ po.amount_net|money }}</td><td colspan="2"></td></tr>
+    <tr><td colspan="3" class="right">НДС {{ po.vat_pct|round(0) }} %</td><td class="right">{{ po.amount_vat|money }}</td><td colspan="2"></td></tr>
+    <tr><td colspan="3" class="right"><b>Итого</b></td><td class="right"><b>{{ po.amount_total|money(po.currency) }}</b></td><td colspan="2"></td></tr>
+  </tfoot>
+</table></div>
+
+<div class="grid g2 mt">
+  <form method="post" class="card">{{ csrf() }}<input type="hidden" name="action" value="line">
+    <h3>Добавить позицию</h3>
+    <div class="field"><label>Наименование *</label><input name="name" required placeholder="Трос стальной 16 мм"></div>
+    <div class="field"><label>Из товаров компании</label><select name="product_id"><option value="">— вручную —</option>
+      {% for p in products %}<option value="{{ p.id }}">{{ tr(p.title) }}</option>{% endfor %}</select></div>
+    <div class="grid g3">
+      <div class="field"><label>Кол-во</label><input name="qty" type="number" step="0.01" value="1"></div>
+      <div class="field"><label>Единица</label><input name="unit" value="шт"></div>
+      <div class="field"><label>Цена</label><input name="price" type="number" step="0.01" value="0"></div>
+    </div>
+    <button class="btn primary">Добавить</button>
+  </form>
+
+  <div class="card">
+    <h3>Параметры и приёмка</h3>
+    <form method="post">{{ csrf() }}<input type="hidden" name="action" value="save">
+      <div class="grid g2">
+        <div class="field"><label>Поставщик</label><select name="vendor_id"><option value="">—</option>
+          {% for v in vendors %}<option value="{{ v.id }}" {{ 'selected' if po.vendor_id==v.id }}>{{ v.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label>Объект</label><select name="project_id"><option value="">—</option>
+          {% for p in projects %}<option value="{{ p.id }}" {{ 'selected' if po.project_id==p.id }}>{{ p.name }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="grid g3">
+        <div class="field"><label>Соглашение</label><select name="agreement_id"><option value="">—</option>
+          {% for a in agreements %}<option value="{{ a.id }}" {{ 'selected' if po.agreement_id==a.id }}>{{ a.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label>НДС, %</label><input name="vat_pct" type="number" step="0.1" value="{{ po.vat_pct }}"></div>
+        <div class="field"><label>Ожидается</label><input name="expected_on" type="date" value="{{ po.expected_on or '' }}"></div>
+      </div>
+      <div class="field"><label>Комментарий</label><textarea name="note" rows="2">{{ po.note }}</textarea></div>
+      <button class="btn sm primary">Сохранить</button>
+    </form>
+
+    {% if po.status in ('confirmed','sent','received') and po.lines %}
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="receive">
+      <h4>Приёмка</h4>
+      {% for l in po.lines %}
+      <div class="flex" style="gap:8px;align-items:center;margin-bottom:4px">
+        <span class="small" style="flex:1">{{ l.name }} <span class="muted">(заказано {{ l.qty|round(2) }} {{ l.unit }}, принято {{ l.received_qty|round(2) }})</span></span>
+        <input name="recv_{{ l.id }}" type="number" step="0.01" placeholder="принять" style="width:110px">
+      </div>
+      {% endfor %}
+      <button class="btn sm primary">Принять (пусто = всё заказанное)</button>
+      <p class="tiny muted">Принятое количество увеличивает остаток товара на складе.</p>
+    </form>
+    {% endif %}
+
+    {% if po.status in ('received','confirmed','billed') %}
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="bill">
+      <h4>Счёт поставщика</h4>
+      <div class="grid g2">
+        <div class="field"><label>Сумма</label><input name="bill_amount" type="number" step="0.01" value="{{ po.billed_amount or po.amount_total }}"></div>
+        <div class="field"><label>Оплатить до</label><input name="bill_due_on" type="date" value="{{ po.bill_due_on or '' }}"></div>
+      </div>
+      <button class="btn sm">Провести счёт</button>
+    </form>
+    {% endif %}
+
+    {% if po.status == 'billed' %}
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="pay">
+      <h4>Оплата: внесено {{ paid|money(po.currency) }} из {{ (po.billed_amount or po.amount_total)|money }}</h4>
+      <div class="grid g4">
+        <div class="field"><label>Сумма</label><input name="amount" type="number" step="0.01" required></div>
+        <div class="field"><label>Дата</label><input name="paid_on" type="date" value="{{ now.strftime('%Y-%m-%d') }}"></div>
+        <div class="field"><label>Способ</label><select name="method"><option value="bank">банк</option><option value="cash">наличные</option><option value="card">карта</option><option value="offset">взаимозачёт</option></select></div>
+        <div class="field"><label>Документ</label><input name="reference" placeholder="п/п 214"></div>
+      </div>
+      <button class="btn sm primary">Записать оплату</button>
+    </form>
+    {% if payments %}<table class="breakdown mt"><tbody>
+      {% for p in payments %}<tr><td>{{ p.paid_on.strftime('%d.%m.%Y') }} · {{ p.method }} {{ p.reference }}</td>
+        <td class="right">{{ p.amount|money }}</td></tr>{% endfor %}
+    </tbody></table>{% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

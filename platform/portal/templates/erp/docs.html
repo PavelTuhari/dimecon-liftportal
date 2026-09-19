@@ -1,0 +1,159 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Документы{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ summary.files }}</b><span>файлов ({{ summary.size_mb }} МБ)</span></div>
+  <div class="kpi"><b>{{ summary.folders }}</b><span>рабочих пространств</span></div>
+  <div class="kpi"><b>{{ summary.tags }}</b><span>тегов</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--warn)' if summary.pending else 'inherit' }}">{{ summary.pending }}</b><span>запросов ожидают</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--danger)' if summary.expiring else 'inherit' }}">{{ summary.expiring }}</b><span>истекает срок</span></div>
+</div>
+
+{% if expiring %}<div class="alert warning mt">Скоро истекает срок действия: {% for m in expiring %}<b>{{ m.filename }}</b> ({{ m.expires_on.strftime('%d.%m.%Y') }}){% if not loop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+
+<div class="grid" style="grid-template-columns:260px 1fr;gap:16px;align-items:start" class="mt">
+  <div class="card">
+    <h3>Пространства</h3>
+    <a class="btn sm block {{ 'primary' if not folder_id }}" href="{{ url_for('erp.docs') }}">Все файлы</a>
+    {% for row in tree %}
+      <a class="btn sm block {{ 'primary' if folder_id == row.folder.id }}" style="margin-top:4px;padding-left:{{ 8 + row.level*12 }}px"
+         href="{{ url_for('erp.docs', folder=row.folder.id) }}">{{ row.folder.name }} <span class="badge">{{ row.count }}</span></a>
+      <div class="tiny muted" style="padding-left:{{ 12 + row.level*12 }}px">{{ access_names.get(row.folder.access, row.folder.access) }}</div>
+    {% endfor %}
+
+    <form method="post" class="mt2">{{ csrf() }}<input type="hidden" name="action" value="folder">
+      <div class="field"><label>Новое пространство</label><input name="name" required placeholder="Договоры 2026"></div>
+      <div class="field"><label>Доступ</label><select name="access">
+        {% for code, title in access_names.items() %}<option value="{{ code }}">{{ title }}</option>{% endfor %}</select></div>
+      <button class="btn sm">Создать</button>
+    </form>
+
+    {% if tags %}<h4 class="mt2">Теги</h4>
+      <div class="flex wrap" style="gap:4px">
+        {% for name, count in tags %}<a class="badge" href="{{ url_for('erp.docs', tag=name) }}">{{ name }} {{ count }}</a>{% endfor %}
+      </div>{% endif %}
+  </div>
+
+  <div>
+    <form method="post" enctype="multipart/form-data" class="card">{{ csrf() }}<input type="hidden" name="action" value="upload">
+      <h3>Загрузить документы</h3>
+      <div class="grid g2">
+        <div class="field"><label>Файлы</label><input type="file" name="files" multiple required></div>
+        <div class="field"><label>Пространство</label><select name="folder_id">
+          {% for row in tree %}<option value="{{ row.folder.id }}" {{ 'selected' if folder_id == row.folder.id }}>{{ row.folder.name }}</option>{% endfor %}</select></div>
+      </div>
+      <div class="grid g4">
+        <div class="field"><label>Теги</label><input name="tags" placeholder="договор, 2026"></div>
+        <div class="field"><label>Привязать к</label><select name="entity">
+          <option value="">— ни к чему —</option><option value="order">заявке</option><option value="project">объекту</option>
+          <option value="purchase">закупке</option><option value="partner">партнёру</option></select></div>
+        <div class="field"><label>Номер записи</label><input name="entity_id" type="number" placeholder="id"></div>
+        <div class="field"><label>Действует до</label><input name="expires_on" type="date"></div>
+      </div>
+      <div class="field"><label>Примечание</label><input name="note" placeholder="Паспорт крана КБ-403А"></div>
+      <button class="btn primary">Загрузить</button>
+    </form>
+
+    <form class="flex mt" style="gap:8px">
+      <input name="q" value="{{ q }}" placeholder="Поиск по имени, тегам и примечанию" style="flex:1">
+      {% if folder_id %}<input type="hidden" name="folder" value="{{ folder_id }}">{% endif %}
+      <button class="btn">Найти</button>
+      {% if q or tag %}<a class="btn ghost" href="{{ url_for('erp.docs') }}">Сброс</a>{% endif %}
+    </form>
+
+    <div class="table-wrap mt"><table>
+      <thead><tr><th>Файл</th><th>Теги</th><th>Привязка</th><th>Версия</th><th>Загружен</th><th></th></tr></thead>
+      <tbody>{% for m in rows %}
+        <tr>
+          <td><a href="{{ m.url|asset }}" target="_blank"><b>{{ m.filename }}</b></a>
+            {% if m.note %}<div class="tiny muted">{{ m.note }}</div>{% endif %}
+            {% if m.expires_on %}<div class="tiny" style="color:var(--warn)">действует до {{ m.expires_on.strftime('%d.%m.%Y') }}</div>{% endif %}</td>
+          <td class="small">{{ m.tags or '—' }}</td>
+          <td class="small">{{ (m.entity ~ ' #' ~ m.entity_id) if m.entity else '—' }}</td>
+          <td class="small">v{{ m.version }}{% if m.status == 'approved' %} <span class="badge ok">утверждён</span>{% endif %}</td>
+          <td class="small">{{ m.created_at.strftime('%d.%m.%Y') }}<div class="tiny muted">{{ (m.size / 1024)|round(0)|int }} КБ</div></td>
+          <td>
+            <details><summary class="btn sm ghost">Действия</summary>
+              <form method="post" action="{{ url_for('erp.doc_file', mid=m.id) }}" class="mt" style="min-width:240px">{{ csrf() }}
+                <input type="hidden" name="action" value="tags">
+                <div class="field"><label class="tiny">Теги</label><input name="tags" value="{{ m.tags }}"></div>
+                <button class="btn sm">Сохранить теги</button></form>
+              <form method="post" action="{{ url_for('erp.doc_file', mid=m.id) }}" enctype="multipart/form-data" class="mt">{{ csrf() }}
+                <input type="hidden" name="action" value="version">
+                <div class="field"><label class="tiny">Новая версия</label><input type="file" name="file"></div>
+                <button class="btn sm">Загрузить версию</button></form>
+              <form method="post" action="{{ url_for('erp.doc_file', mid=m.id) }}" class="flex mt" style="gap:4px">{{ csrf() }}
+                <button class="btn sm" name="action" value="approve">Утвердить</button>
+                <button class="btn sm ghost" name="action" value="delete">Удалить</button></form>
+            </details>
+          </td>
+        </tr>
+      {% else %}<tr><td colspan="6" class="muted">Файлов нет</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="grid g2 mt2">
+  <div class="card">
+    <h3>Запросы документов</h3>
+    <p class="tiny muted">Клиент или подрядчик получает ссылку и загружает файл без входа в кабинет.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Что нужно</th><th>От кого</th><th>Срок</th><th>Ссылка</th><th></th></tr></thead>
+      <tbody>{% for r in requests %}
+        <tr><td>{{ r.name }}</td><td class="small">{{ r.to_name or r.to_email or '—' }}</td>
+          <td class="small">{{ r.due_on.strftime('%d.%m.%Y') if r.due_on else '—' }}</td>
+          <td class="tiny"><code>{{ url_for('site.doc_upload', token=r.request_token, _external=True) }}</code></td>
+          <td><form method="post" action="{{ url_for('erp.doc_request_cancel', rid=r.id) }}">{{ csrf() }}
+            <button class="btn sm ghost">Отменить</button></form></td></tr>
+      {% else %}<tr><td colspan="5" class="muted">Активных запросов нет</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="request">
+      <div class="grid g2">
+        <div class="field"><label>Что нужно *</label><input name="name" required placeholder="Доверенность на получение"></div>
+        <div class="field"><label>Куда отправить</label><input name="to_email" type="email" placeholder="client@example.com"></div>
+      </div>
+      <div class="grid g3">
+        <div class="field"><label>Кому</label><input name="to_name" placeholder="Ион Русу"></div>
+        <div class="field"><label>Срок</label><input name="due_on" type="date"></div>
+        <div class="field"><label>В пространство</label><select name="folder_id">
+          {% for row in tree %}<option value="{{ row.folder.id }}">{{ row.folder.name }}</option>{% endfor %}</select></div>
+      </div>
+      <button class="btn primary sm">Запросить документ</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Правила автообработки</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Правило</th><th>Условие</th><th>Действие</th><th class="right">Сработало</th></tr></thead>
+      <tbody>{% for r in rules %}
+        <tr><td>{{ r.name }}</td>
+          <td class="small">{{ r.match_tag or r.match_mime or 'любой файл' }}</td>
+          <td class="small">{{ {'move':'переложить','tag':'пометить','task':'создать задачу','notify':'уведомить'}.get(r.action, r.action) }}</td>
+          <td class="right">{{ r.runs }}</td></tr>
+      {% else %}<tr><td colspan="4" class="muted">Правил нет</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="rule">
+      <div class="grid g2">
+        <div class="field"><label>Название *</label><input name="name" required placeholder="Счета — в бухгалтерию"></div>
+        <div class="field"><label>Если в имени или тегах</label><input name="match_tag" placeholder="счёт"></div>
+      </div>
+      <div class="grid g2">
+        <div class="field"><label>Тип файла содержит</label><input name="match_mime" placeholder="pdf"></div>
+        <div class="field"><label>Действие</label><select name="rule_action">
+          <option value="move">переложить в пространство</option><option value="tag">добавить теги</option>
+          <option value="task">создать задачу</option><option value="notify">уведомить по почте</option></select></div>
+      </div>
+      <div class="grid g4">
+        <div class="field"><label>Пространство</label><select name="to_folder_id"><option value="">—</option>
+          {% for row in tree %}<option value="{{ row.folder.id }}">{{ row.folder.name }}</option>{% endfor %}</select></div>
+        <div class="field"><label>Теги</label><input name="add_tags" placeholder="бухгалтерия"></div>
+        <div class="field"><label>Задача</label><input name="task_title" placeholder="Провести счёт"></div>
+        <div class="field"><label>E-mail</label><input name="notify_email" type="email"></div>
+      </div>
+      <button class="btn primary sm">Добавить правило</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

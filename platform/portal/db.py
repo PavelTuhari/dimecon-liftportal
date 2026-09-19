@@ -52,6 +52,72 @@ def init_engine(app):
 def create_all():
     from . import models  # noqa: F401  (регистрация моделей)
     Base.metadata.create_all(engine)
+    _sync_columns()
+
+
+def _sync_columns():
+    """Добавить недостающие столбцы в уже существующие таблицы.
+
+    create_all() создаёт новые таблицы, но не меняет старые: при обновлении платформы
+    на рабочей базе новые поля моделей иначе остались бы без столбцов. Добавляем их
+    по одному — ALTER TABLE ADD COLUMN понимают и MySQL, и SQLite. Существующие столбцы
+    не трогаем и ничего не удаляем.
+    """
+    from sqlalchemy import inspect as sa_inspect
+
+    insp = sa_inspect(engine)
+    existing_tables = set(insp.get_table_names())
+    dialect = engine.dialect
+    added = []
+    with engine.begin() as conn:
+        for table in Base.metadata.sorted_tables:
+            if table.name not in existing_tables:
+                continue
+            have = {c["name"] for c in insp.get_columns(table.name)}
+            for col in table.columns:
+                if col.name in have:
+                    continue
+                col_type = col.type.compile(dialect=dialect)
+                sql = f"ALTER TABLE {table.name} ADD COLUMN {col.name} {col_type}"
+                if col.default is not None and getattr(col.default, "is_scalar", False):
+                    value = col.default.arg
+                    if isinstance(value, str):
+                        sql += f" DEFAULT '{value}'"
+                    elif isinstance(value, bool):
+                        sql += f" DEFAULT {1 if value else 0}"
+                    elif isinstance(value, (int, float)):
+                        sql += f" DEFAULT {value}"
+                conn.execute(text(sql))
+                added.append(f"{table.name}.{col.name}")
+    added += _relax_nullable(insp)
+    return added
+
+
+def _relax_nullable(insp) -> list[str]:
+    """Снять NOT NULL там, где модель уже допускает пустое значение.
+
+    Пример: объекты работ раньше всегда принадлежали партнёру B2B, теперь бывают
+    внутренними и клиентскими. На SQLite столбцы не переопределяем — там базы
+    создаются заново и сразу с правильной схемой.
+    """
+    if engine.dialect.name != "mysql":
+        return []
+    changed = []
+    with engine.begin() as conn:
+        for table in Base.metadata.sorted_tables:
+            try:
+                db_cols = {c["name"]: c for c in insp.get_columns(table.name)}
+            except Exception:  # noqa: BLE001 — таблицы может не быть
+                continue
+            for col in table.columns:
+                info = db_cols.get(col.name)
+                if not info or col.primary_key:
+                    continue
+                if col.nullable and info.get("nullable") is False:
+                    col_type = col.type.compile(dialect=engine.dialect)
+                    conn.execute(text(f"ALTER TABLE {table.name} MODIFY {col.name} {col_type} NULL"))
+                    changed.append(f"{table.name}.{col.name} → NULL")
+    return changed
 
 
 def mysql_ddl() -> str:

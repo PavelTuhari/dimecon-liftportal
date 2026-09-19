@@ -1,0 +1,60 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Объекты и проекты{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ board.rows|length }}</b><span>объектов</span></div>
+  <div class="kpi"><b>{{ board.revenue|money(tenant.currency) }}</b><span>выручка по объектам</span></div>
+  <div class="kpi"><b>{{ board.cost|money(tenant.currency) }}</b><span>затраты</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--ok)' if board.margin >= 0 else 'var(--danger)' }}">{{ board.margin|money(tenant.currency) }}</b><span>маржа</span></div>
+  <div class="kpi"><b>{{ board.hours }}</b><span>отработано часов</span></div>
+</div>
+
+{% if board.late %}<div class="alert warning">Просрочен срок сдачи: {% for r in board.late %}<b>{{ r.project.name }}</b> (до {{ r.project.ends_at.strftime('%d.%m.%Y') }}){% if not loop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+
+<div class="flex between wrap mt">
+  <h3 style="margin:0">План и факт по объектам</h3>
+  <a class="btn primary sm" href="{{ url_for('erp.project_new') }}">+ Новый объект</a>
+</div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Объект</th><th>Стадия</th><th>Готовность</th><th class="right">План выручки</th>
+    <th class="right">Выручка</th><th class="right">Затраты</th><th class="right">Маржа</th><th class="right">Часы</th></tr></thead>
+  <tbody>
+  {% for r in board.rows %}
+    <tr>
+      <td><a href="{{ url_for('erp.project', pid=r.project.id) }}"><b>{{ r.project.name }}</b></a>
+        {% if r.project.code %}<span class="tiny muted"> · {{ r.project.code }}</span>{% endif %}
+        {% if r.project.ends_at %}<div class="tiny muted">срок {{ r.project.ends_at.strftime('%d.%m.%Y') }}</div>{% endif %}</td>
+      <td><span class="badge">{{ {'planning':'Подготовка','works':'Работы','handover':'Сдача','closed':'Закрыт'}.get(r.project.stage, r.project.stage) }}</span></td>
+      <td style="min-width:120px">
+        <div class="bar"><i style="width:{{ r.progress.pct }}%"></i></div>
+        <span class="tiny muted">{{ r.progress.done }} из {{ r.progress.total }} задач</span>
+      </td>
+      <td class="right">{{ r.budget|money }}</td>
+      <td class="right"><b>{{ r.revenue|money }}</b>{% if r.invoiced %}<div class="tiny muted">выставлено {{ r.invoiced|money }}</div>{% endif %}</td>
+      <td class="right">{{ r.cost|money }}<div class="tiny muted">закупки {{ r.purchases|money }} · труд {{ r.labour|money }}</div></td>
+      <td class="right" style="color:{{ 'var(--ok)' if r.margin >= 0 else 'var(--danger)' }}"><b>{{ r.margin|money }}</b>
+        <div class="tiny muted">{{ r.margin_pct }} %</div></td>
+      <td class="right">{{ r.hours }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8" class="muted">Объектов пока нет. Создайте первый — задачи, часы, закупки и счета будут собираться по нему.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+
+{% if templates %}
+<h3 class="mt2">Шаблоны объектов</h3>
+<div class="grid g3">{% for t in templates %}
+  <div class="card"><b>{{ t.name }}</b>
+    <p class="small muted" style="margin:6px 0">{{ t.notes[:120] }}</p>
+    <form method="post" action="{{ url_for('erp.project_new') }}" class="flex" style="gap:6px">{{ csrf() }}
+      <input type="hidden" name="template_id" value="{{ t.id }}">
+      <input name="name" placeholder="Название нового объекта" required>
+      <button class="btn sm primary">Создать</button>
+    </form>
+  </div>
+{% endfor %}</div>
+{% endif %}
+{% endblock %}

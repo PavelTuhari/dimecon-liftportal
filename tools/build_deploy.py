@@ -84,7 +84,33 @@ def main():
     for line in r.stdout.splitlines():
         if line.startswith(("Перенесено", "Фотографии", "ГОТОВО")):
             print("   " + line)
-    print(f"   база: {db_path.stat().st_size / 1024 / 1024:.1f} МБ")
+
+    # демо-данные управленческих модулей: объекты, предложения, закупки, счета, таблицы
+    r2 = subprocess.run([sys.executable, "tools/seed_erp.py"], cwd=str(ROOT / "platform"),
+                        env=env, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if r2.returncode != 0:
+        print(r2.stdout[-1500:])
+        print(r2.stderr[-1500:])
+        raise SystemExit("демо-данные модулей в базу пакета не добавлены")
+    for line in r2.stdout.splitlines():
+        if line.strip() and not line.startswith("ГОТОВО"):
+            print("   " + line.strip())
+
+    # закрываем журнал: без этого на сервер уезжает файл, к которому нужны -wal и -shm,
+    # и приложение падает с «database disk image is malformed»
+    import sqlite3
+    con = sqlite3.connect(db_path)
+    con.execute("PRAGMA journal_mode=DELETE")
+    con.execute("VACUUM")
+    integrity = con.execute("PRAGMA integrity_check").fetchone()[0]
+    con.close()
+    for suffix in ("-wal", "-shm"):
+        side = Path(str(db_path) + suffix)
+        if side.exists():
+            side.unlink()
+    if integrity != "ok":
+        raise SystemExit(f"база пакета повреждена: {integrity}")
+    print(f"   база: {db_path.stat().st_size / 1024 / 1024:.1f} МБ, проверка целостности — {integrity}")
 
     print("2. Приложение")
     n = copy_tree(ROOT / "platform", APP)

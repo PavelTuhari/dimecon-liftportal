@@ -1,0 +1,74 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Поставщики и соглашения{% endblock %}
+{% block content %}
+
+<h3>Анализ закупок по поставщикам</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Поставщик</th><th class="right">Заказов</th><th class="right">Сумма</th><th class="right">В работе</th>
+    <th class="right">Опоздали</th><th class="right">Средняя задержка</th><th>Контакты</th></tr></thead>
+  <tbody>{% for r in stats %}
+    <tr>
+      <td><b>{{ r.vendor.name }}</b>{% if r.vendor.idno %}<div class="tiny muted">IDNO {{ r.vendor.idno }}</div>{% endif %}</td>
+      <td class="right">{{ r.orders }}</td>
+      <td class="right"><b>{{ r.amount|money(tenant.currency) }}</b></td>
+      <td class="right">{{ r.open }}</td>
+      <td class="right" style="color:{{ 'var(--danger)' if r.late_pct > 20 else 'inherit' }}">{{ r.late }} ({{ r.late_pct }} %)</td>
+      <td class="right">{{ r.avg_delay }} дн.</td>
+      <td class="small">{{ r.vendor.phone }}{% if r.vendor.email %}<br>{{ r.vendor.email }}{% endif %}</td>
+    </tr>
+  {% else %}<tr><td colspan="7" class="muted">Поставщиков нет</td></tr>{% endfor %}</tbody>
+</table></div>
+
+<div class="grid g2 mt2">
+  <form method="post" class="card">{{ csrf() }}
+    <h3>Новый поставщик</h3>
+    <div class="grid g2">
+      <div class="field"><label>Название *</label><input name="name" required></div>
+      <div class="field"><label>IDNO</label><input name="idno"></div>
+    </div>
+    <div class="grid g2">
+      <div class="field"><label>Контактное лицо</label><input name="contact_name"></div>
+      <div class="field"><label>Телефон</label><input name="phone"></div>
+    </div>
+    <div class="grid g3">
+      <div class="field"><label>E-mail</label><input name="email" type="email"></div>
+      <div class="field"><label>Отсрочка, дн.</label><input name="payment_days" type="number" value="14"></div>
+      <div class="field"><label>Срок поставки, дн.</label><input name="lead_days" type="number" value="3"></div>
+    </div>
+    <div class="field"><label>Заметки</label><textarea name="notes" rows="2"></textarea></div>
+    <button class="btn primary">Сохранить</button>
+  </form>
+
+  <form method="post" action="{{ url_for('erp.vendor_agreement') }}" class="card">{{ csrf() }}
+    <h3>Рамочное соглашение или тендер</h3>
+    <div class="field"><label>Название *</label><input name="name" required placeholder="Металлопрокат 2026, годовая цена"></div>
+    <div class="grid g2">
+      <div class="field"><label>Поставщик</label><select name="vendor_id">{% for v in vendors %}<option value="{{ v.id }}">{{ v.name }}</option>{% endfor %}</select></div>
+      <div class="field"><label>Тип</label><select name="kind"><option value="blanket">рамочное</option><option value="tender">тендер</option></select></div>
+    </div>
+    <div class="grid g4">
+      <div class="field"><label>С</label><input name="valid_from" type="date"></div>
+      <div class="field"><label>По</label><input name="valid_to" type="date"></div>
+      <div class="field"><label>Скидка, %</label><input name="discount_pct" type="number" step="0.1" value="0"></div>
+      <div class="field"><label>Отсрочка, дн.</label><input name="payment_days" type="number" value="14"></div>
+    </div>
+    <button class="btn primary">Добавить</button>
+    {% if agreements %}
+    <h4 class="mt2">Действующие</h4>
+    {% for a in agreements %}<div class="small">{{ a.name }} — скидка {{ a.terms.get('discount_pct', 0) }} %,
+      {{ a.valid_from or '—' }} … {{ a.valid_to or '—' }}</div>{% endfor %}
+    {% endif %}
+  </form>
+</div>
+
+<h3 class="mt2">Список поставщиков</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Название</th><th>Контакт</th><th>Отсрочка</th><th>Поставка</th><th>Статус</th></tr></thead>
+  <tbody>{% for v in vendors %}<tr>
+    <td><b>{{ v.name }}</b></td><td class="small">{{ v.contact_name }} {{ v.phone }}</td>
+    <td>{{ v.payment_days }} дн.</td><td>{{ v.lead_days }} дн.</td>
+    <td><span class="badge {{ 'ok' if v.status == 'active' }}">{{ v.status }}</span></td>
+  </tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Коммерческие предложения{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ stats.total }}</b><span>всего предложений</span></div>
+  <div class="kpi"><b>{{ stats.open_amount|money(tenant.currency) }}</b><span>в работе</span></div>
+  <div class="kpi"><b>{{ stats.won_amount|money(tenant.currency) }}</b><span>выиграно</span></div>
+  <div class="kpi"><b>{{ stats.conversion }} %</b><span>конверсия отправленных</span></div>
+  <div class="kpi"><b>{{ stats.avg_check|money }}</b><span>средний чек</span></div>
+</div>
+
+{% if expiring %}<div class="alert warning mt">Истекает срок: {% for s in expiring %}<a href="{{ url_for('erp.sale', sid=s.id) }}">{{ s.number }}</a> (до {{ s.valid_until.strftime('%d.%m') }}){% if not loop.last %}, {% endif %}{% endfor %}</div>{% endif %}
+
+<div class="card mt">
+  <form method="post" action="{{ url_for('erp.sales_new') }}" class="grid g4" style="align-items:end">{{ csrf() }}
+    <div class="field"><label>Клиент</label><select name="contact_id"><option value="">—</option>
+      {% for c in contacts.values() %}<option value="{{ c.id }}">{{ c.company or c.name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Партнёр B2B</label><select name="partner_id"><option value="">—</option>
+      {% for p in partners.values() %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Шаблон</label><select name="template_id"><option value="">— пустое —</option>
+      {% for t in templates %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}</select></div>
+    <div><button class="btn primary">+ Новое предложение</button></div>
+  </form>
+</div>
+
+<div class="seg mt">
+  <a class="{{ 'on' if not status }}" href="{{ url_for('erp.sales') }}">Все</a>
+  {% for code, title in statuses %}<a class="{{ 'on' if status==code }}" href="{{ url_for('erp.sales', status=code) }}">{{ title }} ({{ stats.by[code].count }})</a>{% endfor %}
+</div>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Номер</th><th>Клиент</th><th>Объект</th><th class="right">Сумма</th><th class="right">Допработы</th><th>Действует до</th><th>Статус</th></tr></thead>
+  <tbody>
+  {% for s in rows %}
+    <tr>
+      <td><a href="{{ url_for('erp.sale', sid=s.id) }}"><b>{{ s.number }}</b></a>
+        <div class="tiny muted">{{ s.created_at.strftime('%d.%m.%Y') }}</div></td>
+      <td class="small">{% if s.contact_id and contacts.get(s.contact_id) %}{{ contacts[s.contact_id].company or contacts[s.contact_id].name }}
+        {% elif s.partner_id and partners.get(s.partner_id) %}{{ partners[s.partner_id].name }}{% else %}—{% endif %}</td>
+      <td class="small">{% if s.project_id %}<a href="{{ url_for('erp.project', pid=s.project_id) }}">объект</a>{% else %}—{% endif %}</td>
+      <td class="right"><b>{{ s.amount_total|money(s.currency) }}</b>{% if s.discount_pct %}<div class="tiny muted">скидка {{ s.discount_pct|round(1) }} %</div>{% endif %}</td>
+      <td class="right small">{{ s.amount_optional|money if s.amount_optional else '—' }}</td>
+      <td class="small">{{ s.valid_until.strftime('%d.%m.%Y') if s.valid_until else '—' }}</td>
+      <td><span class="badge {{ 'ok' if s.status in ('confirmed','invoiced') else ('warn' if s.status in ('sent','accepted') else '') }}">{{ names.get(s.status, s.status) }}</span>
+        {% if s.accepted_at %}<div class="tiny muted">принял {{ s.accepted_by }}</div>{% endif %}</td>
+    </tr>
+  {% else %}<tr><td colspan="7" class="muted">Предложений нет</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

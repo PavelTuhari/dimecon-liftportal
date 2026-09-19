@@ -253,4 +253,9 @@ def ensure_seed(app):
             _demo_business(tnt, owner, fleet)
         tnt.settings = {"api_key": f"demo-{tnt.slug}-key"}
     db.commit()
+    # управленческие модули наполняем для компании-витрины, чтобы кабинет не открывался пустым
+    from .seed_erp import seed_erp
+    demo_tenant = db.query(Tenant).filter_by(slug="dimecon").first()
+    if demo_tenant:
+        seed_erp(demo_tenant)
     app.logger.info("Демо-данные созданы. Вход: admin@platform.local / demo1234")

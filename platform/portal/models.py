@@ -138,6 +138,16 @@ class Media(Base):
     size: Mapped[int] = mapped_column(Integer, default=0)
     alt: Mapped[dict] = mapped_column(JSON, default=dict)
     tags: Mapped[str] = mapped_column(String(200), default="")
+    # рабочее пространство документов: папка, привязка к записи, версии и срок доступа
+    folder_id: Mapped[Optional[int]] = mapped_column(ForeignKey("doc_folders.id", ondelete="SET NULL"), index=True)
+    owner_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
+    entity: Mapped[str] = mapped_column(String(24), default="")      # order/project/task/purchase/partner
+    entity_id: Mapped[Optional[int]] = mapped_column(Integer)
+    version_of_id: Mapped[Optional[int]] = mapped_column(ForeignKey("media.id", ondelete="SET NULL"))
+    version: Mapped[int] = mapped_column(Integer, default=1)
+    status: Mapped[str] = mapped_column(String(16), default="active")  # active/approved/archived
+    note: Mapped[str] = mapped_column(String(255), default="")
+    expires_on: Mapped[Optional[date]] = mapped_column(Date)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
@@ -394,12 +404,20 @@ class Document(Base):
     tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"), index=True)
     order_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orders.id", ondelete="CASCADE"))
     partner_id: Mapped[Optional[int]] = mapped_column(Integer)
-    type: Mapped[str] = mapped_column(String(16))     # quote/act/invoice/confirmation
+    # счета из модулей продаж, проектов и повторяющихся планов
+    sales_id: Mapped[Optional[int]] = mapped_column(Integer, index=True)
+    project_id: Mapped[Optional[int]] = mapped_column(Integer, index=True)
+    contact_id: Mapped[Optional[int]] = mapped_column(Integer)
+    plan_id: Mapped[Optional[int]] = mapped_column(Integer)
+    ref_document_id: Mapped[Optional[int]] = mapped_column(Integer)   # для кредит-ноты — исходный счёт
+    type: Mapped[str] = mapped_column(String(16))     # quote/act/invoice/confirmation/credit_note/bill
     number: Mapped[str] = mapped_column(String(32))
     amount: Mapped[float] = mapped_column(Float, default=0)
-    status: Mapped[str] = mapped_column(String(16), default="issued")
+    currency: Mapped[str] = mapped_column(String(8), default="MDL")
+    status: Mapped[str] = mapped_column(String(16), default="issued")  # issued/partial/paid/overdue/cancelled
     issued_at: Mapped[date] = mapped_column(Date, default=date.today)
     due_at: Mapped[Optional[date]] = mapped_column(Date)
+    reminded_at: Mapped[Optional[date]] = mapped_column(Date)
     payload: Mapped[dict] = mapped_column(JSON, default=dict)
 
 
@@ -424,13 +442,24 @@ class Partner(Base):
 
 
 class Project(Base):
+    """Объект работ. Может принадлежать партнёру B2B, клиенту или быть внутренним."""
     __tablename__ = "projects"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     tenant_id: Mapped[int] = mapped_column(ForeignKey("tenants.id", ondelete="CASCADE"), index=True)
-    partner_id: Mapped[int] = mapped_column(ForeignKey("partners.id", ondelete="CASCADE"), index=True)
+    partner_id: Mapped[Optional[int]] = mapped_column(ForeignKey("partners.id", ondelete="CASCADE"), index=True)
+    contact_id: Mapped[Optional[int]] = mapped_column(ForeignKey("contacts.id", ondelete="SET NULL"))
+    manager_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
+    code: Mapped[str] = mapped_column(String(24), default="")
     name: Mapped[str] = mapped_column(String(160))
     address: Mapped[str] = mapped_column(String(255), default="")
-    status: Mapped[str] = mapped_column(String(16), default="active")
+    status: Mapped[str] = mapped_column(String(16), default="active")   # active/paused/done/archived
+    stage: Mapped[str] = mapped_column(String(16), default="planning")  # planning/works/handover/closed
+    budget_amount: Mapped[float] = mapped_column(Float, default=0)      # план выручки по объекту
+    planned_cost: Mapped[float] = mapped_column(Float, default=0)       # план затрат
+    hour_cost: Mapped[float] = mapped_column(Float, default=0)          # себестоимость часа по умолчанию
+    hour_rate: Mapped[float] = mapped_column(Float, default=0)          # ставка часа для счёта
+    is_template: Mapped[bool] = mapped_column(Boolean, default=False)
+    color: Mapped[str] = mapped_column(String(16), default="")
     starts_at: Mapped[Optional[date]] = mapped_column(Date)
     ends_at: Mapped[Optional[date]] = mapped_column(Date)
     notes: Mapped[str] = mapped_column(Text, default="")
@@ -484,3 +513,10 @@ class AuditLog(Base):
     entity_id: Mapped[Optional[int]] = mapped_column(Integer)
     details: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+
+
+# Управленческие модули (проекты, продажи, закупки, счета, таблицы, документы) описаны
+# отдельным файлом, но регистрируются в той же схеме — импорт обязателен до create_all().
+from .models_erp import (DocFolder, DocRequest, DocRule, Payment, PurchaseAgreement,  # noqa: E402,F401
+                         PurchaseLine, PurchaseOrder, RecurringPlan, ReorderRule, SalesLine,
+                         SalesOrder, SalesTemplate, Sheet, Task, Timesheet, Vendor)

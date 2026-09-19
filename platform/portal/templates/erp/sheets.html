@@ -1,0 +1,28 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Таблицы{% endblock %}
+{% block content %}
+<p class="muted">Таблица с формулами, которая читает данные компании прямо из базы:
+<code>=ВЫРУЧКА("месяц")</code>, <code>=ДОЛГ()</code>, <code>=ТЕХНИКА("тонн")</code>, <code>=ЗАДАЧИ("doing")</code>.
+Плюс сводные срезы, диаграммы, условное форматирование и выгрузка в Excel.</p>
+
+<form method="post" action="{{ url_for('erp.sheet_new') }}" class="card flex" style="gap:8px;align-items:end">{{ csrf() }}
+  <div class="field" style="flex:1"><label>Название</label><input name="name" placeholder="Отчёт за месяц"></div>
+  <div class="field"><label>Из шаблона</label><select name="template"><option value="">— пустая —</option>
+    {% for t in templates %}<option value="{{ t }}">{{ t }}</option>{% endfor %}</select></div>
+  <button class="btn primary">Создать</button>
+</form>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Название</th><th class="right">Ячеек</th><th class="right">Диаграмм</th><th>Изменена</th><th></th></tr></thead>
+  <tbody>{% for s in rows %}
+    <tr>
+      <td><a href="{{ url_for('erp.sheet', shid=s.id) }}"><b>{{ s.name }}</b></a></td>
+      <td class="right">{{ (s.cells or {})|length }}</td>
+      <td class="right">{{ (s.charts or [])|length }}</td>
+      <td class="small">{{ s.updated_at.strftime('%d.%m.%Y %H:%M') }}</td>
+      <td><a class="btn sm" href="{{ url_for('erp.sheet_xlsx', shid=s.id) }}">Excel</a></td>
+    </tr>
+  {% else %}<tr><td colspan="5" class="muted">Таблиц пока нет</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

@@ -6,7 +6,7 @@ from flask import abort, current_app, g, request
 from .db import SessionLocal
 from .models import Domain, Tenant
 
-TENANT_BLUEPRINTS = ("site", "account", "admin", "partner", "export")
+TENANT_BLUEPRINTS = ("site", "account", "admin", "partner", "export", "erp")
 
 
 class DomainRewriteMiddleware:

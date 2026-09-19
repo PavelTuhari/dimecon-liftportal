@@ -1,6 +1,6 @@
 {
  "project": "dimecon.md — ТЗ, платформа LiftPortal и документы",
- "generated": "20.09.2026 01:43",
+ "generated": "20.09.2026 02:25",
  "groups": [
   {
    "name": "Проект",
@@ -68,9 +68,9 @@
    "group": "Проект",
    "ext": ".md",
    "viewer": "markdown",
-   "size": 24527,
-   "size_h": "24.0 КБ",
-   "mtime": "19.09.2026 23:41",
+   "size": 29479,
+   "size_h": "28.8 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -237,9 +237,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 14614,
-   "size_h": "14.3 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 14803,
+   "size_h": "14.5 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -250,9 +250,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 21801,
-   "size_h": "21.3 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 21990,
+   "size_h": "21.5 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -263,9 +263,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 16196,
-   "size_h": "15.8 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 16385,
+   "size_h": "16.0 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -276,9 +276,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 18424,
-   "size_h": "18.0 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 18613,
+   "size_h": "18.2 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -289,9 +289,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 12760,
-   "size_h": "12.5 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 12949,
+   "size_h": "12.6 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -302,9 +302,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 15241,
-   "size_h": "14.9 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 15430,
+   "size_h": "15.1 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -315,9 +315,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 13372,
-   "size_h": "13.1 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 13561,
+   "size_h": "13.2 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -328,9 +328,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 30637,
-   "size_h": "29.9 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 30826,
+   "size_h": "30.1 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -341,9 +341,22 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 25105,
-   "size_h": "24.5 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 25294,
+   "size_h": "24.7 КБ",
+   "mtime": "20.09.2026 02:20",
+   "searchable": true
+  },
+  {
+   "path": "docs/acts/10_upravlencheskie_moduli.html",
+   "name": "10_upravlencheskie_moduli.html",
+   "title": "10_upravlencheskie_moduli.html",
+   "caption": "",
+   "group": "Протоколы испытаний",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 28590,
+   "size_h": "27.9 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -354,9 +367,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 11139,
-   "size_h": "10.9 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 11792,
+   "size_h": "11.5 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -393,9 +406,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 14647,
-   "size_h": "14.3 КБ",
-   "mtime": "19.09.2026 23:48",
+   "size": 17967,
+   "size_h": "17.5 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -464,6 +477,19 @@
    "searchable": true
   },
   {
+   "path": "docs/test_erp.log",
+   "name": "test_erp.log",
+   "title": "test_erp.log",
+   "caption": "",
+   "group": "Протоколы испытаний",
+   "ext": ".log",
+   "viewer": "text",
+   "size": 7664,
+   "size_h": "7.5 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": true
+  },
+  {
    "path": "docs/test_officeplus.log",
    "name": "test_officeplus.log",
    "title": "Протокол: клиент Partner B2B API (33 проверки)",
@@ -499,7 +525,7 @@
    "viewer": "text",
    "size": 1936,
    "size_h": "1.9 КБ",
-   "mtime": "19.09.2026 23:47",
+   "mtime": "20.09.2026 02:16",
    "searchable": true
   },
   {
@@ -512,7 +538,7 @@
    "viewer": "text",
    "size": 5743,
    "size_h": "5.6 КБ",
-   "mtime": "19.09.2026 23:47",
+   "mtime": "20.09.2026 02:24",
    "searchable": true
   },
   {
@@ -617,6 +643,19 @@
    "size": 26931,
    "size_h": "26.3 КБ",
    "mtime": "19.09.2026 23:47",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/15_Сменный рапорт.pdf",
+   "name": "15_Сменный рапорт.pdf",
+   "title": "15_Сменный рапорт.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 26961,
+   "size_h": "26.3 КБ",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -932,6 +971,45 @@
    "searchable": false
   },
   {
+   "path": "docs/generated/74_quote.pdf",
+   "name": "74_quote.pdf",
+   "title": "74_quote.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 30749,
+   "size_h": "30.0 КБ",
+   "mtime": "20.09.2026 02:16",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/75_invoice.pdf",
+   "name": "75_invoice.pdf",
+   "title": "75_invoice.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 29138,
+   "size_h": "28.5 КБ",
+   "mtime": "20.09.2026 02:16",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/76_act.pdf",
+   "name": "76_act.pdf",
+   "title": "76_act.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 32210,
+   "size_h": "31.5 КБ",
+   "mtime": "20.09.2026 02:16",
+   "searchable": false
+  },
+  {
    "path": "docs/generated/7_Сменный рапорт.pdf",
    "name": "7_Сменный рапорт.pdf",
    "title": "7_Сменный рапорт.pdf",
@@ -978,9 +1056,9 @@
    "group": "Сгенерированные документы",
    "ext": ".pdf",
    "viewer": "pdf",
-   "size": 30119,
-   "size_h": "29.4 КБ",
-   "mtime": "19.09.2026 23:47",
+   "size": 29865,
+   "size_h": "29.2 КБ",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -991,9 +1069,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 7794,
-   "size_h": "7.6 КБ",
-   "mtime": "19.09.2026 23:47",
+   "size": 8806,
+   "size_h": "8.6 КБ",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1004,9 +1082,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 16994,
-   "size_h": "16.6 КБ",
-   "mtime": "19.09.2026 23:47",
+   "size": 17911,
+   "size_h": "17.5 КБ",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1017,9 +1095,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6273,
+   "size": 6272,
    "size_h": "6.1 КБ",
-   "mtime": "19.09.2026 23:47",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1030,9 +1108,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 12182,
+   "size": 12181,
    "size_h": "11.9 КБ",
-   "mtime": "19.09.2026 23:47",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1043,9 +1121,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 10560,
+   "size": 10559,
    "size_h": "10.3 КБ",
-   "mtime": "19.09.2026 23:47",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1056,9 +1134,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6484,
-   "size_h": "6.3 КБ",
-   "mtime": "19.09.2026 23:47",
+   "size": 6530,
+   "size_h": "6.4 КБ",
+   "mtime": "20.09.2026 02:16",
    "searchable": false
   },
   {
@@ -1176,6 +1254,71 @@
    "size": 97219,
    "size_h": "94.9 КБ",
    "mtime": "19.09.2026 21:21",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/100_erp_plans.png",
+   "name": "100_erp_plans.png",
+   "title": "100_erp_plans.png",
+   "caption": "Повторяющиеся счета: абонементы и обслуживание",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 29803,
+   "size_h": "29.1 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/101_erp_sheets.png",
+   "name": "101_erp_sheets.png",
+   "title": "101_erp_sheets.png",
+   "caption": "Таблицы компании",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 26076,
+   "size_h": "25.5 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/102_erp_sheet.png",
+   "name": "102_erp_sheet.png",
+   "title": "102_erp_sheet.png",
+   "caption": "Таблица: формулы, живые данные компании, диаграмма",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 53801,
+   "size_h": "52.5 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/103_erp_docs.png",
+   "name": "103_erp_docs.png",
+   "title": "103_erp_docs.png",
+   "caption": "Документы: пространства, теги, запросы, правила",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 160595,
+   "size_h": "156.8 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/104_erp_sales_accept.png",
+   "name": "104_erp_sales_accept.png",
+   "title": "104_erp_sales_accept.png",
+   "caption": "Предложение глазами клиента: принять по ссылке",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 21648,
+   "size_h": "21.1 КБ",
+   "mtime": "20.09.2026 02:19",
    "searchable": false
   },
   {
@@ -2180,6 +2323,136 @@
    "searchable": false
   },
   {
+   "path": "docs/screens/90_erp_projects.png",
+   "name": "90_erp_projects.png",
+   "title": "90_erp_projects.png",
+   "caption": "Объекты: план и факт, маржа по каждому",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 36466,
+   "size_h": "35.6 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/91_erp_project.png",
+   "name": "91_erp_project.png",
+   "title": "91_erp_project.png",
+   "caption": "Карточка объекта: работы, вехи, часы, деньги",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 106808,
+   "size_h": "104.3 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/92_erp_tasks.png",
+   "name": "92_erp_tasks.png",
+   "title": "92_erp_tasks.png",
+   "caption": "Задачи по стадиям: канбан по всем объектам",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 21632,
+   "size_h": "21.1 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/93_erp_sales.png",
+   "name": "93_erp_sales.png",
+   "title": "93_erp_sales.png",
+   "caption": "Коммерческие предложения: воронка и конверсия",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 41848,
+   "size_h": "40.9 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/94_erp_sale.png",
+   "name": "94_erp_sale.png",
+   "title": "94_erp_sale.png",
+   "caption": "Предложение: строки сметы, маржа, допработы, счёт",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 48328,
+   "size_h": "47.2 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/95_erp_purchase.png",
+   "name": "95_erp_purchase.png",
+   "title": "95_erp_purchase.png",
+   "caption": "Закупки: запросы цен, приёмка, долги поставщикам",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 43779,
+   "size_h": "42.8 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/96_erp_vendors.png",
+   "name": "96_erp_vendors.png",
+   "title": "96_erp_vendors.png",
+   "caption": "Поставщики: анализ сроков и объёмов",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 52298,
+   "size_h": "51.1 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/97_erp_reorder.png",
+   "name": "97_erp_reorder.png",
+   "title": "97_erp_reorder.png",
+   "caption": "Пополнение склада по правилам",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 29573,
+   "size_h": "28.9 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/98_erp_invoices.png",
+   "name": "98_erp_invoices.png",
+   "title": "98_erp_invoices.png",
+   "caption": "Счета: оплаты, просрочка, дебиторка по срокам",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 94201,
+   "size_h": "92.0 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/99_erp_invoice.png",
+   "name": "99_erp_invoice.png",
+   "title": "99_erp_invoice.png",
+   "caption": "Счёт: платежи, остаток, кредит-нота",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 30164,
+   "size_h": "29.5 КБ",
+   "mtime": "20.09.2026 02:19",
+   "searchable": false
+  },
+  {
    "path": "docs/screens/index.txt",
    "name": "index.txt",
    "title": "index.txt",
@@ -2187,9 +2460,9 @@
    "group": "Скриншоты",
    "ext": ".txt",
    "viewer": "text",
-   "size": 7672,
-   "size_h": "7.5 КБ",
-   "mtime": "19.09.2026 21:23",
+   "size": 9058,
+   "size_h": "8.8 КБ",
+   "mtime": "20.09.2026 02:19",
    "searchable": true
   },
   {
@@ -2241,7 +2514,7 @@
    "viewer": "json",
    "size": 6991,
    "size_h": "6.8 КБ",
-   "mtime": "20.09.2026 01:43",
+   "mtime": "20.09.2026 02:25",
    "searchable": true
   },
   {
@@ -3448,9 +3721,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 6541,
-   "size_h": "6.4 КБ",
-   "mtime": "20.09.2026 00:46",
+   "size": 6658,
+   "size_h": "6.5 КБ",
+   "mtime": "20.09.2026 02:09",
    "searchable": true
   },
   {
@@ -3532,6 +3805,19 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/blueprints/erp.py",
+   "name": "erp.py",
+   "title": "erp.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 39732,
+   "size_h": "38.8 КБ",
+   "mtime": "20.09.2026 02:09",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/blueprints/partner.py",
    "name": "partner.py",
    "title": "partner.py",
@@ -3565,9 +3851,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 13135,
-   "size_h": "12.8 КБ",
-   "mtime": "19.09.2026 16:00",
+   "size": 15343,
+   "size_h": "15.0 КБ",
+   "mtime": "20.09.2026 02:09",
    "searchable": true
   },
   {
@@ -3578,9 +3864,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 2487,
-   "size_h": "2.4 КБ",
-   "mtime": "19.09.2026 16:00",
+   "size": 5775,
+   "size_h": "5.6 КБ",
+   "mtime": "20.09.2026 02:13",
    "searchable": true
   },
   {
@@ -3630,9 +3916,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 28159,
-   "size_h": "27.5 КБ",
-   "mtime": "19.09.2026 15:52",
+   "size": 31523,
+   "size_h": "30.8 КБ",
+   "mtime": "20.09.2026 01:59",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/models_erp.py",
+   "name": "models_erp.py",
+   "title": "models_erp.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 22663,
+   "size_h": "22.1 КБ",
+   "mtime": "20.09.2026 02:06",
    "searchable": true
   },
   {
@@ -3656,9 +3955,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 25146,
-   "size_h": "24.6 КБ",
-   "mtime": "19.09.2026 21:12",
+   "size": 25472,
+   "size_h": "24.9 КБ",
+   "mtime": "20.09.2026 02:25",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/seed_erp.py",
+   "name": "seed_erp.py",
+   "title": "seed_erp.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 13652,
+   "size_h": "13.3 КБ",
+   "mtime": "20.09.2026 02:12",
    "searchable": true
   },
   {
@@ -3688,6 +4000,19 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/services/docs_ws.py",
+   "name": "docs_ws.py",
+   "title": "docs_ws.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 10219,
+   "size_h": "10.0 КБ",
+   "mtime": "20.09.2026 02:08",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/services/documents.py",
    "name": "documents.py",
    "title": "documents.py",
@@ -3695,9 +4020,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 28864,
-   "size_h": "28.2 КБ",
-   "mtime": "19.09.2026 17:09",
+   "size": 30901,
+   "size_h": "30.2 КБ",
+   "mtime": "20.09.2026 02:09",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/invoicing.py",
+   "name": "invoicing.py",
+   "title": "invoicing.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 15024,
+   "size_h": "14.7 КБ",
+   "mtime": "20.09.2026 02:07",
    "searchable": true
   },
   {
@@ -3753,6 +4091,45 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/services/projects.py",
+   "name": "projects.py",
+   "title": "projects.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 14517,
+   "size_h": "14.2 КБ",
+   "mtime": "20.09.2026 02:06",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/purchase.py",
+   "name": "purchase.py",
+   "title": "purchase.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 10689,
+   "size_h": "10.4 КБ",
+   "mtime": "20.09.2026 02:14",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/sales.py",
+   "name": "sales.py",
+   "title": "sales.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 10539,
+   "size_h": "10.3 КБ",
+   "mtime": "20.09.2026 02:14",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/services/selector.py",
    "name": "selector.py",
    "title": "selector.py",
@@ -3766,6 +4143,19 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/services/sheets.py",
+   "name": "sheets.py",
+   "title": "sheets.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 20572,
+   "size_h": "20.1 КБ",
+   "mtime": "20.09.2026 02:15",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/static/app.css",
    "name": "app.css",
    "title": "app.css",
@@ -3773,9 +4163,9 @@
    "group": "Код платформы",
    "ext": ".css",
    "viewer": "code",
-   "size": 21073,
-   "size_h": "20.6 КБ",
-   "mtime": "19.09.2026 21:19",
+   "size": 22399,
+   "size_h": "21.9 КБ",
+   "mtime": "20.09.2026 02:12",
    "searchable": true
   },
   {
@@ -3799,9 +4189,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 3116,
+   "size": 3123,
    "size_h": "3.0 КБ",
-   "mtime": "19.09.2026 16:57",
+   "mtime": "20.09.2026 02:09",
    "searchable": true
   },
   {
@@ -3916,9 +4306,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 4014,
-   "size_h": "3.9 КБ",
-   "mtime": "19.09.2026 17:19",
+   "size": 5012,
+   "size_h": "4.9 КБ",
+   "mtime": "20.09.2026 02:12",
    "searchable": true
   },
   {
@@ -4221,6 +4611,214 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/templates/erp/docs.html",
+   "name": "docs.html",
+   "title": "docs.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 11569,
+   "size_h": "11.3 КБ",
+   "mtime": "20.09.2026 02:12",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/invoice.html",
+   "name": "invoice.html",
+   "title": "invoice.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 4271,
+   "size_h": "4.2 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/invoices.html",
+   "name": "invoices.html",
+   "title": "invoices.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3849,
+   "size_h": "3.8 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/plans.html",
+   "name": "plans.html",
+   "title": "plans.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3373,
+   "size_h": "3.3 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/project.html",
+   "name": "project.html",
+   "title": "project.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 14069,
+   "size_h": "13.7 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/project_edit.html",
+   "name": "project_edit.html",
+   "title": "project_edit.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3072,
+   "size_h": "3.0 КБ",
+   "mtime": "20.09.2026 02:09",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/projects.html",
+   "name": "projects.html",
+   "title": "projects.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3854,
+   "size_h": "3.8 КБ",
+   "mtime": "20.09.2026 02:09",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/purchase.html",
+   "name": "purchase.html",
+   "title": "purchase.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 4434,
+   "size_h": "4.3 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/purchase_order.html",
+   "name": "purchase_order.html",
+   "title": "purchase_order.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 7675,
+   "size_h": "7.5 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/reorder.html",
+   "name": "reorder.html",
+   "title": "reorder.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3016,
+   "size_h": "2.9 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/sale.html",
+   "name": "sale.html",
+   "title": "sale.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 9539,
+   "size_h": "9.3 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/sales.html",
+   "name": "sales.html",
+   "title": "sales.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3915,
+   "size_h": "3.8 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/sheet.html",
+   "name": "sheet.html",
+   "title": "sheet.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 6294,
+   "size_h": "6.1 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/sheets.html",
+   "name": "sheets.html",
+   "title": "sheets.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 1869,
+   "size_h": "1.8 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/tasks.html",
+   "name": "tasks.html",
+   "title": "tasks.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 2035,
+   "size_h": "2.0 КБ",
+   "mtime": "20.09.2026 02:10",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/erp/vendors.html",
+   "name": "vendors.html",
+   "title": "vendors.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 4525,
+   "size_h": "4.4 КБ",
+   "mtime": "20.09.2026 02:11",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/templates/error.html",
    "name": "error.html",
    "title": "error.html",
@@ -4481,6 +5079,19 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/templates/site/doc_upload.html",
+   "name": "doc_upload.html",
+   "title": "doc_upload.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 1403,
+   "size_h": "1.4 КБ",
+   "mtime": "20.09.2026 02:12",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/templates/site/equipment.html",
    "name": "equipment.html",
    "title": "equipment.html",
@@ -4556,6 +5167,19 @@
    "size": 3058,
    "size_h": "3.0 КБ",
    "mtime": "20.09.2026 00:46",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/site/sales_accept.html",
+   "name": "sales_accept.html",
+   "title": "sales_accept.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3164,
+   "size_h": "3.1 КБ",
+   "mtime": "20.09.2026 02:12",
    "searchable": true
   },
   {
@@ -4832,6 +5456,19 @@
    "searchable": true
   },
   {
+   "path": "platform/tools/screens_erp.py",
+   "name": "screens_erp.py",
+   "title": "screens_erp.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 6244,
+   "size_h": "6.1 КБ",
+   "mtime": "20.09.2026 02:18",
+   "searchable": true
+  },
+  {
    "path": "platform/tools/screens_roles.py",
    "name": "screens_roles.py",
    "title": "screens_roles.py",
@@ -4855,6 +5492,19 @@
    "size": 16929,
    "size_h": "16.5 КБ",
    "mtime": "19.09.2026 17:21",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/seed_erp.py",
+   "name": "seed_erp.py",
+   "title": "seed_erp.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 1065,
+   "size_h": "1.0 КБ",
+   "mtime": "20.09.2026 02:12",
    "searchable": true
   },
   {
@@ -4907,6 +5557,19 @@
    "size": 7688,
    "size_h": "7.5 КБ",
    "mtime": "19.09.2026 17:20",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/test_erp.py",
+   "name": "test_erp.py",
+   "title": "test_erp.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 23056,
+   "size_h": "22.5 КБ",
+   "mtime": "20.09.2026 02:18",
    "searchable": true
   },
   {
@@ -5229,9 +5892,9 @@
    "group": "Схема и конфигурация",
    "ext": ".py",
    "viewer": "code",
-   "size": 59816,
-   "size_h": "58.4 КБ",
-   "mtime": "19.09.2026 21:33",
+   "size": 66278,
+   "size_h": "64.7 КБ",
+   "mtime": "20.09.2026 02:20",
    "searchable": true
   },
   {
@@ -5242,9 +5905,9 @@
    "group": "Схема и конфигурация",
    "ext": ".py",
    "viewer": "code",
-   "size": 13486,
-   "size_h": "13.2 КБ",
-   "mtime": "19.09.2026 23:17",
+   "size": 14925,
+   "size_h": "14.6 КБ",
+   "mtime": "20.09.2026 02:25",
    "searchable": true
   },
   {
@@ -5288,21 +5951,21 @@
   }
  ],
  "stats": {
-  "files": 402,
-  "bytes": 24956597,
+  "files": 453,
+  "bytes": 26224129,
   "by_group": {
    "Проект": 2,
    "Техническое задание": 8,
    "Акты и отчёты": 2,
-   "Протоколы испытаний": 26,
-   "Сгенерированные документы": 39,
-   "Скриншоты": 87,
+   "Протоколы испытаний": 28,
+   "Сгенерированные документы": 43,
+   "Скриншоты": 102,
    "Исходные данные заказчика": 5,
    "Медиатека компании": 90,
-   "Код платформы": 30,
-   "Шаблоны": 62,
+   "Код платформы": 39,
+   "Шаблоны": 80,
    "Интеграции": 5,
-   "Инструменты и тесты": 24,
+   "Инструменты и тесты": 27,
    "Схема и конфигурация": 20,
    "Архив": 2
   }

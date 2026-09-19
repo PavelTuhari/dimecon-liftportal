@@ -1,7 +1,7 @@
 """Публичный white-label сайт компании + B2C-визард."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, session, url_for
 from sqlalchemy import func
@@ -262,6 +262,47 @@ def wizard_done(tenant_slug, number):
 def wizard_reset(tenant_slug):
     session.pop(WZ_KEY, None)
     return redirect(url_for("site.wizard"))
+
+
+@bp.route("/kp/<token>", methods=["GET", "POST"])
+def sales_accept(tenant_slug, token):
+    """Клиент открывает предложение по ссылке, выбирает допработы и принимает его."""
+    from ..models import SalesOrder
+    from ..services import sales as sls
+    so = first_or_404(db.query(SalesOrder).filter_by(tenant_id=_tenant().id, accept_token=token))
+    expired = bool(so.valid_until and so.valid_until < date.today() and so.status in ("sent", "draft"))
+    if request.method == "POST" and not expired and so.status in ("sent", "draft"):
+        chosen = [int(x) for x in request.form.getlist("optional")]
+        sls.accept(so, by_name=request.form.get("name", "").strip() or "клиент", selected_optional=chosen)
+        from ..mailer import send_mail
+        send_mail(_tenant(), _tenant().email or "", f"Предложение {so.number} принято клиентом",
+                  f"{so.accepted_by} принял предложение {so.number} на сумму "
+                  f"{so.amount_total:,.2f} {so.currency}.".replace(",", " "))
+        flash("Спасибо! Предложение принято, менеджер свяжется с вами.", "success")
+        return redirect(url_for("site.sales_accept", token=token))
+    return render_template("site/sales_accept.html", so=so, expired=expired)
+
+
+@bp.route("/upload/<token>", methods=["GET", "POST"])
+def doc_upload(tenant_slug, token):
+    """Загрузка документа по запросу: ссылка с кодом, без входа в кабинет."""
+    from ..models import DocRequest
+    from ..services import docs_ws
+    from ..storage import save_upload
+    req = first_or_404(db.query(DocRequest).filter_by(tenant_id=_tenant().id, request_token=token))
+    if request.method == "POST" and req.status == "pending":
+        fs = request.files.get("file")
+        if not fs or not fs.filename:
+            flash("Выберите файл", "danger")
+        else:
+            media = save_upload(_tenant(), fs)
+            media.note = f"По запросу: {req.name}"[:255]
+            db.commit()
+            docs_ws.fulfil_request(req, media)
+            docs_ws.apply_rules(_tenant(), media)
+            flash("Файл получен, спасибо!", "success")
+        return redirect(url_for("site.doc_upload", token=token))
+    return render_template("site/doc_upload.html", req=req)
 
 
 @bp.route("/track/<number>")
