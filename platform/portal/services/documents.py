@@ -267,6 +267,23 @@ def _order_rows(order, tenant) -> list[tuple[str, str]]:
     ]
 
 
+def supplier_rows(tenant) -> list[tuple[str, str]]:
+    """Реквизиты исполнителя из настроек компании — то, что банк требует в счёте."""
+    bank_legacy = (tenant.settings or {}).get("bank")
+    bank = " · ".join(x for x in [getattr(tenant, "bank_name", "") or "",
+                                  f"IBAN {tenant.bank_iban}" if getattr(tenant, "bank_iban", "") else "",
+                                  f"SWIFT {tenant.bank_swift}" if getattr(tenant, "bank_swift", "") else ""] if x)
+    rows = [("Поставщик", tenant.legal_name or tenant.name)]
+    if tenant.idno:
+        rows.append(("IDNO", tenant.idno))
+    if getattr(tenant, "vat_code", ""):
+        rows.append(("Код плательщика НДС", tenant.vat_code))
+    if getattr(tenant, "legal_address", "") or tenant.address:
+        rows.append(("Адрес", getattr(tenant, "legal_address", "") or tenant.address))
+    rows.append(("Банковские реквизиты", bank or bank_legacy or "по договору"))
+    return rows
+
+
 def _client_rows(order) -> list[tuple[str, str]]:
     c = order.contact
     if not c:
@@ -348,15 +365,16 @@ def invoice_pdf(tenant, order, doc) -> bytes:
     pdf = DocPDF(tenant, DOC_TITLES["invoice"], doc.number)
     pdf.title_block(f"от {doc.issued_at:%d.%m.%Y} по заявке {order.number}"
                     + (f". Срок оплаты до {doc.due_at:%d.%m.%Y}." if doc.due_at else ""))
-    bank = tenant.settings.get("bank") if tenant.settings else None
-    pdf.kv_table(_client_rows(order) + [("Поставщик", tenant.legal_name or tenant.name),
-                                        ("IDNO", tenant.idno), ("Банковские реквизиты", bank or "по договору")])
+    pdf.kv_table(_client_rows(order) + supplier_rows(tenant))
     lines = order.breakdown or [{"title": f"Услуги спецтехники по заявке {order.number}", "amount": doc.amount}]
     pdf.money_table(lines, doc.amount, tenant.currency)
     pdf.note("Оплатой счёта заказчик подтверждает согласие с условиями аренды, включая порядок отмены: "
              "более чем за 24 часа — бесплатно, за 6–24 часа — 30 % минимальной смены, менее 6 часов — "
              "полная минимальная смена и подача.")
-    pdf.signatures("Руководитель / гл. бухгалтер", "Принял")
+    # подписи из настроек компании: кто подписывает счёт со стороны исполнителя
+    left = " / ".join(x for x in [getattr(tenant, "director_name", "") or "Руководитель",
+                                  getattr(tenant, "accountant_name", "") or "гл. бухгалтер"] if x)
+    pdf.signatures(left, "Принял")
     return pdf.out()
 
 

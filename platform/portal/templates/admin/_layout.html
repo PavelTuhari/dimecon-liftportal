@@ -28,11 +28,14 @@
     <a href="{{ url_for('admin.content_list', kind='pages') }}" class="{{ 'on' if request.view_args.get('kind')=='pages' }}">📄 Страницы</a>
     <a href="{{ url_for('admin.reviews') }}" class="{{ 'on' if ep=='admin.reviews' }}">⭐ Отзывы</a>
     <a href="{{ url_for('admin.media') }}" class="{{ 'on' if ep=='admin.media' }}">🖼 Медиатека</a>
-    {% if is_owner %}
     <h5>Настройки</h5>
+    <a href="{{ url_for('setup.index') }}" class="{{ 'on' if ep=='setup.index' }}">🚀 Запуск компании</a>
+    <a href="{{ url_for('setup.load_charts') }}" class="{{ 'on' if ep=='setup.load_charts' }}">📐 Грузовые таблицы</a>
+    {% if is_owner %}
+    <a href="{{ url_for('setup.pricing') }}" class="{{ 'on' if ep=='setup.pricing' }}">💰 Прайс и ставки</a>
+    <a href="{{ url_for('setup.company') }}" class="{{ 'on' if ep=='setup.company' }}">🏦 Реквизиты и почта</a>
+    <a href="{{ url_for('setup.domain') }}" class="{{ 'on' if ep=='setup.domain' }}">🌍 Свой домен</a>
     <a href="{{ url_for('admin.branding') }}" class="{{ 'on' if ep=='admin.branding' }}">🎨 Сайт и бренд</a>
-    <a href="{{ url_for('admin.pricing_settings') }}" class="{{ 'on' if ep=='admin.pricing_settings' }}">💰 Тарифы</a>
-    <a href="{{ url_for('admin.mail_settings') }}" class="{{ 'on' if ep=='admin.mail_settings' }}">✉️ Почта (SMTP)</a>
     <a href="{{ url_for('admin.storage_settings') }}" class="{{ 'on' if ep=='admin.storage_settings' }}">🗄 Хранилище файлов</a>
     <a href="{{ url_for('admin.integrations') }}" class="{{ 'on' if ep=='admin.integrations' }}">🔌 Интеграция CRM</a>
     <a href="{{ url_for('admin.team') }}" class="{{ 'on' if ep=='admin.team' }}">👥 Команда, домен, API</a>

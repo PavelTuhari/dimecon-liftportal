@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Акт 11 · Настройки запуска компании и их применение</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet"><style>
+:root{--paper:#FBFAF7;--raised:#fff;--sunken:#F4F2EC;--ink:#16191C;--ink-2:#55606A;--ink-3:#8A939B;
+--line:#E2DED4;--line-strong:#CFC9BC;--accent:#D98A0B;--accent-soft:#FBEFD8;--navy:#1F3A52;
+--ok:#2E7D4F;--bad:#B23B2E;--warn:#C77700;
+--sans:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+--mono:ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px}
+a{color:var(--navy)}
+header.top{background:var(--navy);color:#fff;padding:26px 0 22px;margin-bottom:26px}
+header.top .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:var(--serif);font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:8px 0 6px;letter-spacing:-.015em}
+header.top h1{color:#fff}
+header.top .lead{color:rgba(255,255,255,.78);max-width:70ch;margin:0}
+h2{font-family:var(--serif);font-size:23px;margin:34px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+h3{font-size:16.5px;margin:22px 0 8px}
+p{margin:0 0 .9em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.9)}
+.verdict{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:4px 13px;font-weight:700;font-size:13px}
+.verdict.ok{background:#E3F3EA;color:var(--ok)}.verdict.warn{background:#FCEFD9;color:var(--warn)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.card b{display:block;font-family:var(--serif);font-size:27px;line-height:1.1;letter-spacing:-.02em}
+.card span{font-size:12.5px;color:var(--ink-2)}
+ul.scope{margin:0 0 1em;padding-left:1.15em}ul.scope li{margin:.25em 0}
+table{width:100%;border-collapse:collapse;font-size:13.6px;background:var(--raised);
+border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:12px 0}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunken);font-size:12.4px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+tbody tr:last-child td{border-bottom:0}
+td.st{white-space:nowrap;font-weight:700;width:1%}
+td.st.ok{color:var(--ok)}td.st.bad{color:var(--bad)}
+td.dt{color:var(--ink-2);font-family:var(--mono);font-size:12.2px}
+pre{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+overflow-x:auto;font-family:var(--mono);font-size:12.4px;line-height:1.5;white-space:pre-wrap}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px;margin:16px 0}
+figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raised)}
+figure img{width:100%;display:block;background:var(--sunken);cursor:zoom-in}
+figcaption{padding:9px 12px;font-size:12.4px;color:var(--ink-2);border-top:1px solid var(--line)}
+figcaption b{color:var(--ink);font-family:var(--mono);font-size:11.4px;display:block;margin-bottom:2px}
+.note{border-left:3px solid var(--warn);background:#FCEFD9;padding:12px 15px;border-radius:0 8px 8px 0;margin:14px 0;font-size:13.6px;color:#7A4E00}
+.note.info{border-color:var(--accent);background:var(--accent-soft);color:#7A4E00}
+.foot{margin-top:40px;padding-top:16px;border-top:3px double var(--line-strong);font-size:13px;color:var(--ink-2)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0}
+.nav a{border:1px solid var(--line-strong);background:var(--raised);border-radius:8px;padding:6px 12px;
+font-size:13px;text-decoration:none;font-weight:600}
+.nav a:hover{border-color:var(--accent)}
+.lb{position:fixed;inset:0;background:rgba(10,12,14,.92);display:none;align-items:center;justify-content:center;z-index:99;padding:22px}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:100%;border-radius:8px}
+@media print{header.top{background:#fff;color:#000;border-bottom:2px solid #000}
+header.top h1,header.top .lead{color:#000}.pill{border-color:#999;color:#000}
+.nav,.lb{display:none!important}figure{break-inside:avoid}table{break-inside:auto}}
+</style></head><body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Акт тестирования № 11 · dimecon.md</div>
+  <h1>Настройки запуска компании и их применение</h1>
+  <p class="lead">Пять пунктов из списка «что дальше» настраиваются в кабинете, и система сразу начинает по ним работать.</p>
+  <div class="meta">
+    <span class="pill">Дата: 20.09.2026</span>
+    <span class="pill">Стенд: Windows 10, MySQL 8.4.0, Python 3.12</span>
+    <span class="pill">Платформа: LiftPortal</span>
+    <span class="pill">Заказчик: SA «Dimecon 11»</span>
+  </div>
+</div></header>
+<div class="wrap">
+  <div class="cards"><div class="card"><b>55 / 55</b><span>проверок пройдено</span></div><div class="card"><b>5</b><span>снимков экрана</span></div><div class="card"><b style="color:var(--ok)">0</b><span>не пройдено</span></div></div>
+  <p><span class="verdict ok">Годен</span></p>
+
+  <h2>Что проверялось</h2>
+  <ul class="scope"><li>грузовые таблицы производителя: разбор файла, проверка данных, замена ориентировочной кривой</li><li>переключение подбора на паспортные строки и снятие предупреждения об оценке</li><li>прайс: ставки и минимальные смены по машинам, зоны подачи, коэффициенты, допуслуги, скидки</li><li>влияние прайса на расчёт заказа</li><li>реквизиты банка и подписи в счетах, срок оплаты и префиксы номеров</li><li>почтовый сервер компании и проверочное письмо</li><li>собственный домен: подсказка по DNS, проверка привязки, основной адрес</li><li>скрипты, применяющие те же настройки из командной строки</li><li>права: настройки доступны владельцу и закрыты для чужих компаний</li></ul>
+
+  <h2>Результаты</h2>
+  <h3>1. СТРАНИЦЫ РАЗДЕЛА НАСТРОЕК</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>сводка «Запуск компании»: /setup</td><td class="dt">HTTP 200</td></tr><tr><td class="st ok">✔ OK</td><td>грузовые таблицы: /setup/load-charts</td><td class="dt">HTTP 200</td></tr><tr><td class="st ok">✔ OK</td><td>прайс и ставки: /setup/pricing</td><td class="dt">HTTP 200</td></tr><tr><td class="st ok">✔ OK</td><td>реквизиты и почта: /setup/company</td><td class="dt">HTTP 200</td></tr><tr><td class="st ok">✔ OK</td><td>свой домен: /setup/domain</td><td class="dt">HTTP 200</td></tr><tr><td class="st ok">✔ OK</td><td>образец файла грузовой таблицы скачивается</td><td class="dt">243 байт</td></tr></tbody></table><h3>2. ГРУЗОВЫЕ ТАБЛИЦЫ: РАЗБОР, ПРОВЕРКА, ПРИМЕНЕНИЕ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>колонки файла распознаны по заголовкам</td><td class="dt">[&#x27;capacity&#x27;, &#x27;configuration&#x27;, &#x27;equipment&#x27;, &#x27;height&#x27;, &#x27;radius&#x27;]</td></tr><tr><td class="st ok">✔ OK</td><td>строки привязаны к машине парка</td><td class="dt">строк в файле: 4; распознано: 4</td></tr><tr><td class="st ok">✔ OK</td><td>таблица прошла проверку на здравый смысл</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>растущая нагрузка на большом вылете помечается ошибкой</td><td class="dt">КБ-403А, КБ-403Б: на вылете 40 м указано 12 т — больше, чем 1.8 т на 3</td></tr><tr><td class="st ok">✔ OK</td><td>паспортная таблица загружена и заменила ориентировочную</td><td class="dt">было passport (16 строк), стало паспорт (4)</td></tr><tr><td class="st ok">✔ OK</td><td>подбор считает по паспортной строке</td><td class="dt">вылет 16.0 м</td></tr><tr><td class="st ok">✔ OK</td><td>предупреждение об оценке снято для этой машины</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>по остальным машинам предупреждение осталось</td><td class="dt">250</td></tr><tr><td class="st ok">✔ OK</td><td>сводка по парку считает паспортные таблицы</td><td class="dt">паспорт у 1 из 22</td></tr><tr><td class="st ok">✔ OK</td><td>загрузка файла через кабинет выполняется</td><td class="dt">HTTP 200</td></tr></tbody></table><h3>3. ПРАЙС: СТАВКИ, ЗОНЫ, КОЭФФИЦИЕНТЫ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>ставка и минимальная смена сохраняются</td><td class="dt">1000.0 → 1100.0, мин. 5 ч</td></tr><tr><td class="st ok">✔ OK</td><td>зоны подачи сохранены формой</td><td class="dt">зон 3, первая плата 2000.0</td></tr><tr><td class="st ok">✔ OK</td><td>коэффициенты времени и условий сохранены</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>цена допуслуги сохранена</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>зона для расстояния 10 км берётся из настроек</td><td class="dt">плата 2000.0</td></tr><tr><td class="st ok">✔ OK</td><td>в расчёте подача считается по плате зоны из настроек</td><td class="dt">2000</td></tr><tr><td class="st ok">✔ OK</td><td>итог заказа меняется вслед за прайсом</td><td class="dt">11600 → 12560</td></tr><tr><td class="st ok">✔ OK</td><td>в сводке прайс отмечен как свой</td><td class="dt">без ставки: 6 машин</td></tr></tbody></table><h3>4. РЕКВИЗИТЫ И ПОЧТА</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>реквизиты сохранены</td><td class="dt">BC «Moldindconbank» SA</td></tr><tr><td class="st ok">✔ OK</td><td>срок оплаты по умолчанию сохранён</td><td class="dt">7 дней</td></tr><tr><td class="st ok">✔ OK</td><td>новый счёт получает срок оплаты из настроек</td><td class="dt">2026-09-20 → 2026-09-27</td></tr><tr><td class="st ok">✔ OK</td><td>номер счёта использует префикс из настроек</td><td class="dt">СЧ-2026-0019</td></tr><tr><td class="st ok">✔ OK</td><td>IBAN печатается в счёте</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>подпись руководителя печатается в счёте</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>код плательщика НДС печатается в счёте</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>проверка почтового сервера отрабатывает без сбоя</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>проверочное письмо ставится в очередь или отправляется</td><td class="dt"></td></tr></tbody></table><h3>5. СВОЙ ДОМЕН</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>адрес приводится к чистому имени</td><td class="dt">crane.dimecon.md</td></tr><tr><td class="st ok">✔ OK</td><td>опечатки в домене отклоняются</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>домен добавлен</td><td class="dt">proverka-domena.dimecon.md</td></tr><tr><td class="st ok">✔ OK</td><td>для поддомена подсказывается запись CNAME</td><td class="dt">eminescu.md</td></tr><tr><td class="st ok">✔ OK</td><td>для корневого домена подсказывается запись A</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>непривязанный домен помечается неподтверждённым</td><td class="dt">имя отвечает (HTTP 200), но это не сайт компании — проверьте</td></tr><tr><td class="st ok">✔ OK</td><td>домен удаляется из кабинета</td><td class="dt"></td></tr></tbody></table><h3>6. СКРИПТЫ, ПРИМЕНЯЮЩИЕ НАСТРОЙКИ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>settings_report.py печатает готовность компании</td><td class="dt">=== Dimecon 11 (dimecon) — готовность 30 % ===</td></tr><tr><td class="st ok">✔ OK</td><td>pricing_tool.py показывает прайс и ставки</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>pricing_tool.py выгружает ставки в CSV</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>pricing_tool.py без --apply только показывает изменения</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>company_tool.py показывает реквизиты</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>import_load_charts.py без --apply ничего не пишет</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>domain_check.py отрабатывает</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>erp_sync.py проверяет оба подключения</td><td class="dt">OfficePlus: доступ не настроен (кабинет → Интеграция CRM)</td></tr></tbody></table><h3>7. ПРАВА И ИЗОЛЯЦИЯ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>чужой кабинет закрыт: /setup</td><td class="dt">HTTP 403</td></tr><tr><td class="st ok">✔ OK</td><td>чужой кабинет закрыт: /setup/pricing</td><td class="dt">HTTP 403</td></tr><tr><td class="st ok">✔ OK</td><td>чужой кабинет закрыт: /setup/company</td><td class="dt">HTTP 403</td></tr><tr><td class="st ok">✔ OK</td><td>чужой кабинет закрыт: /setup/domain</td><td class="dt">HTTP 403</td></tr><tr><td class="st ok">✔ OK</td><td>клиент не попадает в настройки компании</td><td class="dt">HTTP 403</td></tr></tbody></table><h3>8. ВОЗВРАТ ИСХОДНОГО СОСТОЯНИЯ</h3><table><thead><tr><th>Результат</th><th>Проверка</th><th>Фактически</th></tr></thead><tbody><tr><td class="st ok">✔ OK</td><td>прайс возвращён к исходному, чтобы прочие проверки считали те же суммы</td><td class="dt"></td></tr><tr><td class="st ok">✔ OK</td><td>ставка машины возвращена</td><td class="dt"></td></tr></tbody></table>
+  
+  
+  
+  
+
+  <h2>Снимки экрана</h2><div class="shots"><figure><img loading="lazy" src="../screens/110_setup_index.png" alt="Запуск компании: пять настроек и готовность"><figcaption><b>110_setup_index</b>Запуск компании: пять настроек и готовность</figcaption></figure><figure><img loading="lazy" src="../screens/111_setup_charts.png" alt="Грузовые таблицы: загрузка паспорта и состояние парка"><figcaption><b>111_setup_charts</b>Грузовые таблицы: загрузка паспорта и состояние парка</figcaption></figure><figure><img loading="lazy" src="../screens/112_setup_pricing.png" alt="Прайс: ставки, смены, зоны подачи, коэффициенты"><figcaption><b>112_setup_pricing</b>Прайс: ставки, смены, зоны подачи, коэффициенты</figcaption></figure><figure><img loading="lazy" src="../screens/113_setup_company.png" alt="Реквизиты банка и почтовый сервер компании"><figcaption><b>113_setup_company</b>Реквизиты банка и почтовый сервер компании</figcaption></figure><figure><img loading="lazy" src="../screens/114_setup_domain.png" alt="Свой домен: записи DNS и проверка привязки"><figcaption><b>114_setup_domain</b>Свой домен: записи DNS и проверка привязки</figcaption></figure></div>
+
+  <h2>Выводы</h2>
+  <ul class="scope"><li>после загрузки паспортной таблицы подбор считает по ней, а не по оценке с запасом 15 %</li><li>зоны подачи и коэффициенты из формы сразу меняют сумму заказа</li><li>IBAN, код НДС и подпись руководителя печатаются в счёте, срок оплаты берётся из настроек</li><li>домен проверяется по DNS и по ответу сайта, подсказки по записям выдаются автоматически</li><li>то же самое доступно скриптами: отчёт готовности, загрузка таблиц, прайс, реквизиты, домен, ERP</li></ul>
+  <div class="note"><b>Ограничения испытаний.</b><ul class="scope"><li>Проверка домена выполняется с сервера платформы: если запись DNS ещё не разошлась, проверку нужно повторить позже.</li><li>Сертификат HTTPS для своего домена выпускается на сервере после успешной проверки — это отдельный шаг администратора платформы.</li><li>Доступы к OfficePlus и Oracle на стенде не заполнены: скрипт обмена показывает, что подключение не настроено, а не работает вхолостую.</li></ul></div>
+
+  <div class="nav"><a href="index.html">← Все акты</a> <a href="01_infrastruktura.html">№1 Инфраструктура и база данных</a> <a href="02_sajt_zakazchika.html">№2 Сайт заказчика и перенос содержимого</a> <a href="03_podbor_i_raschet.html">№3 Подбор техники и расчёт стоимости</a> <a href="04_zakazy_crm.html">№4 Оформление заказов, формы и CRM компании</a> <a href="05_b2b_portal.html">№5 Портал партнёра B2B</a> <a href="06_dokumenty.html">№6 Документы: PDF и Excel</a> <a href="07_bezopasnost.html">№7 Мультиарендность и разграничение доступа</a> <a href="08_integracii.html">№8 Интеграции с экосистемой заказчика</a> <a href="09_vhod_i_roli.html">№9 Вход и роли пользователей</a> <a href="10_upravlencheskie_moduli.html">№10 Управленческие модули: проекты, продажи, закупки, счета, таблицы, документы</a> <a href="11_nastroyki_zapuska.html">№11 Настройки запуска компании и их применение</a> <a href="../presentation.html">Презентация →</a></div>
+  <div class="foot">Акт сформирован автоматически 20.09.2026 09:42 по протоколам прогонов в <code>docs/*.log</code>.
+  Испытания провёл: Claude (Claude Code), автоматизированный прогон.</div>
+</div><div class="lb" id="lb"><img alt=""></div><script>
+const lb=document.getElementById('lb');document.querySelectorAll('figure img').forEach(i=>i.onclick=()=>{
+lb.querySelector('img').src=i.src;lb.classList.add('on')});lb.onclick=()=>lb.classList.remove('on');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});</script></body></html>

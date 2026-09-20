@@ -55,6 +55,16 @@ class Tenant(Base):
     faq: Mapped[list] = mapped_column(JSON, default=list)       # [{q:{..},a:{..}}]
     social: Mapped[dict] = mapped_column(JSON, default=dict)
     # инфраструктура компании
+    # реквизиты для счетов и актов
+    vat_code: Mapped[str] = mapped_column(String(32), default="")        # код плательщика НДС
+    bank_name: Mapped[str] = mapped_column(String(160), default="")
+    bank_iban: Mapped[str] = mapped_column(String(48), default="")
+    bank_swift: Mapped[str] = mapped_column(String(16), default="")
+    legal_address: Mapped[str] = mapped_column(String(255), default="")
+    director_name: Mapped[str] = mapped_column(String(160), default="")
+    accountant_name: Mapped[str] = mapped_column(String(160), default="")
+    invoice_due_days: Mapped[int] = mapped_column(Integer, default=10)
+    doc_prefixes: Mapped[dict] = mapped_column(JSON, default=dict)       # {"invoice": "СЧ", "act": "АКТ"}
     smtp: Mapped[dict] = mapped_column(JSON, default=dict)      # host, port, user, password, tls, from_email, from_name
     storage: Mapped[dict] = mapped_column(JSON, default=dict)   # backend: local|url|s3, base_url, bucket, endpoint, keys
     pricing: Mapped[dict] = mapped_column(JSON, default=dict)   # коэффициенты, зоны, допуслуги
@@ -121,6 +131,12 @@ class Domain(Base):
     host: Mapped[str] = mapped_column(String(160), unique=True)
     is_primary: Mapped[bool] = mapped_column(Boolean, default=False)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    # проверка привязки: куда указывает DNS и что ответил сайт по этому имени
+    dns_target: Mapped[str] = mapped_column(String(200), default="")
+    http_status: Mapped[Optional[int]] = mapped_column(Integer)
+    check_note: Mapped[str] = mapped_column(String(255), default="")
+    checked_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
 
 
 # ---------------------------------------------------------------- Медиа
@@ -215,6 +231,13 @@ class LoadChart(Base):
     radius_m: Mapped[float] = mapped_column(Float)
     capacity_t: Mapped[float] = mapped_column(Float)
     height_m: Mapped[float] = mapped_column(Float, default=0)
+    # откуда строка: passport — из паспорта производителя, approx — расчётная оценка,
+    # manual — введена руками. Подбор доверяет паспорту и предупреждает об оценке.
+    source: Mapped[str] = mapped_column(String(12), default="manual", index=True)
+    boom_m: Mapped[float] = mapped_column(Float, default=0)            # длина стрелы для этой строки
+    counterweight_t: Mapped[float] = mapped_column(Float, default=0)   # противовес
+    doc_media_id: Mapped[Optional[int]] = mapped_column(Integer)       # файл паспорта в документах
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
 
 
 class Booking(Base):

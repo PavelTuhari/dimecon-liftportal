@@ -1,0 +1,40 @@
+{% extends "admin/_layout.html" %}
+{% block heading %}Запуск компании{% endblock %}
+{% block content %}
+<p class="muted">Пять настроек, после которых платформа работает на ваших данных, а не на демонстрационных.
+Каждый пункт можно заполнить в любом порядке — система сразу начинает их применять.</p>
+
+<div class="card">
+  <div class="flex between"><b>Готовность</b><b>{{ state.pct }} %</b></div>
+  <div class="bar mt"><i style="width:{{ state.pct }}%"></i></div>
+  <p class="tiny muted mt">готово {{ state.done }} из {{ state.total }}{% if state.partial %}, частично — {{ state.partial }}{% endif %}</p>
+</div>
+
+<div class="grid g2 mt">
+  {% for row in state.rows %}
+  <div class="card">
+    <div class="flex between wrap" style="gap:8px">
+      <h3 style="margin:0">{{ loop.index }}. {{ row.title }}</h3>
+      <span class="badge {{ 'ok' if row.state == 'ok' else ('warn' if row.state == 'partial' else 'danger') }}">{{ levels[row.state] }}</span>
+    </div>
+    <p class="small" style="margin:8px 0 4px">{{ row.note }}</p>
+    <p class="tiny muted" style="margin:0">{{ row.why }}</p>
+    <div class="mt"><a class="btn sm {{ 'primary' if row.state != 'ok' }}" href="{{ url_for(row.endpoint) }}">Настроить</a></div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card mt2">
+  <h3>То же самое из командной строки</h3>
+  <p class="small muted">Скрипты применяют настройки без интерфейса — удобно для первичного наполнения
+  и для регулярного обслуживания.</p>
+  <table class="breakdown"><tbody>
+    <tr><td><code>python tools/settings_report.py</code></td><td>отчёт готовности: те же пять пунктов</td></tr>
+    <tr><td><code>python tools/import_load_charts.py файл.xlsx</code></td><td>загрузка паспортных грузовых таблиц</td></tr>
+    <tr><td><code>python tools/pricing_tool.py export|import|rates</code></td><td>выгрузка и загрузка прайса и ставок</td></tr>
+    <tr><td><code>python tools/company_tool.py show|set|mail-test</code></td><td>реквизиты и проверка почты</td></tr>
+    <tr><td><code>python tools/domain_check.py</code></td><td>проверка DNS и ответа сайта по домену</td></tr>
+    <tr><td><code>python tools/erp_sync.py officeplus|oracle</code></td><td>обмен с ERP по сохранённым доступам</td></tr>
+  </tbody></table>
+</div>
+{% endblock %}

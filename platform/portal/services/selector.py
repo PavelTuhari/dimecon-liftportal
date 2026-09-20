@@ -98,13 +98,25 @@ def is_free(eq_id: int, start: datetime, hours: float) -> tuple[bool, datetime |
 
 
 def best_chart(eq: Equipment, r_req: float, m_calc: float, h_req: float) -> LoadChart | None:
-    """Ближайшая большая строка по вылету (консервативно), удовлетворяющая Q и H."""
-    rows = [c for c in eq.load_charts if c.radius_m >= r_req]
+    """Ближайшая большая строка по вылету (консервативно), удовлетворяющая Q и H.
+
+    Если у машины загружена паспортная таблица производителя, считаем только по ней:
+    смешивать паспорт с ориентировочной кривой нельзя — оценка занижена на 15 %.
+    """
+    charts = list(eq.load_charts)
+    passport = [c for c in charts if (c.source or "") == "passport"]
+    rows = [c for c in (passport or charts) if c.radius_m >= r_req]
     ok = [c for c in rows if c.capacity_t >= m_calc and (c.height_m or eq.height_m) >= h_req]
     if not ok:
         return None
     ok.sort(key=lambda c: (c.radius_m, -c.capacity_t))
     return ok[0]
+
+
+def chart_is_approx(eq: Equipment) -> bool:
+    """Подбор по этой машине идёт по оценке, а не по паспорту — повод предупредить клиента."""
+    charts = list(eq.load_charts)
+    return bool(charts) and not any((c.source or "") == "passport" for c in charts)
 
 
 def select_equipment(tenant_id: int, *, weight_t: float, height_m: float, offset_m: float, cargo_dim_m: float,

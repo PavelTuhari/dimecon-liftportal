@@ -1,0 +1,52 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Свой домен{% endblock %}
+{% block content %}
+<p class="muted">Сейчас сайт компании открывается по адресу платформы. После привязки домена тот же сайт
+будет доступен по вашему имени — ссылки в письмах и документах тоже станут вашими.</p>
+
+<form method="post" class="card flex" style="gap:8px;align-items:end">{{ csrf() }}
+  <input type="hidden" name="action" value="add">
+  <div class="field" style="flex:1;margin:0"><label>Домен или поддомен</label>
+    <input name="host" placeholder="dimecon.md или crane.dimecon.md" required></div>
+  <button class="btn primary">Добавить</button>
+</form>
+
+<div class="table-wrap mt"><table>
+  <thead><tr><th>Домен</th><th>Состояние</th><th>DNS указывает на</th><th>Проверен</th><th></th></tr></thead>
+  <tbody>{% for d in rows %}
+    <tr>
+      <td><b>{{ d.host }}</b>{% if d.is_primary %} <span class="badge">основной</span>{% endif %}</td>
+      <td>{% if d.verified %}<span class="badge ok">работает</span>{% else %}<span class="badge warn">не подтверждён</span>{% endif %}
+        {% if d.check_note %}<div class="tiny muted">{{ d.check_note }}</div>{% endif %}</td>
+      <td class="small">{{ d.dns_target or '—' }}{% if d.http_status %}<div class="tiny muted">ответ сайта: HTTP {{ d.http_status }}</div>{% endif %}</td>
+      <td class="small muted">{{ d.checked_at.strftime('%d.%m.%Y %H:%M') if d.checked_at else 'ещё не проверяли' }}</td>
+      <td>
+        <form method="post" class="flex" style="gap:4px">{{ csrf() }}
+          <input type="hidden" name="id" value="{{ d.id }}">
+          <button class="btn sm primary" name="action" value="check">Проверить</button>
+          {% if not d.is_primary %}<button class="btn sm" name="action" value="primary">Сделать основным</button>{% endif %}
+          <button class="btn sm ghost" name="action" value="delete">Удалить</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}<tr><td colspan="5" class="muted">Домены не добавлены</td></tr>{% endfor %}</tbody>
+</table></div>
+
+<div class="card mt2">
+  <h3>Что прописать в панели регистратора</h3>
+  <p class="small muted">Платформа отвечает по адресу <b>{{ platform_host }}</b>{% if platform_ips %}
+    (IP: {{ platform_ips|join(', ') }}){% endif %}.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Тип записи</th><th>Имя</th><th>Значение</th><th>Зачем</th></tr></thead>
+    <tbody>{% for r in instructions %}
+      <tr><td><b>{{ r.type }}</b></td><td><code>{{ r.name }}</code></td><td><code>{{ r.value }}</code></td>
+        <td class="small muted">{{ r.note }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  <p class="tiny muted mt">После изменения записей DNS обновление занимает от нескольких минут до суток.
+  Нажмите «Проверить» — платформа посмотрит, куда ведёт имя, и откроет сайт по нему.</p>
+  <p class="tiny muted">Сертификат HTTPS для своего домена выпускается на сервере платформы после того,
+  как проверка прошла: домен уже указывает на нужный адрес.</p>
+</div>
+{% endblock %}

@@ -40,6 +40,7 @@ def create_app(config_object=Config) -> Flask:
     from .blueprints.admin import bp as admin_bp
     from .blueprints.partner import bp as partner_bp
     from .blueprints.erp import bp as erp_bp
+    from .blueprints.setup import bp as setup_bp
     from .blueprints.api import bp as api_bp
     from .blueprints.docs_export import bp as export_bp
     app.register_blueprint(platform_bp)
@@ -48,6 +49,7 @@ def create_app(config_object=Config) -> Flask:
     app.register_blueprint(account_bp, url_prefix="/s/<tenant_slug>/account")
     app.register_blueprint(admin_bp, url_prefix="/s/<tenant_slug>/admin")
     app.register_blueprint(erp_bp, url_prefix="/s/<tenant_slug>/admin")
+    app.register_blueprint(setup_bp, url_prefix="/s/<tenant_slug>/admin")
     app.register_blueprint(partner_bp, url_prefix="/s/<tenant_slug>/partner")
     app.register_blueprint(api_bp, url_prefix="/api")
 

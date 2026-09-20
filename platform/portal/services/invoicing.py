@@ -22,7 +22,10 @@ STATUS_NAMES = {"issued": "Выставлен", "partial": "Оплачен ча�
 
 
 def next_number(tenant: Tenant, doc_type: str = "invoice") -> str:
-    prefix = {"invoice": "СЧ", "credit_note": "КН", "act": "АКТ", "bill": "СП"}.get(doc_type, "ДОК")
+    # префиксы берём из настроек компании, если владелец их задал
+    prefixes = {"invoice": "СЧ", "credit_note": "КН", "act": "АКТ", "bill": "СП"}
+    prefixes.update({k: v for k, v in (getattr(tenant, "doc_prefixes", None) or {}).items() if v})
+    prefix = prefixes.get(doc_type, "ДОК")
     year = date.today().year
     n = (db.query(func.count(Document.id))
          .filter(Document.tenant_id == tenant.id, Document.type == doc_type,
@@ -32,9 +35,11 @@ def next_number(tenant: Tenant, doc_type: str = "invoice") -> str:
 
 def create_invoice(tenant: Tenant, *, amount: float, lines: list[dict] | None = None, contact_id=None,
                    partner_id=None, project_id=None, sales_id=None, order_id=None, plan_id=None,
-                   payment_days: int = 10, doc_type: str = "invoice", note: str = "",
+                   payment_days: int | None = None, doc_type: str = "invoice", note: str = "",
                    issued_on: date | None = None) -> Document:
     issued = issued_on or date.today()
+    if payment_days is None:   # срок оплаты по умолчанию — из настроек компании
+        payment_days = getattr(tenant, "invoice_due_days", None) or 10
     doc = Document(tenant_id=tenant.id, type=doc_type, number=next_number(tenant, doc_type),
                    amount=round(amount, 2), currency=tenant.currency or "MDL", status="issued",
                    issued_at=issued, due_at=issued + timedelta(days=payment_days),

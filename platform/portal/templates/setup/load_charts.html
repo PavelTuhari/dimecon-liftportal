@@ -1,0 +1,104 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Грузовые таблицы производителя{% endblock %}
+{% block content %}
+<div class="stats">
+  <div class="kpi"><b>{{ summary.with_passport }} / {{ summary.machines }}</b><span>машин с паспортной таблицей</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--warn)' if summary.approx_only else 'inherit' }}">{{ summary.approx_only }}</b><span>считаются по оценке</span></div>
+  <div class="kpi"><b style="color:{{ 'var(--danger)' if summary.without else 'inherit' }}">{{ summary.without }}</b><span>без таблицы вовсе</span></div>
+  <div class="kpi"><b>{{ summary.chart_rows }}</b><span>строк в таблицах</span></div>
+</div>
+
+<div class="alert info mt small">Пока таблицы нет, подбор берёт ориентировочную кривую с занижением 15 % и
+предупреждает клиента. Как только паспортные строки загружены, расчёт идёт только по ним.</div>
+
+<form method="post" enctype="multipart/form-data" class="card mt">{{ csrf() }}
+  <h3>Загрузить таблицу из файла</h3>
+  <div class="grid g2">
+    <div class="field"><label>Файл CSV или XLSX *</label><input type="file" name="file" accept=".csv,.xlsx,.xls" required></div>
+    <div class="field"><label>Если в файле нет колонки с машиной</label><select name="equipment_id">
+      <option value="">— машина берётся из файла —</option>
+      {% for e in fleet %}<option value="{{ e.id }}">{{ e.brand }} {{ e.model }}{% if e.inventory_no %} ({{ e.inventory_no }}){% endif %}</option>{% endfor %}
+    </select></div>
+  </div>
+  <div class="flex wrap" style="gap:16px">
+    <label class="small"><input type="checkbox" name="replace" value="1" checked> заменить ориентировочные строки</label>
+    <label class="small"><input type="checkbox" name="keep_file" value="1" checked> сохранить файл в документах</label>
+  </div>
+  <div class="flex mt" style="gap:8px">
+    <button class="btn" name="action" value="preview">Показать, что распознано</button>
+    <button class="btn primary" name="action" value="import">Загрузить в парк</button>
+    <a class="btn ghost" href="{{ url_for('setup.load_charts_template') }}">Скачать образец файла</a>
+  </div>
+  <p class="tiny muted mt">Колонки распознаются по заголовкам: машина, вылет, грузоподъёмность, высота,
+  конфигурация, стрела, противовес — по-русски, по-румынски или по-английски.</p>
+</form>
+
+{% if preview %}
+<div class="card mt">
+  <h3>Разбор файла {{ preview.filename }}</h3>
+  <p class="small">{{ preview.report.line() }}</p>
+  {% if preview.report.unknown %}
+    <div class="alert warning small">Не нашли в парке: {{ preview.report.unknown|unique|join(', ') }}.
+      Укажите машину вручную в форме выше или поправьте название в файле.</div>
+  {% endif %}
+  {% if preview.problems %}
+    <div class="alert danger small">Похоже на ошибку в данных:<ul class="scope">{% for p in preview.problems %}<li>{{ p }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if preview.report.warnings %}
+    <div class="alert warning small"><ul class="scope">{% for w in preview.report.warnings[:6] %}<li>{{ w }}</li>{% endfor %}</ul></div>
+  {% endif %}
+  {% if preview.sample %}
+  <div class="table-wrap"><table>
+    <thead><tr><th>Машина</th><th class="right">Вылет, м</th><th class="right">Грузоподъёмность, т</th>
+      <th class="right">Высота, м</th><th>Конфигурация</th></tr></thead>
+    <tbody>{% for row in preview.sample %}
+      <tr><td>{{ row.equipment.brand }} {{ row.equipment.model }}</td>
+        <td class="right">{{ row.radius_m }}</td><td class="right">{{ row.capacity_t }}</td>
+        <td class="right">{{ row.height_m or '—' }}</td><td>{{ row.configuration }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  <p class="tiny muted">показаны первые {{ preview.sample|length }} строк из {{ preview.count }}</p>
+  {% endif %}
+</div>
+{% endif %}
+
+<h3 class="mt2">Состояние по парку</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Машина</th><th>Источник</th><th class="right">Строк</th><th>Конфигурации</th>
+    <th class="right">Макс. вылет</th><th>Обновлено</th><th></th></tr></thead>
+  <tbody>{% for r in rows %}
+    <tr>
+      <td><b>{{ r.eq.brand }} {{ r.eq.model }}</b>{% if r.eq.inventory_no %}<div class="tiny muted">{{ r.eq.inventory_no }}</div>{% endif %}</td>
+      <td>{% if r.state == 'passport' %}<span class="badge ok">паспорт</span>
+        {% elif r.state == 'approx' %}<span class="badge warn">оценка</span>
+        {% else %}<span class="badge danger">нет таблицы</span>{% endif %}</td>
+      <td class="right">{{ r.rows }}{% if r.passport and r.approx %}<div class="tiny muted">паспорт {{ r.passport }}, оценка {{ r.approx }}</div>{% endif %}</td>
+      <td class="small">{{ r.configurations|join(', ') or '—' }}</td>
+      <td class="right">{{ r.max_radius or '—' }}</td>
+      <td class="small muted">{{ r.updated.strftime('%d.%m.%Y') if r.updated else '—' }}</td>
+      <td>
+        <details><summary class="btn sm ghost">Править</summary>
+          <form method="post" class="mt" style="min-width:260px">{{ csrf() }}
+            <input type="hidden" name="action" value="manual"><input type="hidden" name="equipment_id" value="{{ r.eq.id }}">
+            <div class="grid g2">
+              <div class="field"><label class="tiny">Вылет, м</label><input name="radius_m" type="number" step="0.1" required></div>
+              <div class="field"><label class="tiny">Нагрузка, т</label><input name="capacity_t" type="number" step="0.01" required></div>
+            </div>
+            <div class="grid g2">
+              <div class="field"><label class="tiny">Высота, м</label><input name="height_m" type="number" step="0.1"></div>
+              <div class="field"><label class="tiny">Конфигурация</label><input name="configuration" value="main"></div>
+            </div>
+            <button class="btn sm primary">Добавить строку паспорта</button>
+          </form>
+          <form method="post" class="flex mt" style="gap:4px">{{ csrf() }}
+            <input type="hidden" name="equipment_id" value="{{ r.eq.id }}">
+            <button class="btn sm" name="action" value="drop_approx">Убрать оценочные</button>
+            <button class="btn sm ghost" name="action" value="clear">Очистить всё</button>
+          </form>
+        </details>
+      </td>
+    </tr>
+  {% else %}<tr><td colspan="7" class="muted">В парке нет техники</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

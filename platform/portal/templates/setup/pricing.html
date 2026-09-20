@@ -1,0 +1,116 @@
+{% extends "admin/_layout.html" %}
+{% from "_macros.html" import csrf with context %}
+{% block heading %}Действующий прайс{% endblock %}
+{% block content %}
+{% if problems %}<div class="alert warning">Осталось заполнить: {{ problems|join('; ') }}</div>{% endif %}
+{% if not custom %}<div class="alert info small">Сейчас действуют коэффициенты платформы по умолчанию.
+Сохраните форму — и расчёт на сайте, в визарде и в счетах пойдёт по вашим цифрам.</div>{% endif %}
+
+<h3>Ставки техники, минимальные смены и подача</h3>
+<form method="post">{{ csrf() }}<input type="hidden" name="action" value="rates">
+  <div class="table-wrap"><table>
+    <thead><tr><th>Машина</th><th class="right">Ставка за час</th><th class="right">Мин. смена, ч</th>
+      <th class="right">Подача (мобилизация)</th><th class="right">Помесячно</th></tr></thead>
+    <tbody>{% for e in fleet %}
+      <tr>
+        <td><b>{{ e.brand }} {{ e.model }}</b><div class="tiny muted">{{ e.capacity_t|round(1) }} т · вылет {{ e.radius_m|round(1) }} м</div></td>
+        <td class="right"><input name="rate_{{ e.id }}" type="number" step="1" value="{{ e.hourly_rate or 0 }}" style="width:120px;text-align:right"></td>
+        <td class="right"><input name="min_{{ e.id }}" type="number" step="0.5" value="{{ e.min_hours or 0 }}" style="width:90px;text-align:right"></td>
+        <td class="right"><input name="mob_{{ e.id }}" type="number" step="1" value="{{ e.mobilization_fee or 0 }}" style="width:120px;text-align:right"></td>
+        <td class="right"><input name="month_{{ e.id }}" type="number" step="100" value="{{ (e.spec or {}).get('monthly_rate', 0) }}" style="width:130px;text-align:right"></td>
+      </tr>
+    {% else %}<tr><td colspan="5" class="muted">В парке нет техники</td></tr>{% endfor %}</tbody>
+  </table></div>
+  <button class="btn primary mt">Сохранить ставки</button>
+</form>
+
+<form method="post" class="mt2">{{ csrf() }}<input type="hidden" name="action" value="form">
+  <div class="grid g2">
+    <div class="card">
+      <h3>Зоны подачи</h3>
+      <p class="tiny muted">Зона выбирается по расстоянию до объекта. Стоимость подачи = плата зоны +
+      километры сверх бесплатных × цена километра.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Название</th><th class="right">Плата</th><th class="right">Беспл. км</th>
+          <th class="right">За км</th><th class="right">До, км</th></tr></thead>
+        <tbody>
+        {% for idx in range(6) %}
+          {% set z = pricing.zones[idx] if pricing.zones|length > idx else None %}
+          <tr>
+            <td><input name="zone_name_{{ idx }}" value="{{ z.name if z else '' }}" placeholder="{{ 'например, Город' if not z }}">
+              <input type="hidden" name="zone_code_{{ idx }}" value="{{ z.code if z else '' }}"></td>
+            <td class="right"><input name="zone_fee_{{ idx }}" type="number" step="10" value="{{ z.fee if z else '' }}" style="width:100px;text-align:right"></td>
+            <td class="right"><input name="zone_free_{{ idx }}" type="number" step="1" value="{{ z.free_km if z else '' }}" style="width:80px;text-align:right"></td>
+            <td class="right"><input name="zone_perkm_{{ idx }}" type="number" step="1" value="{{ z.per_km if z else '' }}" style="width:80px;text-align:right"></td>
+            <td class="right"><input name="zone_max_{{ idx }}" type="number" step="1" value="{{ z.max_km if z else '' }}" style="width:90px;text-align:right"></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+      <p class="tiny muted">Пустое название — строка не сохраняется.</p>
+    </div>
+
+    <div class="card">
+      <h3>Коэффициенты времени и сезона</h3>
+      <div class="grid g3">
+        {% for key, title in [('day','День'),('evening','Вечер'),('night','Ночь'),('saturday','Суббота'),('sunday','Воскресенье')] %}
+        <div class="field"><label>{{ title }}</label><input name="time_{{ key }}" type="number" step="0.05" value="{{ pricing.time[key] }}"></div>
+        {% endfor %}
+      </div>
+      <h4 class="mt">Сезонность по месяцам</h4>
+      <div class="grid g4">
+        {% for m in range(1, 13) %}
+        <div class="field"><label>{{ ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][m-1] }}</label>
+          <input name="season_{{ m }}" type="number" step="0.05" value="{{ pricing.season[m|string] }}"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g2 mt">
+    <div class="card">
+      <h3>Надбавки за условия</h3>
+      <div class="grid g2">
+        {% for key, title in [('tight','Стеснённые условия'),('soft_ground','Слабый грунт'),('power_line','Вблизи ЛЭП'),('night','Ночные работы')] %}
+        <div class="field"><label>{{ title }}</label><input name="cond_{{ key }}" type="number" step="0.05" value="{{ pricing.conditions[key] }}"></div>
+        {% endfor %}
+      </div>
+      <div class="field"><label>Потолок надбавок за условия</label><input name="conditions_cap" type="number" step="0.05" value="{{ pricing.conditions_cap }}"></div>
+      <h4 class="mt">Срочность</h4>
+      <div class="grid g4">
+        {% for hours, coef in pricing.urgency %}
+        <div class="field"><label>{{ 'более 72 ч' if hours == 72 else ('менее ' ~ hours ~ ' ч' if hours else 'в тот же день') }}</label>
+          <input name="urgency_{{ hours }}" type="number" step="0.05" value="{{ coef }}"></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Дополнительные услуги и скидки</h3>
+      <div class="grid g2">
+        {% for key, title in [('rigger','Стропальщик'),('slings','Стропы'),('pads','Подкладки'),('road_closure','Перекрытие дороги'),('night_light','Освещение')] %}
+        <div class="field"><label>{{ title }}</label><input name="addon_{{ key }}" type="number" step="10" value="{{ pricing.addons[key] }}"></div>
+        {% endfor %}
+      </div>
+      <h4 class="mt">Скидки (доля: 0,07 = 7 %)</h4>
+      <div class="grid g3">
+        <div class="field"><label>Гибкая дата</label><input name="discount_flexible" type="number" step="0.01" value="{{ pricing.discounts.flexible_date }}"></div>
+        <div class="field"><label>Первый заказ онлайн</label><input name="discount_first" type="number" step="0.01" value="{{ pricing.discounts.first_online }}"></div>
+        <div class="field"><label>Потолок скидок</label><input name="discount_max" type="number" step="0.01" value="{{ pricing.discounts.max_total }}"></div>
+      </div>
+      <div class="field"><label>Ширина вилки цены в предварительном расчёте</label>
+        <input name="range_width" type="number" step="0.05" value="{{ pricing.range_width }}"></div>
+    </div>
+  </div>
+
+  <button class="btn primary mt">Сохранить прайс</button>
+</form>
+
+<details class="card mt2">
+  <summary class="small" style="cursor:pointer">Для опытных: править прайс как JSON</summary>
+  <form method="post" class="mt">{{ csrf() }}<input type="hidden" name="action" value="json">
+    <textarea name="pricing_json" rows="16" style="font-family:var(--mono);font-size:12px">{{ pricing_json }}</textarea>
+    <button class="btn mt">Сохранить JSON</button>
+  </form>
+</details>
+{% endblock %}

@@ -1,6 +1,6 @@
 {
  "project": "dimecon.md — ТЗ, платформа LiftPortal и документы",
- "generated": "20.09.2026 02:25",
+ "generated": "20.09.2026 09:45",
  "groups": [
   {
    "name": "Проект",
@@ -68,9 +68,9 @@
    "group": "Проект",
    "ext": ".md",
    "viewer": "markdown",
-   "size": 29479,
-   "size_h": "28.8 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 32789,
+   "size_h": "32.0 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -237,9 +237,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 14803,
-   "size_h": "14.5 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 14929,
+   "size_h": "14.6 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -250,9 +250,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 21990,
-   "size_h": "21.5 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 22116,
+   "size_h": "21.6 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -263,9 +263,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 16385,
-   "size_h": "16.0 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 16511,
+   "size_h": "16.1 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -276,9 +276,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 18613,
-   "size_h": "18.2 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 18739,
+   "size_h": "18.3 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -289,9 +289,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 12949,
-   "size_h": "12.6 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 13075,
+   "size_h": "12.8 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -302,9 +302,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 15430,
-   "size_h": "15.1 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 15556,
+   "size_h": "15.2 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -315,9 +315,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 13561,
-   "size_h": "13.2 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 13687,
+   "size_h": "13.4 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -328,9 +328,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 30826,
-   "size_h": "30.1 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 30952,
+   "size_h": "30.2 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -341,9 +341,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 25294,
-   "size_h": "24.7 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 25420,
+   "size_h": "24.8 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -354,9 +354,22 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 28590,
-   "size_h": "27.9 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 28715,
+   "size_h": "28.0 КБ",
+   "mtime": "20.09.2026 09:42",
+   "searchable": true
+  },
+  {
+   "path": "docs/acts/11_nastroyki_zapuska.html",
+   "name": "11_nastroyki_zapuska.html",
+   "title": "11_nastroyki_zapuska.html",
+   "caption": "",
+   "group": "Протоколы испытаний",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 22499,
+   "size_h": "22.0 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -367,9 +380,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 11792,
-   "size_h": "11.5 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 12352,
+   "size_h": "12.1 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -406,9 +419,9 @@
    "group": "Протоколы испытаний",
    "ext": ".html",
    "viewer": "html",
-   "size": 17967,
-   "size_h": "17.5 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 18654,
+   "size_h": "18.2 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -484,9 +497,9 @@
    "group": "Протоколы испытаний",
    "ext": ".log",
    "viewer": "text",
-   "size": 7664,
+   "size": 7663,
    "size_h": "7.5 КБ",
-   "mtime": "20.09.2026 02:19",
+   "mtime": "20.09.2026 09:41",
    "searchable": true
   },
   {
@@ -525,7 +538,7 @@
    "viewer": "text",
    "size": 1936,
    "size_h": "1.9 КБ",
-   "mtime": "20.09.2026 02:16",
+   "mtime": "20.09.2026 09:41",
    "searchable": true
   },
   {
@@ -538,7 +551,20 @@
    "viewer": "text",
    "size": 5743,
    "size_h": "5.6 КБ",
-   "mtime": "20.09.2026 02:24",
+   "mtime": "20.09.2026 09:45",
+   "searchable": true
+  },
+  {
+   "path": "docs/test_settings.log",
+   "name": "test_settings.log",
+   "title": "test_settings.log",
+   "caption": "",
+   "group": "Протоколы испытаний",
+   "ext": ".log",
+   "viewer": "text",
+   "size": 5858,
+   "size_h": "5.7 КБ",
+   "mtime": "20.09.2026 09:40",
    "searchable": true
   },
   {
@@ -656,6 +682,19 @@
    "size": 26961,
    "size_h": "26.3 КБ",
    "mtime": "20.09.2026 02:16",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/16_Сменный рапорт.pdf",
+   "name": "16_Сменный рапорт.pdf",
+   "title": "16_Сменный рапорт.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 26800,
+   "size_h": "26.2 КБ",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1036,6 +1075,45 @@
    "searchable": false
   },
   {
+   "path": "docs/generated/90_quote.pdf",
+   "name": "90_quote.pdf",
+   "title": "90_quote.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 30748,
+   "size_h": "30.0 КБ",
+   "mtime": "20.09.2026 09:41",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/91_invoice.pdf",
+   "name": "91_invoice.pdf",
+   "title": "91_invoice.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 30566,
+   "size_h": "29.8 КБ",
+   "mtime": "20.09.2026 09:41",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/92_act.pdf",
+   "name": "92_act.pdf",
+   "title": "92_act.pdf",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".pdf",
+   "viewer": "pdf",
+   "size": 32359,
+   "size_h": "31.6 КБ",
+   "mtime": "20.09.2026 09:41",
+   "searchable": false
+  },
+  {
    "path": "docs/generated/9_Сменный рапорт.pdf",
    "name": "9_Сменный рапорт.pdf",
    "title": "9_Сменный рапорт.pdf",
@@ -1056,9 +1134,22 @@
    "group": "Сгенерированные документы",
    "ext": ".pdf",
    "viewer": "pdf",
-   "size": 29865,
+   "size": 29861,
    "size_h": "29.2 КБ",
-   "mtime": "20.09.2026 02:16",
+   "mtime": "20.09.2026 09:41",
+   "searchable": false
+  },
+  {
+   "path": "docs/generated/rates.csv",
+   "name": "rates.csv",
+   "title": "rates.csv",
+   "caption": "",
+   "group": "Сгенерированные документы",
+   "ext": ".csv",
+   "viewer": "csv",
+   "size": 1034,
+   "size_h": "1.0 КБ",
+   "mtime": "20.09.2026 09:40",
    "searchable": false
   },
   {
@@ -1069,9 +1160,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 8806,
-   "size_h": "8.6 КБ",
-   "mtime": "20.09.2026 02:16",
+   "size": 9105,
+   "size_h": "8.9 КБ",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1082,9 +1173,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 17911,
-   "size_h": "17.5 КБ",
-   "mtime": "20.09.2026 02:16",
+   "size": 18504,
+   "size_h": "18.1 КБ",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1095,9 +1186,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6272,
+   "size": 6271,
    "size_h": "6.1 КБ",
-   "mtime": "20.09.2026 02:16",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1108,9 +1199,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 12181,
-   "size_h": "11.9 КБ",
-   "mtime": "20.09.2026 02:16",
+   "size": 12057,
+   "size_h": "11.8 КБ",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1121,9 +1212,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 10559,
+   "size": 10561,
    "size_h": "10.3 КБ",
-   "mtime": "20.09.2026 02:16",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1134,9 +1225,9 @@
    "group": "Сгенерированные документы",
    "ext": ".xlsx",
    "viewer": "xlsx",
-   "size": 6530,
+   "size": 6578,
    "size_h": "6.4 КБ",
-   "mtime": "20.09.2026 02:16",
+   "mtime": "20.09.2026 09:41",
    "searchable": false
   },
   {
@@ -1332,6 +1423,71 @@
    "size": 44262,
    "size_h": "43.2 КБ",
    "mtime": "19.09.2026 21:21",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/110_setup_index.png",
+   "name": "110_setup_index.png",
+   "title": "110_setup_index.png",
+   "caption": "Запуск компании: пять настроек и готовность",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 49793,
+   "size_h": "48.6 КБ",
+   "mtime": "20.09.2026 09:42",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/111_setup_charts.png",
+   "name": "111_setup_charts.png",
+   "title": "111_setup_charts.png",
+   "caption": "Грузовые таблицы: загрузка паспорта и состояние парка",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 69568,
+   "size_h": "67.9 КБ",
+   "mtime": "20.09.2026 09:42",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/112_setup_pricing.png",
+   "name": "112_setup_pricing.png",
+   "title": "112_setup_pricing.png",
+   "caption": "Прайс: ставки, смены, зоны подачи, коэффициенты",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 110220,
+   "size_h": "107.6 КБ",
+   "mtime": "20.09.2026 09:42",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/113_setup_company.png",
+   "name": "113_setup_company.png",
+   "title": "113_setup_company.png",
+   "caption": "Реквизиты банка и почтовый сервер компании",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 40523,
+   "size_h": "39.6 КБ",
+   "mtime": "20.09.2026 09:42",
+   "searchable": false
+  },
+  {
+   "path": "docs/screens/114_setup_domain.png",
+   "name": "114_setup_domain.png",
+   "title": "114_setup_domain.png",
+   "caption": "Свой домен: записи DNS и проверка привязки",
+   "group": "Скриншоты",
+   "ext": ".png",
+   "viewer": "image",
+   "size": 31240,
+   "size_h": "30.5 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": false
   },
   {
@@ -2460,9 +2616,9 @@
    "group": "Скриншоты",
    "ext": ".txt",
    "viewer": "text",
-   "size": 9058,
-   "size_h": "8.8 КБ",
-   "mtime": "20.09.2026 02:19",
+   "size": 9571,
+   "size_h": "9.3 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -2514,7 +2670,7 @@
    "viewer": "json",
    "size": 6991,
    "size_h": "6.8 КБ",
-   "mtime": "20.09.2026 02:25",
+   "mtime": "20.09.2026 09:43",
    "searchable": true
   },
   {
@@ -3721,9 +3877,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 6658,
-   "size_h": "6.5 КБ",
-   "mtime": "20.09.2026 02:09",
+   "size": 6781,
+   "size_h": "6.6 КБ",
+   "mtime": "20.09.2026 09:35",
    "searchable": true
   },
   {
@@ -3844,6 +4000,19 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/blueprints/setup.py",
+   "name": "setup.py",
+   "title": "setup.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 15745,
+   "size_h": "15.4 КБ",
+   "mtime": "20.09.2026 09:39",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/blueprints/site.py",
    "name": "site.py",
    "title": "site.py",
@@ -3916,9 +4085,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 31523,
-   "size_h": "30.8 КБ",
-   "mtime": "20.09.2026 01:59",
+   "size": 33551,
+   "size_h": "32.8 КБ",
+   "mtime": "20.09.2026 09:34",
    "searchable": true
   },
   {
@@ -4020,9 +4189,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 30901,
-   "size_h": "30.2 КБ",
-   "mtime": "20.09.2026 02:09",
+   "size": 32044,
+   "size_h": "31.3 КБ",
+   "mtime": "20.09.2026 09:35",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/domains.py",
+   "name": "domains.py",
+   "title": "domains.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 4977,
+   "size_h": "4.9 КБ",
+   "mtime": "20.09.2026 09:35",
    "searchable": true
   },
   {
@@ -4033,9 +4215,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 15024,
-   "size_h": "14.7 КБ",
-   "mtime": "20.09.2026 02:07",
+   "size": 15465,
+   "size_h": "15.1 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/loadcharts.py",
+   "name": "loadcharts.py",
+   "title": "loadcharts.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 11951,
+   "size_h": "11.7 КБ",
+   "mtime": "20.09.2026 09:39",
    "searchable": true
   },
   {
@@ -4085,9 +4280,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 7084,
-   "size_h": "6.9 КБ",
-   "mtime": "19.09.2026 17:01",
+   "size": 10529,
+   "size_h": "10.3 КБ",
+   "mtime": "20.09.2026 09:35",
    "searchable": true
   },
   {
@@ -4137,9 +4332,22 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 12425,
-   "size_h": "12.1 КБ",
-   "mtime": "19.09.2026 15:57",
+   "size": 13164,
+   "size_h": "12.9 КБ",
+   "mtime": "20.09.2026 09:35",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/services/setup_state.py",
+   "name": "setup_state.py",
+   "title": "setup_state.py",
+   "caption": "",
+   "group": "Код платформы",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 7359,
+   "size_h": "7.2 КБ",
+   "mtime": "20.09.2026 09:34",
    "searchable": true
   },
   {
@@ -4189,9 +4397,9 @@
    "group": "Код платформы",
    "ext": ".py",
    "viewer": "code",
-   "size": 3123,
-   "size_h": "3.0 КБ",
-   "mtime": "20.09.2026 02:09",
+   "size": 3132,
+   "size_h": "3.1 КБ",
+   "mtime": "20.09.2026 09:35",
    "searchable": true
   },
   {
@@ -4306,9 +4514,9 @@
    "group": "Шаблоны",
    "ext": ".html",
    "viewer": "html",
-   "size": 5012,
-   "size_h": "4.9 КБ",
-   "mtime": "20.09.2026 02:12",
+   "size": 5384,
+   "size_h": "5.3 КБ",
+   "mtime": "20.09.2026 09:36",
    "searchable": true
   },
   {
@@ -5014,6 +5222,71 @@
    "searchable": true
   },
   {
+   "path": "platform/portal/templates/setup/company.html",
+   "name": "company.html",
+   "title": "company.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 5448,
+   "size_h": "5.3 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/setup/domain.html",
+   "name": "domain.html",
+   "title": "domain.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 3696,
+   "size_h": "3.6 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/setup/index.html",
+   "name": "index.html",
+   "title": "index.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 2738,
+   "size_h": "2.7 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/setup/load_charts.html",
+   "name": "load_charts.html",
+   "title": "load_charts.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 7322,
+   "size_h": "7.2 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
+   "path": "platform/portal/templates/setup/pricing.html",
+   "name": "pricing.html",
+   "title": "pricing.html",
+   "caption": "",
+   "group": "Шаблоны",
+   "ext": ".html",
+   "viewer": "html",
+   "size": 8052,
+   "size_h": "7.9 КБ",
+   "mtime": "20.09.2026 09:36",
+   "searchable": true
+  },
+  {
    "path": "platform/portal/templates/site/_eq_card.html",
    "name": "_eq_card.html",
    "title": "_eq_card.html",
@@ -5326,6 +5599,19 @@
    "searchable": true
   },
   {
+   "path": "platform/tools/company_tool.py",
+   "name": "company_tool.py",
+   "title": "company_tool.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 5716,
+   "size_h": "5.6 КБ",
+   "mtime": "20.09.2026 09:37",
+   "searchable": true
+  },
+  {
    "path": "platform/tools/diag_export.py",
    "name": "diag_export.py",
    "title": "diag_export.py",
@@ -5336,6 +5622,32 @@
    "size": 1669,
    "size_h": "1.6 КБ",
    "mtime": "19.09.2026 17:02",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/domain_check.py",
+   "name": "domain_check.py",
+   "title": "domain_check.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 3004,
+   "size_h": "2.9 КБ",
+   "mtime": "20.09.2026 09:37",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/erp_sync.py",
+   "name": "erp_sync.py",
+   "title": "erp_sync.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 4005,
+   "size_h": "3.9 КБ",
+   "mtime": "20.09.2026 09:37",
    "searchable": true
   },
   {
@@ -5362,6 +5674,19 @@
    "size": 331,
    "size_h": "331 Б",
    "mtime": "19.09.2026 16:20",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/import_load_charts.py",
+   "name": "import_load_charts.py",
+   "title": "import_load_charts.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 3522,
+   "size_h": "3.4 КБ",
+   "mtime": "20.09.2026 09:37",
    "searchable": true
   },
   {
@@ -5430,6 +5755,19 @@
    "searchable": true
   },
   {
+   "path": "platform/tools/pricing_tool.py",
+   "name": "pricing_tool.py",
+   "title": "pricing_tool.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 6552,
+   "size_h": "6.4 КБ",
+   "mtime": "20.09.2026 09:37",
+   "searchable": true
+  },
+  {
    "path": "platform/tools/scrape_dimecon.py",
    "name": "scrape_dimecon.py",
    "title": "scrape_dimecon.py",
@@ -5482,6 +5820,19 @@
    "searchable": true
   },
   {
+   "path": "platform/tools/screens_settings.py",
+   "name": "screens_settings.py",
+   "title": "screens_settings.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 2779,
+   "size_h": "2.7 КБ",
+   "mtime": "20.09.2026 09:41",
+   "searchable": true
+  },
+  {
    "path": "platform/tools/screenshots.py",
    "name": "screenshots.py",
    "title": "screenshots.py",
@@ -5505,6 +5856,19 @@
    "size": 1065,
    "size_h": "1.0 КБ",
    "mtime": "20.09.2026 02:12",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/settings_report.py",
+   "name": "settings_report.py",
+   "title": "settings_report.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 1576,
+   "size_h": "1.5 КБ",
+   "mtime": "20.09.2026 09:36",
    "searchable": true
   },
   {
@@ -5622,6 +5986,19 @@
    "size": 10069,
    "size_h": "9.8 КБ",
    "mtime": "19.09.2026 23:23",
+   "searchable": true
+  },
+  {
+   "path": "platform/tools/test_settings.py",
+   "name": "test_settings.py",
+   "title": "test_settings.py",
+   "caption": "",
+   "group": "Инструменты и тесты",
+   "ext": ".py",
+   "viewer": "code",
+   "size": 19268,
+   "size_h": "18.8 КБ",
+   "mtime": "20.09.2026 09:39",
    "searchable": true
   },
   {
@@ -5892,9 +6269,9 @@
    "group": "Схема и конфигурация",
    "ext": ".py",
    "viewer": "code",
-   "size": 66278,
-   "size_h": "64.7 КБ",
-   "mtime": "20.09.2026 02:20",
+   "size": 70372,
+   "size_h": "68.7 КБ",
+   "mtime": "20.09.2026 09:42",
    "searchable": true
   },
   {
@@ -5951,21 +6328,21 @@
   }
  ],
  "stats": {
-  "files": 453,
-  "bytes": 26224129,
+  "files": 482,
+  "bytes": 26808582,
   "by_group": {
    "Проект": 2,
    "Техническое задание": 8,
    "Акты и отчёты": 2,
-   "Протоколы испытаний": 28,
-   "Сгенерированные документы": 43,
-   "Скриншоты": 102,
+   "Протоколы испытаний": 30,
+   "Сгенерированные документы": 48,
+   "Скриншоты": 107,
    "Исходные данные заказчика": 5,
    "Медиатека компании": 90,
-   "Код платформы": 39,
-   "Шаблоны": 80,
+   "Код платформы": 43,
+   "Шаблоны": 85,
    "Интеграции": 5,
-   "Инструменты и тесты": 27,
+   "Инструменты и тесты": 35,
    "Схема и конфигурация": 20,
    "Архив": 2
   }

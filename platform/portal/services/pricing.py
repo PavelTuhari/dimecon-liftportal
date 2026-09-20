@@ -28,6 +28,76 @@ def pricing_of(tenant: Tenant) -> dict:
     return p
 
 
+def _num(form, name: str, default: float = 0.0) -> float:
+    raw = (form.get(name) or "").replace(",", ".").strip()
+    try:
+        return float(raw) if raw else default
+    except ValueError:
+        return default
+
+
+def pricing_from_form(form, current: dict | None = None) -> dict:
+    """Форма настроек прайса → структура коэффициентов, зон, допуслуг и скидок.
+
+    Поля формы называются по смыслу (time_night, zone_name_0, addon_rigger…), поэтому
+    владелец компании правит цены обычными полями, а не JSON-документом.
+    """
+    base = dict(DEFAULT_PRICING)
+    base.update(current or {})
+    out = {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v)
+           for k, v in base.items()}
+
+    out["time"] = {key: _num(form, f"time_{key}", value)
+                   for key, value in DEFAULT_PRICING["time"].items()}
+    out["season"] = {month: _num(form, f"season_{month}", value)
+                     for month, value in DEFAULT_PRICING["season"].items()}
+    out["conditions"] = {key: _num(form, f"cond_{key}", value)
+                         for key, value in DEFAULT_PRICING["conditions"].items()}
+    out["conditions_cap"] = _num(form, "conditions_cap", DEFAULT_PRICING["conditions_cap"])
+    out["addons"] = {key: _num(form, f"addon_{key}", value)
+                     for key, value in DEFAULT_PRICING["addons"].items()}
+    out["discounts"] = {
+        "flexible_date": _num(form, "discount_flexible", DEFAULT_PRICING["discounts"]["flexible_date"]),
+        "first_online": _num(form, "discount_first", DEFAULT_PRICING["discounts"]["first_online"]),
+        "max_total": _num(form, "discount_max", DEFAULT_PRICING["discounts"]["max_total"]),
+    }
+    out["range_width"] = _num(form, "range_width", DEFAULT_PRICING["range_width"])
+
+    urgency = []
+    for hours, coef in DEFAULT_PRICING["urgency"]:
+        urgency.append([hours, _num(form, f"urgency_{hours}", coef)])
+    out["urgency"] = urgency
+
+    zones = []
+    for idx in range(0, 12):
+        name = (form.get(f"zone_name_{idx}") or "").strip()
+        if not name:
+            continue
+        code = (form.get(f"zone_code_{idx}") or "").strip() or f"zone{idx + 1}"
+        zones.append({"code": code, "name": name, "fee": _num(form, f"zone_fee_{idx}"),
+                      "free_km": _num(form, f"zone_free_{idx}"), "per_km": _num(form, f"zone_perkm_{idx}"),
+                      "max_km": _num(form, f"zone_max_{idx}")})
+    if zones:
+        out["zones"] = sorted(zones, key=lambda z: z["max_km"])
+    return out
+
+
+def pricing_problems(tenant: Tenant) -> list[str]:
+    """Что в прайсе выглядит незаполненным — показывается в настройках."""
+    p = pricing_of(tenant)
+    out = []
+    zones = p.get("zones") or []
+    if not zones:
+        out.append("не заданы зоны подачи")
+    if zones and any(z.get("max_km", 0) <= 0 for z in zones):
+        out.append("у зоны не указан предел по километрам")
+    if p.get("discounts", {}).get("max_total", 0) <= 0:
+        out.append("не задан потолок скидок")
+    if p.get("conditions_cap", 0) <= 1:
+        out.append("потолок надбавок за условия меньше единицы")
+    return out
+
+
 def zone_for(tenant: Tenant, distance_km: float) -> dict:
     zones = pricing_of(tenant)["zones"]
     for z in zones:
